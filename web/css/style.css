@@ -1,0 +1,303 @@
+/* Import Google Fonts: Montserrat for Titles, Roboto for Body */
+@import url('https://fonts.googleapis.com/css2?family=Montserrat:ital,wght@0,100..900;1,100..900&family=Roboto:ital,wght@0,100;0,300;0,400;0,500;0,700;0,900;1,100;1,300;1,400;1,500;1,700;1,900&display=swap');
+
+/* Basic Page Layout */
+html {
+    position: relative;
+    min-height: 100%;
+}
+
+body {
+    color: #4d4d4d; /* Grey content text */
+    background-color: #EEEEEE; /* Beige background from your palette */
+    font-family: "Roboto", sans-serif;
+    font-size: 18px;
+    line-height: 1.55;
+    margin: 0;
+    padding-bottom: 80px; /* Space for the footer */
+}
+
+/* Typography with Montserrat for Titles */
+h1, h2, h3, h4, .navbar-brand {
+    font-family: "Montserrat", sans-serif;
+    font-weight: 700;
+    color: #404f7c; /* Dark blue */
+    margin-top: 18px;
+}
+
+/* Links */
+a {
+    color: #404f7c;
+    text-decoration: none;
+    transition: 0.2s;
+}
+
+a:hover {
+    color: #85dafa; /* Light blue on hover */
+    text-decoration: underline;
+}
+
+/* Main Container */
+.page-content {
+    max-width: 1100px;
+    margin: 0 auto;
+    padding: 20px 12px;
+}
+
+/* MCA Card Styling */
+.card {
+    border: 1px solid #e6e6e6;
+    border-radius: 12px;
+    padding: 14px 16px;
+    background: #ffffff;
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.05);
+}
+
+.card h3 {
+    margin: 0 0 10px 0;
+    font-size: 20px;
+}
+
+/* Two-column Grid */
+.grid-2 {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 16px;
+    align-items: stretch;
+}
+
+/* Callouts */
+.callout {
+    margin-top: 10px;
+    padding: 10px 12px;
+    border-left: 4px solid #404f7c; /* Dark blue border */
+    background: #f7f9ff;
+    border-radius: 8px;
+}
+
+.muted {
+    color: #666666;
+    font-size: 13px;
+}
+
+.hr-soft {
+    border: 0;
+    border-top: 1px solid #efefef;
+    margin: 20px 0;
+}
+
+/* Search Bar & Autocomplete Styling */
+.search-container {
+    margin: 40px auto;
+    max-width: 800px;
+    position: relative;
+}
+
+#microbe-search {
+    width: 100%;
+    padding: 15px;
+    font-size: 20px;
+    font-family: "Roboto", sans-serif;
+    border: 2px solid #404f7c;
+    border-radius: 8px;
+    outline: none;
+    box-sizing: border-box;
+}
+
+#search-results {
+    position: absolute;
+    width: 100%;
+    background: white;
+    border: 1px solid #e6e6e6;
+    border-top: none;
+    z-index: 1000;
+    max-height: 300px;
+    overflow-y: auto;
+    display: none;
+    border-radius: 0 0 8px 8px;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+}
+
+.result-item {
+    padding: 12px 15px;
+    cursor: pointer;
+    border-bottom: 1px solid #efefef;
+    text-align: left;
+    font-size: 16px;
+}
+
+.result-item:hover {
+    background: #f7f9ff;
+    color: #404f7c;
+}
+
+/* Passport Badge Styling */
+.badge-id {
+    background: #e6e6e6;
+    padding: 4px 10px;
+    border-radius: 4px;
+    font-weight: bold;
+    font-size: 13px;
+    color: #4d4d4d;
+    cursor: pointer;
+    display: inline-block;
+}
+
+.badge-id:hover {
+    background: #dcdcdc;
+}
+
+/* Navigation Bar */
+.navbar {
+    background-color: #404f7c;
+    padding: 15px 30px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.navbar-brand {
+    color: white !important;
+    font-size: 24px;
+    margin: 0;
+    text-decoration: none;
+}
+
+/* Footer */
+footer {
+    position: absolute;
+    bottom: 0;
+    width: 100%;
+    height: 40px;
+    background-color: #393E46;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.copyright {
+    font-size: 14px;
+    color: #EEEEEE;
+}
+
+/* Pathobiont highlighting */
+.pathobiont-alert {
+    color: #D66853;
+    font-weight: bold;
+}
+
+/* Pro-style Global Logo Control */
+.logo-container {
+    text-align: center;
+    margin-top: 20px;
+    margin-bottom: 40px;
+}
+
+.logo-main {
+    width: 350px;
+    height: auto;
+    transition: transform 0.3s ease;
+}
+
+/* Subtle pro touch: slight hover effect */
+.logo-main:hover {
+    transform: scale(1.02);
+}
+
+/* Highlight state for keyboard navigation */
+.result-item.selected {
+    background-color: #f1f3f4;
+    outline: none;
+}
+
+/* Anchor the container */
+.google-search-container {
+    position: relative;
+    margin: 20px auto 40px auto;
+    max-width: 600px;
+    text-align: left;
+}
+
+/* Fix the dropdown width and behavior */
+#search-results {
+    position: absolute;
+    top: 100%; /* Sits exactly below the input */
+    left: 0;
+    right: 0;   /* Forces it to match the width of the container */
+    background: white;
+    border: 1px solid #dfe1e5;
+    border-top: none;
+    z-index: 1000;
+    max-height: 300px;
+    overflow-y: auto;
+    display: none;
+    border-radius: 0 0 24px 24px;
+    box-shadow: 0 4px 6px rgba(32,33,36,0.1);
+    /* Prevent the box from expanding */
+    box-sizing: border-box; 
+}
+
+.result-item {
+    padding: 12px 20px;
+    cursor: pointer;
+    transition: background 0.1s;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis; /* Keeps long names from breaking the box */
+}
+
+.result-item.selected {
+    background-color: #f1f3f4;
+}
+
+/* Pathobiont horizontal list styling */
+.pb-container { display: flex; gap: 8px; flex-wrap: wrap; }
+.pb-item { padding: 4px 10px; border-radius: 3px; font-weight: bold; font-size: 10px; text-transform: uppercase; background: #f0f0f0; color: #aaa; border: 1px solid #eee; }
+/* Bright blue for the active 'yes' selection */
+.pb-active-yes { background: #007bff; color: #fff; border-color: #0056b3; }
+/* Standard black or neutral for other active selections */
+.eg-active-other { background: #333; color: #fff; border-color: #000; }
+
+/* Gemini version: 3.1 Pro */
+/* New lines: CSS for the evidence level hover tooltip */
+.ev-tooltip {
+    position: relative;
+    display: inline-block;
+    cursor: help;
+    border-bottom: 1px dotted #888;
+}
+
+.ev-tooltip .ev-tooltiptext {
+    visibility: hidden;
+    width: 200px;
+    background-color: #fff;
+    color: #333;
+    text-align: left;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    padding: 10px;
+    box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+    position: absolute;
+    z-index: 10;
+    bottom: 150%;
+    left: 50%;
+    transform: translateX(-50%);
+    opacity: 0;
+    transition: opacity 0.2s;
+}
+
+/* Ensure the span class looks correct inside the popup */
+.ev-tooltip .ev-tooltiptext .dict-term {
+    font-weight: 800;
+    font-size: 13px;
+    color: #000;
+    display: block;
+}
+
+.ev-tooltip:hover .ev-tooltiptext {
+    visibility: visible;
+    opacity: 1;
+}
