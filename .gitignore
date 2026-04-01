@@ -8,3 +8,6 @@ web/db_connect.php
 
 # Staging files (transient curation drafts — not for version control)
 staging/
+
+# Derived SQL dumps (regenerate with database/xml2sql.py)
+database/MCA_DB_*.sql

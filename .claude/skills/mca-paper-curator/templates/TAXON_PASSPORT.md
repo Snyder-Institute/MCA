@@ -13,11 +13,11 @@ All field values must conform to `references/CONTROLLED_VOCABULARY.md`.
 | Passport ID | *(assigned on CREATE; existing ID on UPDATE)* |
 | Preferred Name | |
 | Taxon Rank | |
-| Lineage | *(kingdom \| phylum \| class \| order \| family \| genus \| species)* |
-| NCBI TaxID | |
+| Domain | *(Bacteria / Archaea / Fungi / Virus / Eukaryote)* |
+| Lineage | *(phylum \| class \| order \| family \| genus \| species — pipe-separated)* |
+| NCBI TaxID | *(integer)* |
 | Synonyms | *(semicolon-separated)* |
 | Last Reviewed | *(YYYY-MM-DD)* |
-| Version | |
 
 ---
 
@@ -55,6 +55,19 @@ All field values must conform to `references/CONTROLLED_VOCABULARY.md`.
 
 ---
 
+## Metabolites
+
+*One block per metabolite relationship reported in the paper. Leave section blank if none.*
+
+| Field | Value |
+|-------|-------|
+| Metabolite Name | |
+| Relationship | *(produces / consumes / modifies)* |
+| KEGG Compound ID | *(populated in Phase 2; leave blank)* |
+| ChEBI ID | *(populated in Phase 2; leave blank)* |
+
+---
+
 ## Clinical Associations
 
 *One block per association extracted from the paper.*
@@ -63,6 +76,7 @@ All field values must conform to `references/CONTROLLED_VOCABULARY.md`.
 | Field | Value |
 |-------|-------|
 | Association Text | *(free text — the clinical claim)* |
+| Evidence Type | *(study design — e.g., prospective cohort, RCT, mouse model)* |
 | Evidence Grade | *(E1 / E2 / E3 / UNCERTAIN — from grading agent)* |
 | Evidence Rationale | *(from grading agent)* |
 | PMID(s) | *(comma-separated)* |
@@ -71,6 +85,7 @@ All field values must conform to `references/CONTROLLED_VOCABULARY.md`.
 | Field | Value |
 |-------|-------|
 | Association Text | |
+| Evidence Type | |
 | Evidence Grade | |
 | Evidence Rationale | |
 | PMID(s) | |

@@ -1,0 +1,20 @@
+[
+  {
+    "date_applied": "2026-04-01",
+    "passport_id": "MCA-BAC-000001",
+    "preferred_name": "Enterobacteriaceae",
+    "action": "CREATE",
+    "source_pmid": 36894652,
+    "xml_file": "database/MCA_DB_v1_0_20260401.xml",
+    "staging_file": "staging/applied/2026-04-01_enterobacteriaceae.json"
+  },
+  {
+    "date_applied": "2026-04-01",
+    "passport_id": "MCA-BAC-000002",
+    "preferred_name": "Enterococcaceae",
+    "action": "CREATE",
+    "source_pmid": 36894652,
+    "xml_file": "database/MCA_DB_v1_0_20260401.xml",
+    "staging_file": "staging/applied/2026-04-01_enterococcaceae.json"
+  }
+]

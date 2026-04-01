@@ -2,7 +2,7 @@
 name: mca-xml-update
 description: "MCA XML update skill. Reads one or more approved staging JSON files from staging/, validates them, applies CREATE or UPDATE actions to database/MCA_DB_vX.X.xml, and archives applied files. Triggers on: apply staging file, update MCA XML, apply to database, commit staging, import staging."
 metadata:
-  version: "1.0"
+  version: "2.0"
   last_updated: "2026-03-31"
 ---
 
@@ -127,6 +127,19 @@ User: "Apply staging file(s)" + [file path(s) or "all"]
      |
      +-> Move each successfully applied staging file to staging/applied/
          (create staging/applied/ if it does not exist)
+     +-> Append one entry per successfully applied file to database/curation_log.json:
+         - Read existing log array (or start with [] if file does not exist)
+         - Append entry:
+             {
+               "date_applied": "YYYY-MM-DD",
+               "passport_id": "MCA-BAC-000001",
+               "preferred_name": "Taxon name",
+               "action": "CREATE | UPDATE",
+               "source_pmid": 12345678,
+               "xml_file": "database/MCA_DB_vX_X_YYYYMMDD.xml",
+               "staging_file": "staging/applied/YYYY-MM-DD_taxon-name.json"
+             }
+         - Write updated array back to database/curation_log.json (pretty-printed, 2-space indent)
      +-> Report to user:
          - Output XML: database/MCA_DB_[output_version_string].xml (new file)
          - Source XML preserved: database/MCA_DB_[previous_version_string].xml
@@ -134,6 +147,7 @@ User: "Apply staging file(s)" + [file path(s) or "all"]
          - New passport IDs assigned: [list]
          - Fields updated per taxon: [summary]
          - Files archived to staging/applied/
+         - Log updated: database/curation_log.json
          - Any files skipped and why
 ```
 
@@ -173,7 +187,7 @@ New passport IDs are assigned by the orchestrator before calling `xml_writer_age
 | Field type | Behaviour |
 |------------|-----------|
 | Scalar (e.g., `gram_status`, `is_pathobiont`) | Overwrite with new value; flag in report if overwriting a non-null existing value |
-| List (e.g., `synonyms`, `bloom_triggers`, `clinical_associations`) | Append new items; skip exact duplicates |
+| List (e.g., `synonyms`, `bloom_triggers`, `metabolites`, `clinical_associations`) | Append new items; skip exact duplicates (matched on `value` for tag objects) |
 | `last_reviewed` | Always update to the value in the staging file |
 | `updated_at` | Set to today's date (ISO 8601) |
 | Fields absent from `proposed_changes` (null or omitted) | Leave XML untouched |
@@ -182,11 +196,17 @@ New passport IDs are assigned by the orchestrator before calling `xml_writer_age
 
 ## XML Structure Notes
 
-The current XML (`MCA_DB_v0.1.xml`) contains only core passport fields within `<TaxonPassport>`. Satellite fields (synonyms, biology, ecology, clinical profile, clinical associations) are not yet present as XML child elements on existing passports.
+Full element-level structure is defined in `agents/XML_WRITER_AGENT.md`.
 
-**Adding new child elements:** When a staging file proposes satellite fields for an existing passport that has none, `xml_writer_agent` adds them as new child elements under the existing `<TaxonPassport>` node. This is expected and correct — it enriches existing passports progressively.
+**Core fields:** `<passport_id>`, `<preferred_name>`, `<taxon_rank>`, `<domain>`, `<lineage>`, `<ncbi_taxid>`, `<is_pathobiont>`, `<last_reviewed>`, `<created_at>`, `<updated_at>`. Note: `<version>` is no longer a per-passport field.
 
-**XML element naming:** Use snake_case element names matching the staging file field names (e.g., `<bloom_trigger>`, `<clinical_association>`, `<association_text>`). Wrap list items in a container element where appropriate (e.g., `<bloom_triggers><bloom_trigger>...</bloom_trigger></bloom_triggers>`).
+**Ext-ID attributes on tag elements:** Body-site tags (`<primary_niche>`, `<typical_specimen>`) carry a `mesh_anatomy_id` attribute; `<bloom_trigger>` carries `kegg_drug_id`; `<amr_highlight>` carries `aro_id`. Omit the attribute entirely when the ID is null.
+
+**New sections:** `<Metabolites>` (produces/consumes/modifies relationships + KEGG/ChEBI IDs); `<AssocRefs>` inside each `<ClinicalAssociation>` (MeSH and KEGG Disease IDs).
+
+**`content_hash` on associations:** The `xml_writer_agent` computes a SHA-256 hash of the lowercased, whitespace-normalised `association_text` and writes it as `<content_hash>`. This is never provided in the staging file — always derived on write.
+
+**Adding new child elements:** When a staging file proposes satellite fields for an existing passport that has none, `xml_writer_agent` adds them as new child element blocks under the existing `<TaxonPassport>` node. This is expected — it enriches passports progressively.
 
 **Preserve formatting:** Maintain 1-space indentation and existing element order when writing back to the XML.
 
@@ -252,8 +272,8 @@ Applied files are never deleted — they serve as the audit trail of what was im
 
 | Item | Content |
 |------|---------|
-| Skill Version | 1.0 |
-| Last Updated | 2026-03-31 |
+| Skill Version | 2.0 |
+| Last Updated | 2026-04-01 |
 | Maintainer | Heewon Seo |
 | Input | `staging/YYYY-MM-DD_[taxon].json` (one or more) |
 | Output | New `database/MCA_DB_vMAJOR_MINOR_YYYYMMDD.xml` + archived staging files |
@@ -265,4 +285,5 @@ Applied files are never deleted — they serve as the audit trail of what was im
 
 | Version | Date | Changes |
 |---------|------|---------|
+| 2.0 | 2026-04-01 | Schema v2.0: domain field, ext-id attributes on tag elements, Metabolites section, AssocRefs on associations, content_hash computed on write, version removed from per-passport fields |
 | 1.0 | 2026-03-31 | Initial version: single xml_writer_agent, batch support, pre-flight confirmation, staging archive |

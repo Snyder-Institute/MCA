@@ -21,20 +21,20 @@ Use the study design identified in Phase 0 (paper analysis) to assign the grade.
 ### E3 — Strong human clinical evidence
 Assign E3 if the paper is one of the following:
 - Systematic review or meta-analysis of human clinical studies
-- Randomized controlled trial (RCT) with microbiome outcome data
 - Clinical practice guideline citing microbiome evidence
-- Large-scale prospective cohort with pre-registered outcomes and microbiome endpoints
+- Multiple independent human cohorts (or trials) confirming the same finding within a single paper (e.g., discovery cohort + replication cohort, or pooled multi-centre analysis)
 
-**Key signal phrases in paper:** "systematic review", "meta-analysis", "randomized", "clinical guideline", "PRISMA", "GRADE"
+**Key signal phrases in paper:** "systematic review", "meta-analysis", "clinical guideline", "PRISMA", "GRADE", "replication cohort", "multi-centre", "pooled analysis"
 
 ### E2 — Moderate human evidence
 Assign E2 if the paper is one of the following:
-- Prospective or retrospective cohort study in humans
+- Single prospective or retrospective cohort study in humans
+- Single randomized controlled trial (RCT) with microbiome outcome data
 - Case-control study in humans
 - Cross-sectional study with a well-defined clinical outcome
 - Secondary analysis of a clinical trial with microbiome data
 
-**Key signal phrases in paper:** "cohort", "case-control", "cross-sectional", "odds ratio", "hazard ratio", "human subjects", "patients enrolled"
+**Key signal phrases in paper:** "cohort", "case-control", "cross-sectional", "randomized", "odds ratio", "hazard ratio", "human subjects", "patients enrolled"
 
 ### E1 — Limited / preliminary
 Assign E1 if the paper is one of the following:
@@ -71,7 +71,7 @@ Flag the paper as `UNCERTAIN` when:
 - The paper is a review but does not meet systematic review standards (narrative review)
 - The paper reports microbiome associations as secondary/exploratory endpoints only, with no primary clinical outcome
 
-**When flagged:** Do not assign a grade. Write a rationale explaining what is unclear. Present to the user for a decision before the staging file is written.
+**When flagged:** Do not assign a grade. Write an `uncertain_reason` explaining what is unclear. The staging file is still written with `grade: UNCERTAIN` and the `uncertain_reason` populated — it is not held back. The user reviews and resolves the uncertainty when inspecting the staging file.
 
 ---
 

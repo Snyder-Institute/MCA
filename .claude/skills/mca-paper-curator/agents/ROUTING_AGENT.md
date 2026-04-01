@@ -14,7 +14,8 @@ Determines the action (CREATE or UPDATE) for each taxon confirmed in Phase 0 by 
 | Input | Description |
 |-------|-------------|
 | Phase 0 output | Confirmed taxa list from `paper_analyst_agent` (preferred names, synonyms, NCBI TaxIDs) |
-| `database/MCA_DB_v0.1.xml` | Current MCA database XML export |
+| Current XML | Most recent `database/MCA_DB_*.xml` file — use the highest-versioned file present |
+| `cross_check_flags` | `cross_check_flags[]` array from Phase 0 `paper_analyst_agent` output — XML passport names found in paper text but absent from the confirmed taxa list; routing_agent processes these flags but does **not** re-scan the paper text |
 
 ---
 
@@ -54,7 +55,7 @@ Search the XML in the following order. Stop at the first match.
 
 ## Output Format
 
-One object per taxon:
+One object per taxon, plus an optional top-level cross_check_flags array:
 
 ```json
 {
@@ -66,18 +67,60 @@ One object per taxon:
 }
 ```
 
+After all taxa are routed, append the cross-check results at the top level of the routing output:
+
+```json
+{
+  "cross_check_flags": [
+    {
+      "xml_name": "",
+      "passport_id": "MCA-BAC-000000 | null",
+      "reason": ""
+    }
+  ]
+}
+```
+
+`cross_check_flags` is an empty array `[]` when the reverse scan finds no omissions.
+
 ---
 
 ## AMBIGUOUS Handling
 
 When action is `AMBIGUOUS`:
-1. Populate `routing_notes` with a clear description of the ambiguity
-2. Present the options to the user before Phase 1 merging
-3. Wait for user to select the correct match or confirm CREATE
-4. Do not write a staging file for an unresolved AMBIGUOUS taxon
+1. Populate `routing_notes` with a clear description of the ambiguity and the options available
+2. The skill continues — a staging file is written for the taxon with `action: AMBIGUOUS`, `passport_id: null`, and the ambiguity described in `extraction_notes`
+3. Do not halt or wait for user input — the user resolves the ambiguity when reviewing the staging file before applying it to the XML
 
 **Example routing note:**
 > "Paper reports 'Lactobacillus rhamnosus' (genus-level) but XML contains both MCA-BAC-000003 (Lactobacillus rhamnosus GG, species) and MCA-BAC-000008 (Lactobacillus rhamnosus, genus). Please confirm which passport to update, or confirm CREATE if this is a distinct entry."
+
+---
+
+## Cross-Check Step
+
+`paper_analyst_agent` (Phase 0) performs the reverse scan of XML names against the paper text and returns a `cross_check_flags[]` array. The routing agent receives this array and is responsible for processing the flags into the staging output — it does **not** re-scan the paper text.
+
+After routing all Phase 0 taxa, process the `cross_check_flags[]` received from Phase 0:
+
+1. For each flag, identify the most closely related taxon among the taxa being staged in this run (e.g., if the flag is for `Enterococcaceae`, the most closely related staging file might be one for `Enterobacteriaceae` if both are co-mentioned in the paper).
+2. Fold the flag into `extraction_notes` of that related staging file.
+3. If no closely related staging file exists for a flagged taxon, write all orphaned flags to a dedicated file: `staging/YYYY-MM-DD_cross-check-flags.json`, using the format:
+   ```json
+   {
+     "schema_version": "2.0",
+     "action": "REVIEW",
+     "source_pmid": 12345678,
+     "cross_check_flags": [
+       {
+         "xml_name": "Taxon name",
+         "passport_id": "MCA-BAC-000000",
+         "reason": "Name found in paper main text but not in Phase 0 taxa list — possible Phase 0 omission"
+       }
+     ]
+   }
+   ```
+4. Do **not** automatically create or update a staging file for a cross-check flagged taxon — this requires human review to confirm whether inclusion was intentional or an omission.
 
 ---
 

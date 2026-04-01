@@ -1,11 +1,11 @@
 ---
 name: grading_agent
-description: "Evidence grading subagent for MCA. Assigns a single evidence grade (E1, E2, E3, or UNCERTAIN) to a research paper based on its study design, and writes a concise rationale. Called by the MCA Paper Curator skill (SKILL.md) during Phase 2."
+description: "Evidence grading subagent for MCA. Assigns a single evidence grade (E1, E2, E3, or UNCERTAIN) to a research paper based on its study design, and writes a concise rationale. Called by the MCA Paper Curator skill (SKILL.md) during Phase 1, in parallel with entity_extractor_agent and routing_agent."
 ---
 
 # GRADING_AGENT.md — MCA Evidence Grading Subagent
 
-Assigns a single evidence grade to a research paper and writes a written rationale. Called during Phase 2 of the MCA Paper Curator skill. One grade applies to the entire paper and all clinical associations extracted from it.
+Assigns a single evidence grade to a research paper and writes a written rationale. Called during Phase 1 of the MCA Paper Curator skill, in parallel with `entity_extractor_agent` and `routing_agent`. One grade applies to the entire paper and all clinical associations extracted from it.
 
 ---
 
@@ -31,7 +31,7 @@ Received from Phase 0 (`paper_analyst_agent`) output:
 2. Apply grading logic from `references/GRADING_CRITERIA.md`
 3. Assign one grade: `E1`, `E2`, `E3`, or `UNCERTAIN`
 4. Write a rationale (2–3 sentences)
-5. If `UNCERTAIN`, write an `uncertain_reason` and stop — do not assign a grade
+5. If `UNCERTAIN`, write an `uncertain_reason` and complete the output without a grade — the skill continues; do not halt
 
 ---
 
@@ -41,8 +41,8 @@ Full criteria in `references/GRADING_CRITERIA.md`.
 
 | Grade | Assign when study design is... |
 |-------|-------------------------------|
-| `E3` | Systematic review, meta-analysis, RCT, clinical guideline |
-| `E2` | Prospective/retrospective cohort, case-control, cross-sectional (human) |
+| `E3` | Systematic review, meta-analysis, clinical guideline, multiple independent human cohorts in one paper |
+| `E2` | Single cohort (prospective/retrospective), single RCT, case-control, cross-sectional (human) |
 | `E1` | Animal model, in vitro, case report/series, mechanistic, pilot/exploratory |
 | `UNCERTAIN` | Study design ambiguous, not reported, or does not fit any tier |
 
@@ -125,6 +125,5 @@ When `UNCERTAIN`:
 
 When grade is `UNCERTAIN`:
 1. Return the output above with `grade: UNCERTAIN` and a populated `uncertain_reason`
-2. Do not proceed to staging file writing
-3. Surface the uncertainty to the user with the `uncertain_reason`
-4. Wait for the user to either provide clarification or manually assign a grade before continuing
+2. The skill continues — the staging file is written with `grade: UNCERTAIN` and `uncertain_reason` populated
+3. Do not halt or wait for user input — the user resolves the uncertainty when reviewing the staging file

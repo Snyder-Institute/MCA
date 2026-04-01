@@ -8,14 +8,14 @@ Demonstrates a complete Taxon Passport entry for ***Clostridioides difficile*** 
 
 | Field | Value |
 |-------|-------|
-| Passport ID | MCA-BAC-000006 |
+| Passport ID | MCA-BAC-000007 |
 | Preferred Name | Clostridioides difficile |
 | Taxon Rank | species |
+| Domain | Bacteria |
 | Lineage | Bacteria \| Bacillota \| Clostridia \| Eubacteriales \| Peptostreptococcaceae \| Clostridioides \| Clostridioides difficile |
 | NCBI TaxID | 1496 |
-| Synonyms | Clostridium difficile; C. diff |
+| Synonyms | Clostridium difficile |
 | Last Reviewed | 2026-03-31 |
-| Version | v0.1 |
 
 ---
 
@@ -93,5 +93,5 @@ PMIDs supporting the passport as a whole:
 ## Extraction Notes
 
 - Preferred name updated from *Clostridium difficile* (legacy) to *Clostridioides difficile* (current valid name per NCBI Taxonomy as of 2019)
-- Synonym "C. diff" is a common clinical shorthand — included for searchability
+- Synonym "Clostridium difficile" sourced from NCBI Taxonomy Common names for TaxID 1496
 - Ribotype 027 (NAP1/BI) noted under AMR highlights as a clinically significant hypervirulent strain

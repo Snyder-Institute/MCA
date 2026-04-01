@@ -1,0 +1,152 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<MicrobialClinicalAtlas>
+ <Meta>
+  <version>v1_0_20260401</version>
+  <created>2026-04-01</created>
+ </Meta>
+ <TaxonPassport>
+  <passport_id>MCA-BAC-000001</passport_id>
+  <preferred_name>Enterobacteriaceae</preferred_name>
+  <taxon_rank>family</taxon_rank>
+  <domain>Bacteria</domain>
+  <lineage>Bacteria; Proteobacteria; Gammaproteobacteria; Enterobacterales; Enterobacteriaceae</lineage>
+  <ncbi_taxid>543</ncbi_taxid>
+  <is_pathobiont>yes</is_pathobiont>
+  <last_reviewed>2026-04-01</last_reviewed>
+  <created_at>2026-04-01</created_at>
+  <updated_at>2026-04-01</updated_at>
+  <Ecology>
+   <PrimaryNiches>
+    <primary_niche mesh_anatomy_id="D007422">gut</primary_niche>
+   </PrimaryNiches>
+   <Reservoirs>
+    <reservoir>human</reservoir>
+   </Reservoirs>
+  </Ecology>
+  <ClinicalProfile>
+   <ClinicalRoles>
+    <clinical_role>opportunistic pathogen</clinical_role>
+   </ClinicalRoles>
+   <TypicalSpecimens>
+    <typical_specimen mesh_anatomy_id="D005243">stool</typical_specimen>
+   </TypicalSpecimens>
+   <BloomTriggers>
+    <bloom_trigger>antibiotic exposure</bloom_trigger>
+   </BloomTriggers>
+   <RiskContexts>
+    <risk_context>ICU / critical care</risk_context>
+   </RiskContexts>
+  </ClinicalProfile>
+  <TaxonEvidencePmids>
+   <pmid>36894652</pmid>
+  </TaxonEvidencePmids>
+  <ClinicalAssociations>
+   <ClinicalAssociation>
+    <association_text>Enterobacteriaceae relative abundance was significantly elevated in critically ill ICU patients compared to healthy controls, representing the dominant bloom component of gut dysbiosis in critical illness as quantified by 16S rRNA sequencing of rectal swab samples.</association_text>
+    <content_hash>a83c223d7eee5ed41a6ac5272d1b65caf0c8eaae2e8f0876bd59f3bcefda1c86</content_hash>
+    <evidence_grade>E2</evidence_grade>
+    <evidence_type>prospective cohort</evidence_type>
+    <AssocRefs>
+     <ref type="mesh" id="D016638" label="Critical Illness"/>
+     <ref type="mesh" id="D064806" label="Dysbiosis"/>
+    </AssocRefs>
+    <Pmids>
+     <pmid>36894652</pmid>
+    </Pmids>
+   </ClinicalAssociation>
+   <ClinicalAssociation>
+    <association_text>Higher Enterobacteriaceae relative abundance in ICU patients was associated with subsequent development of nosocomial infections; gut microbiota dysbiosis incorporating Enterobacteriaceae bloom contributed to a predictive microbiota-immune metasystem score for infection outcomes.</association_text>
+    <content_hash>25a05ed6074d7ba0350ed6217f15cf49ab5bd188354c2e6d20a84b8b1c73578c</content_hash>
+    <evidence_grade>E2</evidence_grade>
+    <evidence_type>prospective cohort</evidence_type>
+    <AssocRefs>
+     <ref type="mesh" id="D003428" label="Cross Infection"/>
+     <ref type="mesh" id="D016638" label="Critical Illness"/>
+    </AssocRefs>
+    <Pmids>
+     <pmid>36894652</pmid>
+    </Pmids>
+   </ClinicalAssociation>
+   <ClinicalAssociation>
+    <association_text>Enterobacteriaceae bloom in ICU patients correlated with immune dysregulation markers (including impaired innate immune cell function) as part of a gut microbiota-immune metasystem that was disrupted in critical illness.</association_text>
+    <content_hash>525d87faefe04b35caae0da65e78bcb934b7e78c0aeb3627852c77e0b7c78c61</content_hash>
+    <evidence_grade>E2</evidence_grade>
+    <evidence_type>prospective cohort</evidence_type>
+    <AssocRefs>
+     <ref type="mesh" id="D064806" label="Dysbiosis"/>
+     <ref type="mesh" id="D064307" label="Microbiota"/>
+    </AssocRefs>
+    <Pmids>
+     <pmid>36894652</pmid>
+    </Pmids>
+   </ClinicalAssociation>
+  </ClinicalAssociations>
+ </TaxonPassport>
+ <TaxonPassport>
+  <passport_id>MCA-BAC-000002</passport_id>
+  <preferred_name>Enterococcaceae</preferred_name>
+  <taxon_rank>family</taxon_rank>
+  <domain>Bacteria</domain>
+  <lineage>Bacteria; Firmicutes; Bacilli; Lactobacillales; Enterococcaceae</lineage>
+  <ncbi_taxid>81852</ncbi_taxid>
+  <is_pathobiont>yes</is_pathobiont>
+  <last_reviewed>2026-04-01</last_reviewed>
+  <created_at>2026-04-01</created_at>
+  <updated_at>2026-04-01</updated_at>
+  <Ecology>
+   <PrimaryNiches>
+    <primary_niche mesh_anatomy_id="D007422">gut</primary_niche>
+   </PrimaryNiches>
+   <Reservoirs>
+    <reservoir>human</reservoir>
+   </Reservoirs>
+  </Ecology>
+  <ClinicalProfile>
+   <ClinicalRoles>
+    <clinical_role>opportunistic pathogen</clinical_role>
+   </ClinicalRoles>
+   <TypicalSpecimens>
+    <typical_specimen mesh_anatomy_id="D005243">stool</typical_specimen>
+    <typical_specimen mesh_anatomy_id="D001769">blood</typical_specimen>
+    <typical_specimen mesh_anatomy_id="D014552">urine</typical_specimen>
+   </TypicalSpecimens>
+   <BloomTriggers>
+    <bloom_trigger>antibiotic exposure</bloom_trigger>
+   </BloomTriggers>
+   <RiskContexts>
+    <risk_context>ICU / critical care</risk_context>
+   </RiskContexts>
+  </ClinicalProfile>
+  <TaxonEvidencePmids>
+   <pmid>36894652</pmid>
+  </TaxonEvidencePmids>
+  <ClinicalAssociations>
+   <ClinicalAssociation>
+    <association_text>Enterococcaceae bloomed significantly in the gut microbiota of critically ill ICU patients compared to healthy controls, representing one of two dominant pathobiont families (alongside Enterobacteriaceae) expanding during critical illness-associated gut dysbiosis.</association_text>
+    <content_hash>ef2e4e92c14490d56497a5aa34ec34ec54c81d69b87a0bdbe083c2608f84f0ed</content_hash>
+    <evidence_grade>E2</evidence_grade>
+    <evidence_type>prospective cohort</evidence_type>
+    <AssocRefs>
+     <ref type="mesh" id="D016638" label="Critical Illness"/>
+     <ref type="mesh" id="D064806" label="Dysbiosis"/>
+    </AssocRefs>
+    <Pmids>
+     <pmid>36894652</pmid>
+    </Pmids>
+   </ClinicalAssociation>
+   <ClinicalAssociation>
+    <association_text>Enterococcaceae gut bloom in ICU patients was associated with nosocomial infections, particularly bloodstream infections and urinary tract infections attributed to Enterococcus species, implicating gut reservoir overgrowth in the pathogenesis of ICU-acquired Enterococcal infections.</association_text>
+    <content_hash>9e0c6db28d2133b255f2d650138f3175ed10184fbe820e093f3b4d0b16431ae7</content_hash>
+    <evidence_grade>E2</evidence_grade>
+    <evidence_type>prospective cohort</evidence_type>
+    <AssocRefs>
+     <ref type="mesh" id="D003428" label="Cross Infection"/>
+     <ref type="kegg_disease" id="H01444" label="Enterococcal infection"/>
+    </AssocRefs>
+    <Pmids>
+     <pmid>36894652</pmid>
+    </Pmids>
+   </ClinicalAssociation>
+  </ClinicalAssociations>
+ </TaxonPassport>
+</MicrobialClinicalAtlas>

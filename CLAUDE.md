@@ -39,9 +39,15 @@ MCA/
 │   ├── css/style.css           # Main stylesheet
 │   ├── images/                 # Logo and favicon
 │   └── data/                   # Versioned XML exports (e.g., MCA_DB_v0.1.xml)
-└── database/
-    ├── MCA_create_database.sql.gz  # Full schema definition
-    └── MCA_dump_v0.1.sql.gz        # Sample data dump
+├── database/
+│   ├── MCA_create_database.sql.gz  # Full schema definition
+│   └── MCA_dump_v0.1.sql.gz        # Sample data dump
+├── staging/                    # Staging JSON files from mca-paper-curator (gitignored)
+│   └── YYYY-MM-DD_taxon-name.json  # One file per taxon per curation run
+└── .claude/
+    └── skills/
+        ├── mca-paper-curator/  # Skill 1: paper → staging JSON (7-agent, 4-phase pipeline)
+        └── mca-xml-update/     # Skill 2: staging JSON → XML database
 ```
 
 ---
@@ -83,9 +89,9 @@ The central structured record for a taxon. A passport is versioned and reviewed 
 An individual, evidence-graded claim linking a taxon to a specific clinical condition or outcome (e.g., "associated with increased risk of CDI recurrence"). Each association is:
 - Linked to exactly one Taxon Passport via `passport_id`
 - Graded by evidence level:
-  - **E3** — Strong human clinical evidence (guidelines, meta-analyses, systematic reviews)
-  - **E2** — Moderate human evidence (well-designed observational studies)
-  - **E1** — Limited / preliminary (animal models, case reports, mechanistic work)
+  - **E3** — Strong human clinical evidence (guidelines, meta-analyses, systematic reviews, or multiple independent human cohorts within a single paper)
+  - **E2** — Moderate human evidence (single cohort, single RCT, case-control, or cross-sectional study)
+  - **E1** — Limited / preliminary (animal models, in vitro studies, case reports, mechanistic work)
 - Supported by one or more PMIDs
 
 ### 4. Evidence / PMID (support entity)

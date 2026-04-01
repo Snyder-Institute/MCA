@@ -6,16 +6,21 @@ Used by `agents/ENTITY_EXTRACTOR_AGENT.md` to ensure extracted field values matc
 
 ## Identity Fields
 
+### Domain
+Allowed values:
+- `Bacteria`
+- `Archaea`
+- `Fungi`
+- `Virus`
+- `Eukaryote`
+
 ### Taxon Rank
 Allowed values:
-- `kingdom`
-- `phylum`
-- `class`
-- `order`
 - `family`
 - `genus`
 - `species`
 - `strain`
+- `clade`
 
 ### Passport ID Format
 `MCA-[DOMAIN]-[NNNNNN]`
@@ -63,6 +68,24 @@ Allowed values:
 - `dimorphic fungus`
 - `not applicable`
 - `unknown`
+
+### Key Traits
+Extract only traits the paper explicitly attributes to this taxon. Do not add traits from background knowledge.
+
+Standardized terms:
+- `spore-forming`
+- `biofilm-forming`
+- `toxin-producing`
+- `butyrate-producing`
+- `short-chain fatty acid (SCFA) producer`
+- `mucin-degrading`
+- `cellulose-degrading`
+- `hydrogen-producing`
+- `sulfate-reducing`
+- `nitrogen-fixing`
+- `antibiotic-producing`
+
+If the paper uses a term not on this list, map to the closest match and note the original in parentheses. If no reasonable mapping exists, use the paper's exact term and flag in `extraction_notes`.
 
 ---
 
@@ -117,6 +140,14 @@ Allowed values (select one):
 - `context dependent`
 - `unknown`
 
+**Decision rule:**
+- `yes` — paper explicitly labels the taxon as a pathobiont, or demonstrates it causes infection/disease in humans in this paper's own data
+- `no` — paper explicitly characterises the taxon as commensal, protective, or non-pathogenic
+- `context dependent` — paper states the taxon can be both beneficial and harmful depending on host state or conditions, OR the taxon is a known commensal that can act as an opportunistic pathogen
+- `unknown` — paper does not characterise pathobiont status; use as default when no explicit statement is present
+
+For UPDATE actions: only propose a change if the paper provides an explicit characterisation. If overwriting a non-null, non-`unknown` existing value, flag in `extraction_notes` and require human review before applying.
+
 ### Clinical Roles
 Allowed values (can be multiple):
 - `opportunistic pathogen`
@@ -127,6 +158,18 @@ Allowed values (can be multiple):
 - `biofilm former`
 - `coloniser`
 - `unknown`
+
+**Mapping guidance:**
+- `opportunistic pathogen` — normally commensal but can cause infection in vulnerable hosts (immunocompromised, ICU, post-surgical); paper explicitly describes disease-causing potential in at-risk populations
+- `primary pathogen` — causes disease in immunocompetent hosts; paper demonstrates direct pathogenic role without requiring host compromise
+- `protective commensal` — paper explicitly describes a protective, beneficial, or colonisation-resistance role; depletion is associated with disease risk
+- `commensal` — paper characterises as normal flora without assigning a protective or pathogenic role
+- `probiotic candidate` — paper explicitly evaluates or proposes the taxon for probiotic or therapeutic use
+- `biofilm former` — paper explicitly describes biofilm formation as a clinically or ecologically relevant feature
+- `coloniser` — paper describes transient or early colonisation without further clinical characterisation
+- `unknown` — paper does not assign a clinical role
+
+A taxon may have multiple roles (e.g., `commensal` + `opportunistic pathogen`). Assign all roles the paper explicitly supports.
 
 ### Typical Specimen Types
 Allowed values (can be multiple):
@@ -204,4 +247,6 @@ When a paper uses non-standard terminology:
 1. Map to the closest controlled term above
 2. Record the original term from the paper in parentheses in the extracted value
    - Example: paper says "large bowel" → use `gut (large bowel)`
-3. If no reasonable mapping exists, use `unknown` and flag for user review
+3. If no reasonable mapping exists:
+   - For **closed-vocabulary fields** (`gram_status`, `oxygen_tolerance`, `morphology`, `is_pathobiont`, `clinical_roles`, `reservoirs`, `typical_specimens`, `amr_highlights`): use `unknown` and flag in `extraction_notes`
+   - For **free-text list fields** (`primary_niches`, `transmission_routes`, `bloom_triggers`, `risk_contexts`, `key_traits`): use the paper's exact term and flag in `extraction_notes`

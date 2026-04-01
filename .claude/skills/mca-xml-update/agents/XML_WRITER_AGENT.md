@@ -54,16 +54,16 @@ See `.claude/references/VERSIONING.md` for the version string format and snapsho
 ### Step 2A — CREATE action
 
 1. Use `assigned_passport_id` as the `<passport_id>` value.
-2. Build a new `<TaxonPassport>` block with:
-   - Core fields from `proposed_changes.identity`:
-     `preferred_name`, `taxon_rank`, `lineage`, `ncbi_taxid`
+2. Build a new `<TaxonPassport>` block with core fields from `proposed_changes.identity`:
+   `preferred_name`, `taxon_rank`, `domain`, `lineage`, `ncbi_taxid`
    - `is_pathobiont` from `proposed_changes.clinical_profile.is_pathobiont`
    - `last_reviewed` from staging file root
-   - `version` — set to `output_version_string` (e.g. `v0_1_20260331`)
-   - `created_at` and `updated_at` — set to today's date (ISO 8601: `YYYY-MM-DD HH:MM:SS`)
-3. Append all satellite child elements with non-null values (see XML Structure below).
-4. Insert the new `<TaxonPassport>` block at the end of the XML, before the closing `</MicrobialClinicalAtlas>` tag.
-5. Preserve 1-space indentation throughout.
+   - `created_at` and `updated_at` — set to today's date (ISO 8601 date only: `YYYY-MM-DD`)
+   - Do **not** write a `<version>` element — version is stored in `meta`, not per passport
+3. Append all satellite child element blocks with non-null/non-empty values (see XML Structure below).
+4. For `<ClinicalAssociation>` entries: compute `content_hash` as SHA-256 of the lowercased, whitespace-normalised `association_text` before writing.
+5. Insert the new `<TaxonPassport>` block at the end of the XML, before the closing `</MicrobialClinicalAtlas>` tag.
+6. Preserve 1-space indentation throughout.
 
 ---
 
@@ -76,18 +76,20 @@ See `.claude/references/VERSIONING.md` for the version string format and snapsho
    - If the existing XML element is empty or absent: set the value.
    - If the existing XML element has a value: overwrite and record in `scalar_overwrites`.
 
-   **List fields** (all arrays: `synonyms`, `key_traits`, `primary_niches`, `reservoirs`, `transmission_routes`, `clinical_roles`, `typical_specimens`, `bloom_triggers`, `risk_contexts`, `amr_highlights`, `taxon_level_pmids`):
+   **List fields** (all arrays: `synonyms`, `key_traits`, `primary_niches`, `typical_specimens`, `bloom_triggers`, `amr_highlights`, `reservoirs`, `transmission_routes`, `clinical_roles`, `risk_contexts`, `metabolites`, `taxon_level_pmids`):
    - Collect existing values from XML for this field.
-   - Append only items not already present (case-insensitive exact match).
+   - For plain-string fields: append only items not already present (case-insensitive exact match).
+   - For object fields (`primary_niches`, `typical_specimens`, `bloom_triggers`, `amr_highlights`, `metabolites`): match on `value` (case-insensitive); skip if `value` already present, otherwise append. If a new entry has a non-null `ext_id` and the existing entry has none, update the attribute on the existing element.
    - Skip exact duplicates silently.
 
    **`clinical_associations`**:
-   - Each item in the staging array is a new claim. Append all as new `<ClinicalAssociation>` elements.
-   - Do not deduplicate clinical associations — each paper's claim is a distinct record even if similar text exists.
+   - Compute `content_hash` (SHA-256 of lowercased, whitespace-normalised `association_text`) before inserting.
+   - Skip if a `<ClinicalAssociation>` with the same `content_hash` already exists under this passport.
+   - Otherwise, append as a new `<ClinicalAssociation>` element including `<content_hash>`, `<evidence_type>`, `<AssocRefs>`, and `<Pmids>`.
 
    **`last_reviewed`**: Always overwrite with the staging file value.
-   **`updated_at`**: Always set to today's date.
-   **`version`**: Always set to `output_version_string` on any touched passport.
+   **`updated_at`**: Always set to today's date (`YYYY-MM-DD`).
+   **`version`**: Do **not** write or update — version is in `meta`, not per passport.
 
 3. If a proposed satellite section (e.g., `<Biology>`, `<Ecology>`) does not yet exist on the passport node, create it as a new child element block.
 
@@ -123,15 +125,17 @@ Return the output object (see Outputs above) to the orchestrator with:
   <passport_id>MCA-BAC-000016</passport_id>
   <preferred_name>Clostridioides difficile</preferred_name>
   <taxon_rank>species</taxon_rank>
-  <lineage>Bacteria|...</lineage>
+  <domain>Bacteria</domain>
+  <lineage>Bacteria|Bacillota|Clostridia|Eubacteriales|Peptostreptococcaceae|Clostridioides|Clostridioides difficile</lineage>
   <ncbi_taxid>1496</ncbi_taxid>
   <is_pathobiont>yes</is_pathobiont>
   <last_reviewed>2026-03-31</last_reviewed>
-  <version>v0.1</version>
-  <created_at>2026-03-31 00:00:00</created_at>
-  <updated_at>2026-03-31 00:00:00</updated_at>
+  <created_at>2026-03-31</created_at>
+  <updated_at>2026-03-31</updated_at>
 </TaxonPassport>
 ```
+
+Note: `<version>` is no longer written per passport. DB version is stored in the `meta` table / a separate `<Meta>` block if needed.
 
 ### Satellite child element blocks (added when data is present)
 
@@ -146,8 +150,8 @@ Return the output object (see Outputs above) to the orchestrator with:
 
   <Biology>
     <gram_status>gram-positive</gram_status>
-    <oxygen_tolerance>anaerobe</oxygen_tolerance>
-    <morphology>rod</morphology>
+    <oxygen_tolerance>obligate anaerobe</oxygen_tolerance>
+    <morphology>bacillus (rod)</morphology>
     <KeyTraits>
       <key_trait>spore-forming</key_trait>
       <key_trait>toxin-producing</key_trait>
@@ -156,7 +160,8 @@ Return the output object (see Outputs above) to the orchestrator with:
 
   <Ecology>
     <PrimaryNiches>
-      <primary_niche>gut</primary_niche>
+      <!-- mesh_anatomy_id attribute omitted when null -->
+      <primary_niche mesh_anatomy_id="D007408">gut</primary_niche>
     </PrimaryNiches>
     <Reservoirs>
       <reservoir>human</reservoir>
@@ -172,18 +177,30 @@ Return the output object (see Outputs above) to the orchestrator with:
       <clinical_role>opportunistic pathogen</clinical_role>
     </ClinicalRoles>
     <TypicalSpecimens>
-      <typical_specimen>stool</typical_specimen>
+      <!-- mesh_anatomy_id attribute omitted when null -->
+      <typical_specimen mesh_anatomy_id="D070101">stool</typical_specimen>
     </TypicalSpecimens>
     <BloomTriggers>
-      <bloom_trigger>antibiotic exposure</bloom_trigger>
+      <!-- kegg_drug_id attribute omitted when null -->
+      <bloom_trigger kegg_drug_id="D00806">antibiotic exposure</bloom_trigger>
     </BloomTriggers>
     <RiskContexts>
       <risk_context>ICU / critical care</risk_context>
     </RiskContexts>
     <AmrHighlights>
-      <amr_highlight>fluoroquinolone resistance</amr_highlight>
+      <!-- aro_id attribute omitted when null -->
+      <amr_highlight aro_id="ARO:3000026">ESBL-producing</amr_highlight>
     </AmrHighlights>
   </ClinicalProfile>
+
+  <Metabolites>
+    <Metabolite>
+      <metabolite_name>butyric acid</metabolite_name>
+      <relationship>produces</relationship>
+      <kegg_compound_id>C00246</kegg_compound_id>
+      <chebi_id>CHEBI:17968</chebi_id>
+    </Metabolite>
+  </Metabolites>
 
   <TaxonEvidencePmids>
     <pmid>12345678</pmid>
@@ -192,7 +209,14 @@ Return the output object (see Outputs above) to the orchestrator with:
   <ClinicalAssociations>
     <ClinicalAssociation>
       <association_text>...</association_text>
+      <content_hash>e3b0c44298fc1c149afb...</content_hash>
       <evidence_grade>E2</evidence_grade>
+      <evidence_type>prospective cohort</evidence_type>
+      <AssocRefs>
+        <!-- ref_label omitted when null (e.g., for kegg_disease) -->
+        <ref type="mesh" id="D003967" label="Diarrhea"/>
+        <ref type="kegg_disease" id="H00352"/>
+      </AssocRefs>
       <Pmids>
         <pmid>12345678</pmid>
       </Pmids>

@@ -45,7 +45,7 @@ Currently: free-text, no external IDs.
 
 | Field | Example values | Candidate standard |
 |---|---|---|
-| primary_niches | gut, oral, skin, respiratory, urogenital | **UBERON** (anatomical ontology) or MeSH anatomy |
+| primary_niches | gut, oral, skin, respiratory, urogenital | **MeSH anatomy** |
 | reservoirs | human, animal, environment | NCBI TaxID (for host organisms) |
 | transmission_routes | fecal-oral, airborne, contact, vertical | MeSH |
 
@@ -58,7 +58,7 @@ Currently: free-text, no external IDs.
 | Field | Example values | Candidate standard |
 |---|---|---|
 | clinical_roles | opportunistic pathogen, protective commensal, toxin producer | Disease Ontology (DO) / MeSH |
-| typical_specimens | stool, blood, respiratory, urine, CSF | UBERON / MeSH anatomy |
+| typical_specimens | stool, blood, respiratory, urine, CSF | **MeSH anatomy** |
 | bloom_triggers | antibiotic exposure, immunosuppression, dysbiosis | **KEGG Drug** / MeSH (D000900 = Anti-Bacterial Agents) |
 | risk_contexts | ICU, immunosuppressed, elderly, post-surgical | MeSH (patient/population descriptors) |
 | amr_highlights | ESBL, CRE, VRE, linezolid resistance | **CARD / ARO** (Antibiotic Resistance Ontology: card.mcmaster.ca) |
@@ -74,21 +74,34 @@ Currently: free-text, no external IDs.
 | **disease / condition** | embedded in free text — NOT structured | **MeSH** + **KEGG Disease** |
 | pmids | PubMed IDs ✓ | (add DOI as secondary?) |
 
-### Proposed addition: `mesh_terms` array per association
+### MeSH terms — sourced from NLM API via PMID
+
+Each paper already carries MeSH annotations in PubMed. During curation, the skill fetches MeSH terms for each PMID via the NLM E-utilities API, then filters for terms relevant to the association.
+
+- If relevant MeSH terms are found → include all of them
+- If no relevant terms → skip (do not force)
+
+**Use cases:** standardized vocabulary, querying/filtering within MCA, linking out to PubMed.
+
 ```json
 "mesh_terms": [
   { "term": "Obesity", "mesh_id": "D009765" },
-  { "term": "Triglycerides", "mesh_id": "D014280" }
+  { "term": "Colorectal Neoplasms", "mesh_id": "D015179" }
 ]
 ```
 
-### Proposed addition: `kegg_disease_ids` array per association
+### KEGG Disease IDs — mapped by agent
+
+An agent maps the condition text to KEGG Disease (H numbers) using the local KEGG DISEASE flat file. This is always attempted; if no match is found, the field is omitted.
+
+When both MeSH and KEGG Disease are available, both are included.
+
 ```json
 "kegg_disease_ids": ["H00409", "H01593"]
 ```
 
-MeSH browser: https://meshb.nlm.nih.gov  
-KEGG Disease: https://www.genome.jp/kegg/disease/
+MeSH API: https://eutils.ncbi.nlm.nih.gov/entrez/eutils/  
+KEGG Disease (local mirror): `kegg/medicus/disease.tar.gz`
 
 ---
 
@@ -145,21 +158,24 @@ User will provide KEGG DB. Candidate KEGG resources to link:
 
 ---
 
+## Design decisions log
+
+| # | Decision | Resolution |
+|---|---|---|
+| 1 | KEGG integration mode | **Local mirror** — medicus + ligand downloaded to private Dropbox |
+| 2 | MeSH terms: required or optional? | **Conditional** — fetched from NLM API via PMID; included when relevant terms found, skipped when not. Always attempt KEGG Disease mapping. |
+| 3 | Body site identifier | **MeSH anatomy** — used for both `primary_niches` and `typical_specimens` |
+| 4 | Metabolite architecture | **Option A** — satellite table `mca_taxon_metabolite` on taxon passport; MCA is taxon-centred |
+
+---
+
 ## Next steps (pick up here next session)
 
-These are the open design decisions that must be resolved before any schema changes or staging file format updates are made:
+All design decisions are resolved. 
 
-1. **Metabolite architecture** — Should metabolites be a first-class entity (Option B: own records) or satellite entries on taxon passports (Option A: `mca_taxon_metabolite` table)? Option B is richer but requires more schema work. Decide before touching the DB or staging format.
-
-2. **KEGG integration mode** — Is the plan to mirror a local KEGG DB (user will provide), or link out to KEGG REST API at query time? This affects whether KEGG IDs are just stored as strings vs. whether we can do local lookups during curation.
-
-3. **MeSH terms: required or optional?** — Should `mesh_terms` become a required field in new clinical associations going forward (enforced by the paper-curator skill), or remain optional/best-effort? Recommend: required for E2/E3, optional for E1.
-
-4. **Body site identifier: UBERON vs MeSH anatomy** — UBERON is more granular and ontologically richer; MeSH anatomy is PubMed-native and more familiar to clinicians. Pick one for `primary_niches` and `typical_specimens`. Both `primary_niches` and `typical_specimens` should use the same choice.
-
-5. **Implementation order** — Suggested sequence once decisions above are made:
-   - Step 1: Add `mesh_terms` + `kegg_disease_ids` to clinical associations (staging schema + DB)
-   - Step 2: Add `kegg_drug_id` to bloom_triggers
-   - Step 3: Design metabolite entity (depends on decision #1)
-   - Step 4: Add body site IDs to niches/specimens (depends on decision #4)
-   - Step 5: Add CARD/ARO IDs to amr_highlights
+**Implementation order:**
+- Step 1: Add `mesh_terms` + `kegg_disease_ids` to clinical associations (staging schema + XML schema + paper-curator skill)
+- Step 2: Add `kegg_drug_id` to bloom_triggers
+- Step 3: Design and implement metabolite entity
+- Step 4: Add MeSH anatomy IDs to `primary_niches` and `typical_specimens`
+- Step 5: Add CARD/ARO IDs to `amr_highlights`
