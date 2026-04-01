@@ -2,13 +2,13 @@
 name: mca-paper-curator
 description: "MCA curation skill for extracting clinically meaningful microbial entities and relationships from a research paper (PDF) and writing a structured staging file for human review. Covers paper analysis, entity extraction, CREATE/UPDATE routing against the existing XML, and evidence grading via a dedicated subagent. Triggers on: curate paper, add paper to MCA, extract from paper, curate taxon, update passport."
 metadata:
-  version: "2.3"
+  version: "3.1"
   last_updated: "2026-04-01"
 ---
 
-# MCA Paper Curator v2.3 — Microbiome Knowledge Base Curation Skill
+# MCA Paper Curator v3.1 — Microbiome Knowledge Base Curation Skill
 
-Reads a research paper (PDF), extracts taxa and clinically meaningful features, maps them to the MCA entity model, determines whether each taxon requires a new Taxon Passport (CREATE) or an update to an existing one (UPDATE), grades the evidence via a dedicated grading subagent, and writes a structured staging file for human review before any changes are applied to the database.
+Reads a research paper (PDF) and writes a structured staging file per taxon. Biology and ecology fields are populated from NCBI Taxonomy and BacDive by TaxID — not from the PDF. The paper is the source only for the clinical layer: pathobiont status, clinical roles, bloom triggers, AMR, metabolites, and clinical associations.
 
 ---
 
@@ -43,17 +43,18 @@ Curate this paper: [attach PDF — filename must be the PMID, e.g. 38123456.pdf]
 
 ---
 
-## Agent Team (7 Agents)
+## Agent Team (8 Agents)
 
 | # | Agent | Role | Phase |
 |---|-------|------|-------|
-| 1 | `paper_analyst_agent` | Reads the PDF; extracts paper metadata (PMID, title, authors, journal, year, study design, population, sample size) and identifies all taxa mentioned | Phase 0 |
-| 2 | `entity_extractor_agent` | Maps paper findings to MCA entity model fields (biology, ecology, clinical profile, metabolites, clinical associations) per taxon | Phase 1 |
-| 3 | `routing_agent` | Checks each taxon against the current XML; determines CREATE (new passport) or UPDATE (existing passport); identifies `passport_id` for updates | Phase 1 |
-| 4 | `grading_agent` | Assigns a single evidence grade (E1 / E2 / E3) for the whole paper with written rationale; flags uncertainty when study design is ambiguous or unreported | Phase 1 |
-| 5 | `mesh_agent` | Fetches paper MeSH annotations from NLM E-utilities API; filters relevant terms per clinical association; resolves MeSH anatomy IDs for body sites and specimen types | Phase 2 |
-| 6 | `kegg_agent` | Maps clinical conditions → KEGG Disease IDs; bloom trigger drugs → KEGG Drug IDs; metabolite names → KEGG Compound IDs — all via local KEGG flat file mirror | Phase 2 |
-| 7 | `aro_agent` | Maps AMR phenotype names to CARD ARO identifiers via local CARD ontology data or CARD web API | Phase 2 |
+| 1 | `paper_analyst_agent` | Reads the PDF; extracts paper metadata (PMID, title, abstract, authors, journal, year, study design, population, sample size) and identifies all taxa mentioned. **Spawned with claude-opus-4-6** — taxon identification and abstract extraction are scope-setting for all downstream agents. | Phase 0 |
+| 2 | `db_fetch_agent` | Given TaxID, queries NCBI Taxonomy (lineage, synonyms) and BacDive (biology, ecology); populates all fields available from structured databases | Phase 1 |
+| 3 | `entity_extractor_agent` | Extracts the clinical layer from the paper: pathobiont status, clinical roles, typical specimens, bloom triggers, risk contexts, AMR highlights, metabolites, and clinical associations | Phase 1 |
+| 4 | `routing_agent` | Checks each taxon against the current XML; determines CREATE or UPDATE; identifies `passport_id` for updates | Phase 1 |
+| 5 | `grading_agent` | Assigns a single evidence grade (E1 / E2 / E3) for the whole paper with written rationale; flags uncertainty when study design is ambiguous or unreported | Phase 1 |
+| 6 | `mesh_agent` | Fetches paper MeSH annotations from NLM E-utilities API; assigns relevant MeSH terms per clinical association; resolves MeSH anatomy IDs for body sites and specimen types | Phase 2 |
+| 7 | `kegg_agent` | Maps clinical conditions → KEGG Disease IDs; bloom trigger drugs → KEGG Drug IDs; metabolite names → KEGG Compound IDs — all via local KEGG flat file mirror | Phase 2 |
+| 8 | `aro_agent` | Maps AMR phenotype names to CARD ARO identifiers via local CARD ontology data or CARD web API | Phase 2 |
 
 ---
 
@@ -85,20 +86,27 @@ User: "Curate this paper" + [PDF — filename is PMID, e.g. 38123456.pdf]
            absent from the confirmed taxa list (potential Phase 0 omissions)
          - Writes paper summary into staging file (no user confirmation required)
      |
-=== Phase 1: ENTITY EXTRACTION, ROUTING & GRADING (parallel) ===
+=== Phase 1: DB FETCH, ENTITY EXTRACTION, ROUTING & GRADING (parallel) ===
      |
-     |-> [entity_extractor_agent]
+     |-> [db_fetch_agent] (parallel — one per taxon)
      |   Per taxon identified in Phase 0:
-     |   - Biology: gram status, oxygen tolerance, morphology, key traits
-     |   - Ecology: primary niches (with mesh_anatomy_id: null), reservoirs,
-     |              transmission routes
+     |   - Queries NCBI Taxonomy by TaxID → lineage, rank, domain, synonyms
+     |   - Queries BacDive by TaxID → gram status, oxygen tolerance, morphology,
+     |     key traits, primary niches (with mesh_anatomy_id: null), reservoirs
+     |   - Maps all fetched values to controlled vocabulary
+     |   - Best-effort: failures logged in db_fetch_notes, do not block
+     |
+     |-> [entity_extractor_agent] (parallel — one per taxon)
+     |   Per taxon identified in Phase 0 — paper only, clinical layer only:
      |   - Clinical profile: pathobiont status, clinical roles,
      |                        typical specimens (with mesh_anatomy_id: null),
      |                        bloom triggers (with kegg_drug_id: null),
      |                        risk contexts, AMR highlights (with aro_id: null)
+     |   - Transmission routes: only if paper explicitly reports them in Results/Discussion
      |   - Metabolites: name, relationship (with kegg_compound_id: null, chebi_id: null)
      |   - Clinical associations: claim text, evidence_type,
      |                             assoc_refs: [] (populated in Phase 2)
+     |   - Do NOT extract biology or ecology fields — those come from db_fetch_agent
      |   - Only extract what the paper explicitly reports; leave unknown fields null
      |
      |-> [routing_agent] (parallel)
@@ -109,32 +117,53 @@ User: "Curate this paper" + [PDF — filename is PMID, e.g. 38123456.pdf]
      |       UPDATE — taxon found; identify passport_id; diff proposed changes
      |
      +-> [grading_agent] (parallel)
-         - Receives: paper metadata + study design from Phase 0
+         - Receives: abstract, title, journal, year, study_design, population, sample_size from Phase 0
+         - Does NOT receive pmid — not needed for grading
          - Assigns ONE grade for the entire paper
          - Grades: E3 (strong clinical) / E2 (moderate) / E1 (limited/preliminary)
-         - Writes rationale (2–3 sentences)
+         - Writes rationale (2–3 sentences); uses abstract to resolve ambiguous study_design
          - Flags UNCERTAIN if study design is ambiguous or not reported
      |
 === Phase 1 → Phase 2 MERGE ===
      |
-     +-> Match entity_extractor_agent and routing_agent outputs by preferred_name.
-         Per taxon, produce a single merged object:
-           action, passport_id, matched_on  ← from routing_agent
-           proposed_changes, extraction_notes ← from entity_extractor_agent
-           append routing_notes[] → extraction_notes[]
-         Process cross_check_flags[] received from Phase 0 output: fold each flag into
-         extraction_notes of the most closely related taxon staging file per the rules in
-         ROUTING_AGENT.md (orphaned flags → staging/YYYY-MM-DD_cross-check-flags.json).
+     +-> Match all Phase 1 outputs by preferred_name. Per taxon, produce a single merged object:
+           action, passport_id, matched_on       ← from routing_agent
+           identity, biology, ecology            ← from db_fetch_agent
+           clinical_profile, metabolites,
+           clinical_associations                 ← from entity_extractor_agent
+           transmission_routes                   ← entity_extractor_agent (if reported);
+                                                    otherwise [] from db_fetch_agent
+           extraction_notes                      ← union of db_fetch_notes +
+                                                    entity_extractor notes +
+                                                    routing_notes
+         Process cross_check_flags[] from Phase 0: fold into extraction_notes per
+         ROUTING_AGENT.md rules (orphaned flags → staging/YYYY-MM-DD_cross-check-flags.json).
          This merged object is passed to Phase 2 agents and used to assemble the staging file.
      |
-=== Phase 2: ONTOLOGY ENRICHMENT (parallel — requires Phase 1 merged output) ===
+=== Phase 2 PRE-FETCH: NLM API CALLS (orchestrator — before spawning any Phase 2 agents) ===
+     |
+     +-> The orchestrator makes all NLM network calls directly (not via subagents):
+         1. Fetch paper MeSH annotations:
+            WebFetch → https://eutils.ncbi.nlm.nih.gov/entrez/eutils/efetch.fcgi?db=pubmed&id={pmid}&retmode=xml
+            Store raw XML as `nlm_efetch_xml`
+            If this call fails (technical error): HALT — interrupt user before proceeding
+         2. Resolve anatomy IDs for all unique body site / specimen terms from Phase 1 merge:
+            For each unique CV term in primary_niches[] + typical_specimens[]:
+              WebFetch → https://id.nlm.nih.gov/mesh/lookup/descriptor?label={term}&match=contains&limit=5
+              Extract best anatomy match; store as {cv_term → mesh_anatomy_id} in `anatomy_lookup_results`
+              No match → store null for that term (not a failure)
+            Respect NLM rate limit: max 3 requests/second
+         Pass `nlm_efetch_xml` and `anatomy_lookup_results` as explicit inputs to mesh_agent.
+     |
+=== Phase 2: ONTOLOGY ENRICHMENT (parallel — requires Phase 1 merged output + NLM pre-fetch) ===
      |
      |-> [mesh_agent] (see agents/MESH_AGENT.md)
-     |   - Fetches paper MeSH annotations from NLM E-utilities API via PMID
+     |   - Receives pre-fetched `nlm_efetch_xml` and `anatomy_lookup_results` from orchestrator
      |   - Filters and assigns relevant MeSH terms to each clinical association
      |     → populates assoc_refs[ref_type=mesh] on each association
-     |   - Resolves MeSH anatomy IDs for extracted primary_niches and
+     |   - Applies pre-resolved anatomy IDs to primary_niches and
      |     typical_specimens → populates mesh_anatomy_id
+     |   - Makes no network calls itself
      |
      |-> [kegg_agent] (see agents/KEGG_AGENT.md)
      |   - Reads local KEGG flat file mirror
@@ -174,7 +203,11 @@ User: "Curate this paper" + [PDF — filename is PMID, e.g. 38123456.pdf]
 4. **Phase 1 — UPDATE diff**: For UPDATE actions, only propose fields that differ from what is already in the XML; do not overwrite unchanged fields
 5. **Phase 1 — one grade per paper**: A single evidence grade applies to the whole paper and all associations extracted from it
 6. **Phase 1 — uncertainty flag**: If study design cannot be determined, `grading_agent` must flag `UNCERTAIN` rather than guess; the staging file is still written with `UNCERTAIN` flagged for human review
-7. **Phase 2 — enrichment is best-effort**: Ontology ID lookup failures (NLM API down, KEGG file not found, CARD unavailable) do not block staging file output. Failed lookups are logged in `extraction_notes`; affected fields remain `null`.
+7. **Phase 2 — enrichment failure handling**: Distinguish two failure types:
+   - **Technical blocker** (tool permission denied, required file inaccessible, network timeout, archive cannot be opened): **HALT immediately** and interrupt the user with a clear message explaining which tool was blocked and what is needed to proceed. Do not write staging files. Do not silently continue.
+   - **Data gap** (term not found in ontology, API returns empty results, no matching KEGG entry): continue without blocking; log in `extraction_notes`; affected fields remain `null`.
+
+   > **Rationale:** A permission denial means the enrichment step did not run at all — the user cannot meaningfully review a staging file that is missing IDs due to a tool misconfiguration. A missing ontology match is expected and reviewable.
 8. **Phase 3 — no XML writes**: This skill ends at writing the staging file; the XML is never touched here
 
 ---
@@ -205,6 +238,7 @@ One JSON file per taxon, written to `staging/`. Schema defined in `templates/STA
 | Agent | Definition File |
 |-------|----------------|
 | `paper_analyst_agent` | `agents/PAPER_ANALYST_AGENT.md` |
+| `db_fetch_agent` | `agents/DB_FETCH_AGENT.md` |
 | `entity_extractor_agent` | `agents/ENTITY_EXTRACTOR_AGENT.md` |
 | `routing_agent` | `agents/ROUTING_AGENT.md` |
 | `grading_agent` | `agents/GRADING_AGENT.md` |
@@ -274,7 +308,7 @@ One JSON file per taxon, written to `staging/`. Schema defined in `templates/STA
 
 | Item | Content |
 |------|---------|
-| Skill Version | 2.3 |
+| Skill Version | 3.1 |
 | Last Updated | 2026-04-01 |
 | Maintainer | Heewon Seo |
 | Input | Research paper (PDF); filename stem must be the PMID (digits only, e.g. `38123456.pdf`) |
@@ -287,6 +321,8 @@ One JSON file per taxon, written to `staging/`. Schema defined in `templates/STA
 
 | Version | Date | Changes |
 |---------|------|---------|
+| 3.1 | 2026-04-01 | **Phase 2 failure handling:** Split enrichment failure rule into two cases — technical blockers (tool permission denied, file inaccessible) now HALT and interrupt the user; data gaps (term not found in ontology) remain non-blocking. Prevents silently producing under-enriched staging files when the cause is a configuration issue, not missing data. |
+| 3.0 | 2026-04-01 | **Architecture redesign:** Added `db_fetch_agent` (NCBI Taxonomy + BacDive) to Phase 1. Biology and ecology fields are now populated from structured databases by TaxID, not extracted from the PDF. `entity_extractor_agent` narrowed to clinical layer only (pathobiont status, clinical roles, typical specimens, bloom triggers, risk contexts, AMR, metabolites, clinical associations). Transmission routes remain paper-sourced (db_fetch_agent does not provide them). Phase 1→2 merge updated to union outputs from db_fetch_agent + entity_extractor_agent. |
 | 2.3 | 2026-04-01 | **Second integrity pass (9 fixes):** Cross-check scanning moved to paper_analyst_agent; routing_agent now receives and processes cross_check_flags[] from Phase 0 only. Length-preservation rule added to mesh_agent and kegg_agent. MESH_AGENT.md: CONTROLLED_VOCABULARY.md added to inputs. ARO_AGENT.md: removed misleading project-memory reference for CARD path. ENTITY_EXTRACTOR_AGENT.md: preferred_name ownership clarified (Phase 0 is authoritative). Grading criteria rewritten as purely study-design-based (E3 = multiple cohorts/meta-analysis/guidelines; E2 = single cohort or RCT; E1 = animal/in vitro/mechanistic). CONTROLLED_VOCABULARY.md: typical_specimens and amr_highlights added to closed-vocab mapping list. SKILL.md Quick Start output #4: UNCERTAIN added. |
 | 2.2 | 2026-04-01 | **Extraction rule completeness pass:** added synonym rule (NCBI Common names only); added key_traits controlled vocabulary; added is_pathobiont decision rule; added clinical_roles mapping guidance; restricted ecology/bloom_trigger scope to Results/Discussion only; added biology null-rule for supra-species ranks; added association_text format rule; added paper_summary per-taxon scope rule. **Integrity fixes:** resolved UNCERTAIN grade contradiction (staging file always written); resolved AMBIGUOUS routing contradiction (no mid-skill stops; staging file written with flag); corrected grading_agent phase label (Phase 2→Phase 1); added Phase 1→2 merge step to workflow; added cross_check_flags orphan file (`staging/YYYY-MM-DD_cross-check-flags.json`); fixed wrong MeSH anatomy IDs in MESH_AGENT.md example (gut D007422, stool D005243); added Metabolites section to TAXON_PASSPORT.md template; fixed TAXON_PASSPORT_EXAMPLE.md passport_id (MCA-BAC-000007) and synonym (NCBI only); added kegg_mirror_path to KEGG_AGENT.md inputs. |
 | 2.1 | 2026-04-01 | Added 3 Phase 2 enrichment agents: mesh_agent (NLM MeSH), kegg_agent (KEGG Disease/Drug/Compound), aro_agent (CARD/ARO); grading_agent moved to Phase 1; workflow expanded to 4 phases; Phase 2 is best-effort/non-blocking |

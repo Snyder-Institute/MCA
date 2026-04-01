@@ -92,6 +92,11 @@ def main():
     w()
     w('SET FOREIGN_KEY_CHECKS = 0;')
     w()
+    w('-- truncate all data tables before reload')
+    for tbl in ('assoc_pmid', 'assoc_ref', 'association', 'passport_pmid',
+                'metabolite', 'taxon_tag', 'biology', 'passport', 'paper'):
+        w(f'TRUNCATE TABLE {tbl};')
+    w()
 
     # ── meta ────────────────────────────────────────────────────────────────
     meta_el = root.find('Meta')
@@ -100,6 +105,32 @@ def main():
         w('-- meta')
         w(f"INSERT INTO meta (key_name, key_value) VALUES ('db_version', {esc(db_version)})")
         w(f"  ON DUPLICATE KEY UPDATE key_value = VALUES(key_value);")
+        w()
+
+    # ── papers ──────────────────────────────────────────────────────────────
+    papers_el = root.find('Papers')
+    if papers_el is not None:
+        w('-- papers')
+        for paper_el in papers_el.findall('Paper'):
+            pmid         = esc_int(get_text(paper_el, 'pmid'))
+            title        = esc(get_text(paper_el, 'title'))
+            authors      = esc(get_text(paper_el, 'authors'))
+            journal      = esc(get_text(paper_el, 'journal'))
+            year         = esc_int(get_text(paper_el, 'year'))
+            study_design = esc(get_text(paper_el, 'study_design'))
+            population   = esc(get_text(paper_el, 'population'))
+            sample_size  = esc_int(get_text(paper_el, 'sample_size'))
+            if pmid != 'NULL':
+                w(
+                    f'INSERT INTO paper '
+                    f'(pmid, title, authors, journal, year, study_design, population, sample_size) '
+                    f'VALUES ({pmid}, {title}, {authors}, {journal}, {year}, '
+                    f'{study_design}, {population}, {sample_size}) '
+                    f'ON DUPLICATE KEY UPDATE title=VALUES(title), authors=VALUES(authors), '
+                    f'journal=VALUES(journal), year=VALUES(year), '
+                    f'study_design=VALUES(study_design), population=VALUES(population), '
+                    f'sample_size=VALUES(sample_size);'
+                )
         w()
 
     # ── passports ───────────────────────────────────────────────────────────
@@ -142,13 +173,14 @@ def main():
         # ── biology ──
         bio = tp.find('Biology')
         if bio is not None:
-            gram  = get_text(bio, 'gram_status', 'unknown')
-            oxy   = get_text(bio, 'oxygen_tolerance', 'unknown')
-            morph = get_text(bio, 'morphology')
+            gram        = get_text(bio, 'gram_status', 'unknown')
+            oxy         = get_text(bio, 'oxygen_tolerance', 'unknown')
+            morph       = get_text(bio, 'morphology')
+            bacdive_url = get_text(bio, 'bacdive_url')
             w(
                 f'INSERT INTO biology '
-                f'(passport_id, gram_status, oxygen_tolerance, morphology, created_at, updated_at) VALUES ('
-                f'{p_pk}, {esc(gram)}, {esc(oxy)}, {esc(morph)}, {esc(created_at)}, {esc(updated_at)});'
+                f'(passport_id, gram_status, oxygen_tolerance, morphology, bacdive_url, created_at, updated_at) VALUES ('
+                f'{p_pk}, {esc(gram)}, {esc(oxy)}, {esc(morph)}, {esc(bacdive_url)}, {esc(created_at)}, {esc(updated_at)});'
             )
             w()
 
@@ -205,7 +237,7 @@ def main():
         for ca in assocs:
             assoc_text   = get_text(ca, 'association_text')
             content_hash = get_text(ca, 'content_hash')
-            ev_grade     = get_text(ca, 'evidence_grade', 'E2')
+            ev_grade     = get_text(ca, 'evidence_level', 'E2')
             ev_type      = get_text(ca, 'evidence_type', '')
 
             if ev_grade == 'UNCERTAIN':

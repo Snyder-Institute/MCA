@@ -1,0 +1,329 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema"
+           elementFormDefault="qualified"
+           attributeFormDefault="unqualified">
+
+  <!-- ── Root ─────────────────────────────────────────────────────────── -->
+  <xs:element name="MicrobialClinicalAtlas">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element name="Meta"          type="MetaType"/>
+        <xs:element name="Papers"        type="PapersType"  minOccurs="0"/>
+        <xs:element name="TaxonPassport" type="TaxonPassportType"
+                    minOccurs="0" maxOccurs="unbounded"/>
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+
+  <!-- ── Meta ──────────────────────────────────────────────────────────── -->
+  <xs:complexType name="MetaType">
+    <xs:sequence>
+      <xs:element name="version" type="xs:string"/>
+      <xs:element name="created" type="xs:date" minOccurs="0"/>
+    </xs:sequence>
+  </xs:complexType>
+
+  <!-- ── Papers ────────────────────────────────────────────────────────── -->
+  <xs:complexType name="PapersType">
+    <xs:sequence>
+      <xs:element name="Paper" type="PaperType" minOccurs="0" maxOccurs="unbounded"/>
+    </xs:sequence>
+  </xs:complexType>
+
+  <xs:complexType name="PaperType">
+    <xs:sequence>
+      <xs:element name="pmid"         type="xs:positiveInteger"/>
+      <xs:element name="title"        type="xs:string"          minOccurs="0"/>
+      <xs:element name="authors"      type="xs:string"          minOccurs="0"/>
+      <xs:element name="journal"      type="xs:string"          minOccurs="0"/>
+      <xs:element name="year"         type="xs:gYear"           minOccurs="0"/>
+      <xs:element name="study_design" type="xs:string"          minOccurs="0"/>
+      <xs:element name="population"   type="xs:string"          minOccurs="0"/>
+      <xs:element name="sample_size"  type="xs:positiveInteger" minOccurs="0"/>
+    </xs:sequence>
+  </xs:complexType>
+
+  <!-- ── TaxonPassport ─────────────────────────────────────────────────── -->
+  <xs:complexType name="TaxonPassportType">
+    <xs:sequence>
+      <xs:element name="passport_id"   type="PassportIdType"/>
+      <xs:element name="preferred_name" type="xs:string"/>
+      <xs:element name="taxon_rank"    type="TaxonRankType"/>
+      <xs:element name="domain"        type="DomainType"/>
+      <xs:element name="lineage"       type="xs:string"/>
+      <xs:element name="ncbi_taxid"    type="xs:positiveInteger"/>
+      <xs:element name="is_pathobiont" type="PathobiontType"/>
+      <xs:element name="last_reviewed" type="xs:date"/>
+      <xs:element name="created_at"    type="xs:date"/>
+      <xs:element name="updated_at"    type="xs:date"/>
+      <xs:element name="Synonyms"             type="SynonymsType"          minOccurs="0"/>
+      <xs:element name="Biology"              type="BiologyType"           minOccurs="0"/>
+      <xs:element name="Ecology"              type="EcologyType"           minOccurs="0"/>
+      <xs:element name="ClinicalProfile"      type="ClinicalProfileType"   minOccurs="0"/>
+      <xs:element name="Metabolites"          type="MetabolitesType"       minOccurs="0"/>
+      <xs:element name="TaxonEvidencePmids"   type="PmidListType"          minOccurs="0"/>
+      <xs:element name="ClinicalAssociations" type="ClinicalAssociationsType" minOccurs="0"/>
+    </xs:sequence>
+  </xs:complexType>
+
+  <xs:simpleType name="PassportIdType">
+    <xs:restriction base="xs:string">
+      <xs:pattern value="MCA-(BAC|FUN|VIR|ARC)-[0-9]{6}"/>
+    </xs:restriction>
+  </xs:simpleType>
+
+  <!-- Reconciled against SQL ENUM('family','genus','species','strain','clade') -->
+  <xs:simpleType name="TaxonRankType">
+    <xs:restriction base="xs:string">
+      <xs:enumeration value="family"/>
+      <xs:enumeration value="genus"/>
+      <xs:enumeration value="species"/>
+      <xs:enumeration value="strain"/>
+      <xs:enumeration value="clade"/>
+    </xs:restriction>
+  </xs:simpleType>
+
+  <!-- Reconciled against SQL ENUM('Bacteria','Archaea','Fungi','Virus','Eukaryote') -->
+  <xs:simpleType name="DomainType">
+    <xs:restriction base="xs:string">
+      <xs:enumeration value="Bacteria"/>
+      <xs:enumeration value="Archaea"/>
+      <xs:enumeration value="Fungi"/>
+      <xs:enumeration value="Virus"/>
+      <xs:enumeration value="Eukaryote"/>
+    </xs:restriction>
+  </xs:simpleType>
+
+  <!-- Reconciled against SQL ENUM('yes','no','context dependent','unknown') -->
+  <xs:simpleType name="PathobiontType">
+    <xs:restriction base="xs:string">
+      <xs:enumeration value="yes"/>
+      <xs:enumeration value="no"/>
+      <xs:enumeration value="context dependent"/>
+      <xs:enumeration value="unknown"/>
+    </xs:restriction>
+  </xs:simpleType>
+
+  <!-- SQL ENUM('E1','E2','E3'); UNCERTAIN is valid in XML but skipped by xml2sql.py -->
+  <xs:simpleType name="EvidenceLevelType">
+    <xs:restriction base="xs:string">
+      <xs:enumeration value="E1"/>
+      <xs:enumeration value="E2"/>
+      <xs:enumeration value="E3"/>
+      <xs:enumeration value="UNCERTAIN"/>
+    </xs:restriction>
+  </xs:simpleType>
+
+  <!-- Reconciled against SQL ENUM('gram-positive','gram-negative','gram-variable','not applicable','unknown') -->
+  <xs:simpleType name="GramStatusType">
+    <xs:restriction base="xs:string">
+      <xs:enumeration value="gram-positive"/>
+      <xs:enumeration value="gram-negative"/>
+      <xs:enumeration value="gram-variable"/>
+      <xs:enumeration value="not applicable"/>
+      <xs:enumeration value="unknown"/>
+    </xs:restriction>
+  </xs:simpleType>
+
+  <!-- Reconciled against SQL ENUM('aerobe','facultative anaerobe','obligate anaerobe','microaerophile','aerotolerant anaerobe','not applicable','unknown') -->
+  <xs:simpleType name="OxygenToleranceType">
+    <xs:restriction base="xs:string">
+      <xs:enumeration value="aerobe"/>
+      <xs:enumeration value="facultative anaerobe"/>
+      <xs:enumeration value="obligate anaerobe"/>
+      <xs:enumeration value="microaerophile"/>
+      <xs:enumeration value="aerotolerant anaerobe"/>
+      <xs:enumeration value="not applicable"/>
+      <xs:enumeration value="unknown"/>
+    </xs:restriction>
+  </xs:simpleType>
+
+  <!-- Reconciled against SQL ENUM('produces','consumes','modifies') -->
+  <xs:simpleType name="MetaboliteRelationshipType">
+    <xs:restriction base="xs:string">
+      <xs:enumeration value="produces"/>
+      <xs:enumeration value="consumes"/>
+      <xs:enumeration value="modifies"/>
+    </xs:restriction>
+  </xs:simpleType>
+
+  <!-- Reconciled against SQL ENUM('mesh','kegg_disease') -->
+  <xs:simpleType name="AssocRefTypeType">
+    <xs:restriction base="xs:string">
+      <xs:enumeration value="mesh"/>
+      <xs:enumeration value="kegg_disease"/>
+    </xs:restriction>
+  </xs:simpleType>
+
+  <xs:complexType name="SynonymsType">
+    <xs:sequence>
+      <xs:element name="synonym" type="xs:string" minOccurs="0" maxOccurs="unbounded"/>
+    </xs:sequence>
+  </xs:complexType>
+
+  <xs:complexType name="BiologyType">
+    <xs:sequence>
+      <xs:element name="gram_status"       type="GramStatusType"      minOccurs="0"/>
+      <xs:element name="oxygen_tolerance"  type="OxygenToleranceType" minOccurs="0"/>
+      <xs:element name="morphology"        type="xs:string"           minOccurs="0"/>
+      <xs:element name="KeyTraits"         type="KeyTraitsType"       minOccurs="0"/>
+      <xs:element name="bacdive_url"       type="xs:anyURI"           minOccurs="0"/>
+    </xs:sequence>
+  </xs:complexType>
+
+  <xs:complexType name="KeyTraitsType">
+    <xs:sequence>
+      <xs:element name="key_trait" type="xs:string" minOccurs="0" maxOccurs="unbounded"/>
+    </xs:sequence>
+  </xs:complexType>
+
+  <xs:complexType name="EcologyType">
+    <xs:sequence>
+      <xs:element name="PrimaryNiches"      type="PrimaryNichesType"      minOccurs="0"/>
+      <xs:element name="Reservoirs"         type="ReservoirsType"         minOccurs="0"/>
+      <xs:element name="TransmissionRoutes" type="TransmissionRoutesType" minOccurs="0"/>
+    </xs:sequence>
+  </xs:complexType>
+
+  <xs:complexType name="PrimaryNichesType">
+    <xs:sequence>
+      <xs:element name="primary_niche" minOccurs="0" maxOccurs="unbounded">
+        <xs:complexType>
+          <xs:simpleContent>
+            <xs:extension base="xs:string">
+              <xs:attribute name="mesh_anatomy_id" type="xs:string" use="optional"/>
+            </xs:extension>
+          </xs:simpleContent>
+        </xs:complexType>
+      </xs:element>
+    </xs:sequence>
+  </xs:complexType>
+
+  <xs:complexType name="ReservoirsType">
+    <xs:sequence>
+      <xs:element name="reservoir" type="xs:string" minOccurs="0" maxOccurs="unbounded"/>
+    </xs:sequence>
+  </xs:complexType>
+
+  <xs:complexType name="TransmissionRoutesType">
+    <xs:sequence>
+      <xs:element name="transmission_route" type="xs:string" minOccurs="0" maxOccurs="unbounded"/>
+    </xs:sequence>
+  </xs:complexType>
+
+  <xs:complexType name="ClinicalProfileType">
+    <xs:sequence>
+      <xs:element name="ClinicalRoles"    type="ClinicalRolesType"    minOccurs="0"/>
+      <xs:element name="TypicalSpecimens" type="TypicalSpecimensType" minOccurs="0"/>
+      <xs:element name="BloomTriggers"    type="BloomTriggersType"    minOccurs="0"/>
+      <xs:element name="RiskContexts"     type="RiskContextsType"     minOccurs="0"/>
+      <xs:element name="AmrHighlights"    type="AmrHighlightsType"    minOccurs="0"/>
+    </xs:sequence>
+  </xs:complexType>
+
+  <xs:complexType name="ClinicalRolesType">
+    <xs:sequence>
+      <xs:element name="clinical_role" type="xs:string" minOccurs="0" maxOccurs="unbounded"/>
+    </xs:sequence>
+  </xs:complexType>
+
+  <xs:complexType name="TypicalSpecimensType">
+    <xs:sequence>
+      <xs:element name="typical_specimen" minOccurs="0" maxOccurs="unbounded">
+        <xs:complexType>
+          <xs:simpleContent>
+            <xs:extension base="xs:string">
+              <xs:attribute name="mesh_anatomy_id" type="xs:string" use="optional"/>
+            </xs:extension>
+          </xs:simpleContent>
+        </xs:complexType>
+      </xs:element>
+    </xs:sequence>
+  </xs:complexType>
+
+  <xs:complexType name="BloomTriggersType">
+    <xs:sequence>
+      <xs:element name="bloom_trigger" minOccurs="0" maxOccurs="unbounded">
+        <xs:complexType>
+          <xs:simpleContent>
+            <xs:extension base="xs:string">
+              <xs:attribute name="kegg_drug_id" type="xs:string" use="optional"/>
+            </xs:extension>
+          </xs:simpleContent>
+        </xs:complexType>
+      </xs:element>
+    </xs:sequence>
+  </xs:complexType>
+
+  <xs:complexType name="RiskContextsType">
+    <xs:sequence>
+      <xs:element name="risk_context" type="xs:string" minOccurs="0" maxOccurs="unbounded"/>
+    </xs:sequence>
+  </xs:complexType>
+
+  <xs:complexType name="AmrHighlightsType">
+    <xs:sequence>
+      <xs:element name="amr_highlight" minOccurs="0" maxOccurs="unbounded">
+        <xs:complexType>
+          <xs:simpleContent>
+            <xs:extension base="xs:string">
+              <xs:attribute name="aro_id" type="xs:string" use="optional"/>
+            </xs:extension>
+          </xs:simpleContent>
+        </xs:complexType>
+      </xs:element>
+    </xs:sequence>
+  </xs:complexType>
+
+  <xs:complexType name="MetabolitesType">
+    <xs:sequence>
+      <xs:element name="Metabolite" minOccurs="0" maxOccurs="unbounded">
+        <xs:complexType>
+          <xs:sequence>
+            <xs:element name="metabolite_name"  type="xs:string"/>
+            <xs:element name="relationship"     type="MetaboliteRelationshipType" minOccurs="0"/>
+            <xs:element name="kegg_compound_id" type="xs:string"                 minOccurs="0"/>
+            <xs:element name="chebi_id"         type="xs:string"                 minOccurs="0"/>
+          </xs:sequence>
+        </xs:complexType>
+      </xs:element>
+    </xs:sequence>
+  </xs:complexType>
+
+  <xs:complexType name="PmidListType">
+    <xs:sequence>
+      <xs:element name="pmid" type="xs:positiveInteger" minOccurs="0" maxOccurs="unbounded"/>
+    </xs:sequence>
+  </xs:complexType>
+
+  <xs:complexType name="ClinicalAssociationsType">
+    <xs:sequence>
+      <xs:element name="ClinicalAssociation" type="ClinicalAssociationType"
+                  minOccurs="0" maxOccurs="unbounded"/>
+    </xs:sequence>
+  </xs:complexType>
+
+  <xs:complexType name="ClinicalAssociationType">
+    <xs:sequence>
+      <xs:element name="association_text" type="xs:string"/>
+      <xs:element name="content_hash"    type="xs:string"        minOccurs="0"/>
+      <xs:element name="evidence_level"  type="EvidenceLevelType"/>
+      <xs:element name="evidence_type"   type="xs:string"        minOccurs="0"/>
+      <xs:element name="AssocRefs"       type="AssocRefsType"    minOccurs="0"/>
+      <xs:element name="Pmids"           type="PmidListType"     minOccurs="0"/>
+    </xs:sequence>
+  </xs:complexType>
+
+  <xs:complexType name="AssocRefsType">
+    <xs:sequence>
+      <xs:element name="ref" minOccurs="0" maxOccurs="unbounded">
+        <xs:complexType>
+          <xs:attribute name="type"  type="AssocRefTypeType" use="required"/>
+          <xs:attribute name="id"    type="xs:string"        use="required"/>
+          <xs:attribute name="label" type="xs:string"        use="optional"/>
+        </xs:complexType>
+      </xs:element>
+    </xs:sequence>
+  </xs:complexType>
+
+</xs:schema>

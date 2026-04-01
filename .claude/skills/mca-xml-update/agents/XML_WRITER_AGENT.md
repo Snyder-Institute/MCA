@@ -51,6 +51,37 @@ See `.claude/references/VERSIONING.md` for the version string format and snapsho
 
 ---
 
+### Step 1B — Write paper metadata
+
+After reading inputs and before writing any passport, write the staging file's `source_paper` to the `<Papers>` block in the output XML:
+
+1. Locate the `<Papers>` block in the source XML. If it does not exist, create it immediately after the `<Meta>` block.
+2. Check whether a `<Paper>` element with the same `<pmid>` already exists in `<Papers>`.
+   - If it already exists: skip (do not overwrite — the paper was written by a previous agent call in this session).
+   - If it does not exist: append a new `<Paper>` element with all non-null fields from `source_paper`.
+3. `source_paper.pmid` is required. If `pmid` is null, skip the paper block and record in the output report.
+
+**XML structure for a Paper element:**
+
+```xml
+<Papers>
+  <Paper>
+    <pmid>36894652</pmid>
+    <title>Gut microbiota and Clostridioides difficile infection ...</title>
+    <authors>Smith J; Jones A; Lee K</authors>
+    <journal>Gut Microbes</journal>
+    <year>2023</year>
+    <study_design>prospective cohort</study_design>
+    <population>Adult ICU patients with antibiotic exposure</population>
+    <sample_size>412</sample_size>
+  </Paper>
+</Papers>
+```
+
+Omit any element whose value is null (do not write `<sample_size/>` for missing sample size).
+
+---
+
 ### Step 2A — CREATE action
 
 1. Use `assigned_passport_id` as the `<passport_id>` value.
@@ -72,7 +103,7 @@ See `.claude/references/VERSIONING.md` for the version string format and snapsho
 1. Locate the `<TaxonPassport>` node where `<passport_id>` matches the staging file's `passport_id`.
 2. For each field in `proposed_changes` that is non-null:
 
-   **Scalar fields** (`gram_status`, `oxygen_tolerance`, `morphology`, `is_pathobiont`, `taxon_rank`, `lineage`, `ncbi_taxid`):
+   **Scalar fields** (`gram_status`, `oxygen_tolerance`, `morphology`, `bacdive_url`, `is_pathobiont`, `taxon_rank`, `lineage`, `ncbi_taxid`):
    - If the existing XML element is empty or absent: set the value.
    - If the existing XML element has a value: overwrite and record in `scalar_overwrites`.
 
@@ -118,6 +149,33 @@ Return the output object (see Outputs above) to the orchestrator with:
 
 ## XML Structure Reference
 
+### Top-level document structure
+
+```xml
+<?xml version="1.0" encoding="UTF-8"?>
+<MicrobialClinicalAtlas>
+ <Meta>
+  <version>v0_1_20260401</version>
+ </Meta>
+ <Papers>
+  <Paper>
+   <pmid>36894652</pmid>
+   <title>...</title>
+   <authors>...</authors>
+   <journal>...</journal>
+   <year>2023</year>
+   <study_design>prospective cohort</study_design>
+   <population>...</population>
+   <sample_size>412</sample_size>
+  </Paper>
+ </Papers>
+ <TaxonPassport>...</TaxonPassport>
+ <!-- ... -->
+</MicrobialClinicalAtlas>
+```
+
+---
+
 ### Core passport fields (always present)
 
 ```xml
@@ -156,6 +214,8 @@ Note: `<version>` is no longer written per passport. DB version is stored in the
       <key_trait>spore-forming</key_trait>
       <key_trait>toxin-producing</key_trait>
     </KeyTraits>
+    <!-- bacdive_url: always write when db_fetch_agent provides it, including for family-rank taxa where gram/oxygen/morphology are null -->
+    <bacdive_url>https://bacdive.dsmz.de/...</bacdive_url>
   </Biology>
 
   <Ecology>
@@ -210,7 +270,7 @@ Note: `<version>` is no longer written per passport. DB version is stored in the
     <ClinicalAssociation>
       <association_text>...</association_text>
       <content_hash>e3b0c44298fc1c149afb...</content_hash>
-      <evidence_grade>E2</evidence_grade>
+      <evidence_level>E2</evidence_level>
       <evidence_type>prospective cohort</evidence_type>
       <AssocRefs>
         <!-- ref_label omitted when null (e.g., for kegg_disease) -->

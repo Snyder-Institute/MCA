@@ -1,11 +1,11 @@
 ---
 name: mesh_agent
-description: "Phase 2 enrichment agent for the MCA Paper Curator skill. Enriches entity_extractor output with MeSH identifiers: fetches the paper's MeSH annotations from the NLM E-utilities API, filters and assigns relevant terms per clinical association, and resolves MeSH anatomy IDs for extracted body sites and typical specimens. Runs in parallel with kegg_agent and aro_agent."
+description: "Phase 2 enrichment agent for the MCA Paper Curator skill. Enriches entity_extractor output with MeSH identifiers: maps pre-fetched NLM MeSH annotations to individual clinical associations, and resolves MeSH anatomy IDs for extracted body sites and specimens. Receives pre-fetched NLM data from the orchestrator — does not make any network calls itself. Runs in parallel with kegg_agent and aro_agent."
 ---
 
 # MESH_AGENT.md — MCA MeSH Enrichment Agent
 
-Enriches entity extractor output with Medical Subject Headings (MeSH) identifiers. Receives the source PMID and entity extractor output. Performs two tasks: (1) fetches the paper's MeSH annotations from NLM and maps them to individual clinical associations; (2) resolves MeSH anatomy IDs for extracted body site and specimen terms. Returns enriched data for staging file assembly.
+Enriches entity extractor output with Medical Subject Headings (MeSH) identifiers. Receives pre-fetched NLM data from the orchestrator and performs two tasks: (1) maps paper MeSH annotations to individual clinical associations; (2) resolves MeSH anatomy IDs for extracted body site and specimen terms. **Does not make any network calls — all NLM API calls are made by the orchestrator before this agent is spawned.**
 
 ---
 
@@ -13,51 +13,46 @@ Enriches entity extractor output with Medical Subject Headings (MeSH) identifier
 
 | Input | Description |
 |-------|-------------|
-| `pmid` | PubMed ID of the source paper (integer, from `source_paper.pmid`) |
+| `nlm_efetch_xml` | Raw XML string from the NLM efetch response for the source PMID — fetched by the orchestrator before spawning this agent. May be `null` if PMID is null or fetch failed. |
+| `anatomy_lookup_results` | Dict of `{cv_term → mesh_anatomy_id}` for each unique body site and specimen term extracted in Phase 1 — resolved by the orchestrator via NLM MeSH lookup API before spawning this agent. May be an empty dict `{}` if lookups failed. |
 | `entity_extractor output` | Full output from `entity_extractor_agent` — specifically `clinical_associations[]`, `ecology.primary_niches[]`, `clinical_profile.typical_specimens[]` |
-| `references/CONTROLLED_VOCABULARY.md` | Controlled vocabulary for body site and specimen terms — use the canonical CV term as the lookup query for anatomy ID resolution in Task 2 |
+| `references/CONTROLLED_VOCABULARY.md` | Controlled vocabulary for body site and specimen terms |
 
 ---
 
 ## Task
 
-### Task 1 — Fetch paper MeSH annotations and map to associations
+### Task 1 — Map pre-fetched MeSH annotations to associations
 
-1. Fetch the paper's full MeSH annotation list from NLM E-utilities:
-   ```
-   GET https://eutils.ncbi.nlm.nih.gov/entrez/eutils/efetch.fcgi
-       ?db=pubmed&id={pmid}&retmode=xml
-   ```
-2. Parse the `<MeshHeadingList>` block from the response. Extract all `<DescriptorName>` elements with their `UI` attribute (the MeSH ID, e.g., `D003141`).
+1. Receive `nlm_efetch_xml` from the orchestrator. If null or empty, return `assoc_refs: []` for all associations and note in `mesh_notes`.
+2. Parse the `<MeshHeadingList>` block from the XML. Extract all `<DescriptorName>` elements with their `UI` attribute (the MeSH ID, e.g., `D003141`).
 3. For each clinical association in the entity extractor output:
    - Read the `association_text`
-   - Identify which fetched MeSH terms describe the disease, condition, or outcome referenced in that association (semantic match — a term is relevant if it describes the primary clinical condition or outcome in the claim)
+   - Identify which MeSH terms describe the disease, condition, or outcome referenced in that association (semantic match — a term is relevant if it describes the primary clinical condition or outcome in the claim)
    - Include all relevant terms; skip a term if it describes only the study methodology or the taxon itself rather than the condition
 4. If no relevant MeSH terms can be identified for an association, return `assoc_refs: []` for that association — do not force a match.
-5. If `pmid` is null, skip Task 1 entirely and return empty `assoc_refs` for all associations.
 
-### Task 2 — Resolve MeSH anatomy IDs for body sites and specimens
+### Task 2 — Apply pre-fetched anatomy IDs to body sites and specimens
 
-1. For each item in `primary_niches[]` and `typical_specimens[]`:
+1. Receive `anatomy_lookup_results` dict `{cv_term → mesh_anatomy_id}` from the orchestrator.
+2. For each item in `primary_niches[]` and `typical_specimens[]`:
    - If `mesh_anatomy_id` is already populated (non-null), skip.
-   - Otherwise, resolve the MeSH anatomy ID using the NLM MeSH Lookup API:
-     ```
-     GET https://id.nlm.nih.gov/mesh/lookup/descriptor
-         ?label={term}&match=contains&limit=5
-     ```
-   - From the response, select the best match from the anatomy/body part subtree. Prefer exact matches over partial.
-   - If the lookup returns no useful anatomy match, leave `mesh_anatomy_id` as `null`.
-2. Use the MCA controlled vocabulary canonical term (from `references/CONTROLLED_VOCABULARY.md`) as the lookup query — not raw text from the paper.
+   - Otherwise, look up the canonical CV term in `anatomy_lookup_results` and apply the resolved ID.
+   - If the term is absent from `anatomy_lookup_results` or maps to null, leave `mesh_anatomy_id` as `null`.
+3. Do not make any API calls — all lookup results have already been fetched by the orchestrator.
 
 ---
 
-## NLM API Notes
+## NLM API Notes (Orchestrator Reference)
+
+These calls are made by the **orchestrator** before spawning this agent — not by the agent itself.
 
 - **efetch endpoint:** `https://eutils.ncbi.nlm.nih.gov/entrez/eutils/efetch.fcgi?db=pubmed&id={pmid}&retmode=xml`
-- **MeSH lookup endpoint:** `https://id.nlm.nih.gov/mesh/lookup/descriptor?label={term}&match=contains&limit=5`
+- **MeSH anatomy lookup endpoint:** `https://id.nlm.nih.gov/mesh/lookup/descriptor?label={term}&match=contains&limit=5`
 - No API key required for low-volume use. Add `&tool=MCA&email=` parameters if rate limiting is encountered.
-- Rate limit: maximum 3 requests/second to NCBI APIs. Add a short delay between requests if fetching anatomy IDs for many terms.
-- If the NLM API returns an error or times out: log in `extraction_notes`, set affected fields to `null`, continue.
+- Rate limit: maximum 3 requests/second to NCBI APIs. The orchestrator should add a short delay between anatomy lookup calls if resolving many terms.
+- If the NLM efetch call fails (technical error): orchestrator halts and interrupts the user per Skill v3.1 Checkpoint Rule 7.
+- If an anatomy lookup call returns no useful match: orchestrator passes `null` for that term in `anatomy_lookup_results` — not a technical failure.
 
 ---
 
@@ -114,7 +109,7 @@ One object per taxon, providing enriched versions of the relevant fields:
 |------|--------|
 | No fabrication | Only return MeSH IDs confirmed by the NLM API response. Never guess or invent IDs. |
 | Null on miss | If no anatomy match is found for a body site, return `null` — not an approximate match. |
-| Empty on no PMID | If `source_paper.pmid` is null, return empty `assoc_refs` for all associations without error. |
+| Empty on no PMID | If `nlm_efetch_xml` is null (PMID was null or fetch failed), return empty `assoc_refs` for all associations without error. |
 | Length preservation | Return exactly as many association objects as the entity extractor output — one per association, in the same order. Never skip an association that has no MeSH match; return it with `assoc_refs: []`. |
 | Order preservation | Return association objects in the same order as the entity extractor output. |
-| Non-blocking | Errors from the NLM API do not halt the skill — log in `mesh_notes` and continue. |
+| No network calls | This agent never calls any API. All NLM data is provided by the orchestrator as inputs. |

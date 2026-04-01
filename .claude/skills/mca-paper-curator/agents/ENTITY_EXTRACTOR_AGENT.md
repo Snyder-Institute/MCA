@@ -1,11 +1,11 @@
 ---
 name: entity_extractor_agent
-description: "Phase 1 agent for the MCA Paper Curator skill. Maps paper findings to the MCA entity model per taxon — biology, ecology, clinical profile, and clinical associations. Runs in parallel with routing_agent. Only extracts what the paper explicitly reports."
+description: "Phase 1 agent for the MCA Paper Curator skill. Extracts clinical profile, metabolites, and clinical associations from the paper for each taxon. Biology and ecology fields are populated by db_fetch_agent from NCBI Taxonomy and BacDive — do not extract those from the PDF. Runs in parallel with routing_agent and db_fetch_agent."
 ---
 
 # ENTITY_EXTRACTOR_AGENT.md — MCA Entity Extractor Agent
 
-Maps findings from the research paper to the MCA entity model for each taxon confirmed in Phase 0. Produces a structured extraction per taxon that feeds into the staging file. Runs in parallel with `routing_agent`.
+Extracts the **clinical layer** of the MCA entity model from the research paper for each taxon confirmed in Phase 0. Biology and ecology fields are handled by `db_fetch_agent` (NCBI Taxonomy + BacDive) — this agent does not touch those fields. Produces a structured extraction per taxon that feeds into the staging file. Runs in parallel with `routing_agent` and `db_fetch_agent`.
 
 ---
 
@@ -34,20 +34,15 @@ For each taxon in the confirmed taxa list:
 ## Extraction Scope per Taxon
 
 ### Identity
-- Preferred name, taxon rank, domain, lineage, NCBI TaxID (integer), synonyms
-- Source: paper text + NCBI Taxonomy (for lineage and synonym resolution)
-- `preferred_name`: use the value resolved in Phase 0 by `paper_analyst_agent` — do not re-resolve or independently standardise. `paper_analyst_agent` is the authoritative source for this field.
-- `domain` is derived from the first element of lineage (e.g., `Bacteria`)
-- `synonyms`: populate from the **"Common names"** field in the NCBI Taxonomy record for this taxon (look up by TaxID or preferred name). NCBI is the authoritative source — do not add names from the paper, other databases, or background knowledge. If NCBI lists no common names, set `synonyms: []`.
+- `preferred_name` only: use the value resolved in Phase 0 by `paper_analyst_agent` — do not re-resolve. All other identity fields (lineage, rank, domain, TaxID, synonyms) are populated by `db_fetch_agent`.
 
 ### Biology
-- Gram status, oxygen tolerance, morphology, key traits
-- Source: paper text — only extract what the paper explicitly states for this taxon. Do not add from background knowledge.
-- For taxa at **family rank or above**: only populate `gram_status`, `oxygen_tolerance`, and `morphology` if the paper explicitly characterises the majority of the family with a shared trait (e.g., *"Lachnospiraceae are obligate anaerobes"*). If members are heterogeneous or the paper does not characterise biology at the family level, set to `null`.
+**Do not extract from the paper.** Biology fields (`gram_status`, `oxygen_tolerance`, `morphology`, `key_traits`) are populated by `db_fetch_agent` from BacDive. Leave the entire `biology` block absent from your output — it will be merged in from `db_fetch_agent`.
 
 ### Ecology
-- Primary niches, reservoirs, transmission routes
-- Source: **Results and Discussion only**. Do not extract from Introduction or Methods background text. A niche or reservoir qualifies only if the paper's own data or primary conclusions place the taxon there. Background statements about well-known ecological context do not qualify.
+**Do not extract primary niches or reservoirs from the paper.** Those fields are populated by `db_fetch_agent` from BacDive.
+
+**Exception — transmission routes:** If the paper explicitly reports a transmission route for this taxon in its own Results or Discussion, extract it. Background statements from Introduction do not qualify.
 
 ### Clinical Profile
 - Pathobiont status, clinical roles, typical specimens, bloom triggers, risk contexts, AMR highlights

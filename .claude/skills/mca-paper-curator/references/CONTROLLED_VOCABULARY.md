@@ -141,10 +141,12 @@ Allowed values (select one):
 - `unknown`
 
 **Decision rule:**
-- `yes` — paper explicitly labels the taxon as a pathobiont, or demonstrates it causes infection/disease in humans in this paper's own data
+- `yes` — paper explicitly labels the taxon as a pathobiont, or demonstrates it causes infection/disease in humans in this paper's own data. **Explicit paper language takes priority over background biological knowledge** — if the paper calls the taxon a pathobiont, use `yes` even if the taxon is also a known gut commensal.
 - `no` — paper explicitly characterises the taxon as commensal, protective, or non-pathogenic
-- `context dependent` — paper states the taxon can be both beneficial and harmful depending on host state or conditions, OR the taxon is a known commensal that can act as an opportunistic pathogen
+- `context dependent` — paper states the taxon can be both beneficial and harmful depending on host state or conditions, **and does not explicitly label it a pathobiont**
 - `unknown` — paper does not characterise pathobiont status; use as default when no explicit statement is present
+
+**Priority:** `yes` (explicit label) > `context dependent` (inferred from biology) > `unknown`. When explicit paper language conflicts with background knowledge, always follow the paper and flag the conflict in `extraction_notes`.
 
 For UPDATE actions: only propose a change if the paper provides an explicit characterisation. If overwriting a non-null, non-`unknown` existing value, flag in `extraction_notes` and require human review before applying.
 

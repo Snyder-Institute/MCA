@@ -22,13 +22,13 @@ Maps extracted entity names to KEGG identifiers using the local KEGG flat file m
 
 ## Flat Files Used
 
-Construct full paths by joining `kegg_mirror_path` (from Inputs) with the relative paths below.
+Construct full paths by joining `kegg_mirror_path` (from Inputs) with the relative paths below. All files are pre-extracted plain text — no decompression needed. Read them directly using the Read or Grep tool.
 
 | KEGG resource | Path relative to `kegg_mirror_path` | Entry prefix | Encoding |
 |---|---|---|---|
-| KEGG Disease | `medicus/disease.tar.gz` → `disease/disease` | `H` | English |
-| KEGG Drug | `medicus/drug.tar.gz` → `drug/drug` | `D` | Mixed JP/EN — English names present as USP/INN names |
-| KEGG Compound | `ligand/compound.tar.gz` → `compound/compound` | `C` | English |
+| KEGG Disease | `medicus/disease/disease` | `H` | English |
+| KEGG Drug | `medicus/drug/drug` | `D` | Mixed JP/EN — English names present as USP/INN names |
+| KEGG Compound | `ligand/compound/compound` | `C` | English |
 
 Entries in all three files are delimited by `///` on its own line.
 
@@ -184,7 +184,7 @@ One object per taxon:
 | No fabrication | Only return KEGG IDs confirmed by the flat file index. Never guess or invent IDs. |
 | Null on miss | If no match is found, return `null` — not the nearest approximate. |
 | Drug classes | Do not attempt KEGG Drug lookup for general drug class terms — only specific drug names. |
-| File not found | If a flat file cannot be read, log in `kegg_notes` and skip that lookup type. Do not halt. |
+| File not found | If a flat file cannot be read (path wrong, file missing), this is a technical blocker — halt and interrupt the user per Skill v3.1 Checkpoint Rule 7. Do not silently skip. |
 | Length preservation | Return exactly as many association objects as the entity extractor output — one per association, in the same order. Never skip an association with no KEGG match; return it with `assoc_refs: []`. |
 | Order preservation | Return association objects in the same order as entity extractor output. |
 | Non-blocking | Lookup failures do not halt the skill — all errors go to `kegg_notes`. |

@@ -1,6 +1,8 @@
 ---
 name: paper_analyst_agent
 description: "Phase 0 agent for the MCA Paper Curator skill. Reads a research paper PDF, extracts paper metadata, identifies all taxa mentioned, and writes the summary directly into the staging file. No user confirmation — the skill runs end-to-end."
+model: claude-opus-4-6
+model_rationale: "Opus is used here because this agent reads the full PDF, and its taxon identification and abstract extraction outputs set the scope for every downstream agent. A missed taxon produces no staging file — there is no downstream recovery path. This is a single call per paper, so the cost is bounded."
 ---
 
 # PAPER_ANALYST_AGENT.md — MCA Paper Analyst Agent
@@ -38,6 +40,7 @@ Reads the full PDF of a research paper and extracts structured metadata. Identif
 |-------|-------------|
 | `pmid` | PubMed ID — taken directly from the PDF filename stem (already validated); do not search the PDF text for this value |
 | `title` | Full paper title |
+| `abstract` | Full abstract text, copied verbatim from the paper. If no structured abstract is present, copy the opening summary paragraph. Never truncate. |
 | `authors` | Author list (Last FM format, semicolon-separated) |
 | `journal` | Journal name |
 | `year` | Publication year |
@@ -82,6 +85,7 @@ For each taxon:
   "paper": {
     "pmid": "",
     "title": "",
+    "abstract": "",
     "authors": "",
     "journal": "",
     "year": "",

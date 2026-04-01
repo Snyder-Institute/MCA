@@ -5,7 +5,7 @@
     "preferred_name": "Enterobacteriaceae",
     "action": "CREATE",
     "source_pmid": 36894652,
-    "xml_file": "database/MCA_DB_v1_0_20260401.xml",
+    "xml_file": "database/MCA_DB_v0_1_20260401.xml",
     "staging_file": "staging/applied/2026-04-01_enterobacteriaceae.json"
   },
   {
@@ -14,7 +14,43 @@
     "preferred_name": "Enterococcaceae",
     "action": "CREATE",
     "source_pmid": 36894652,
-    "xml_file": "database/MCA_DB_v1_0_20260401.xml",
+    "xml_file": "database/MCA_DB_v0_1_20260401.xml",
     "staging_file": "staging/applied/2026-04-01_enterococcaceae.json"
+  },
+  {
+    "date_applied": "2026-04-01",
+    "passport_id": "MCA-BAC-000003",
+    "preferred_name": "Ruminococcaceae",
+    "action": "CREATE",
+    "source_pmid": 36894652,
+    "xml_file": "database/MCA_DB_v0_1_20260401.xml",
+    "staging_file": "staging/applied/2026-04-01_ruminococcaceae.json"
+  },
+  {
+    "date_applied": "2026-04-01",
+    "passport_id": "MCA-BAC-000004",
+    "preferred_name": "Lachnospiraceae",
+    "action": "CREATE",
+    "source_pmid": 36894652,
+    "xml_file": "database/MCA_DB_v0_1_20260401.xml",
+    "staging_file": "staging/applied/2026-04-01_lachnospiraceae.json"
+  },
+  {
+    "date_applied": "2026-04-01",
+    "passport_id": "MCA-BAC-000005",
+    "preferred_name": "Bifidobacteriaceae",
+    "action": "CREATE",
+    "source_pmid": 36894652,
+    "xml_file": "database/MCA_DB_v0_1_20260401.xml",
+    "staging_file": "staging/applied/2026-04-01_bifidobacteriaceae.json"
+  },
+  {
+    "date_applied": "2026-04-01",
+    "passport_id": "MCA-BAC-000006",
+    "preferred_name": "Clostridioides difficile",
+    "action": "CREATE",
+    "source_pmid": 36894652,
+    "xml_file": "database/MCA_DB_v0_1_20260401.xml",
+    "staging_file": "staging/applied/2026-04-01_clostridioides-difficile.json"
   }
 ]

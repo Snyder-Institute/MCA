@@ -1,16 +1,18 @@
 ---
 name: mca-xml-update
-description: "MCA XML update skill. Reads one or more approved staging JSON files from staging/, validates them, applies CREATE or UPDATE actions to database/MCA_DB_vX.X.xml, and archives applied files. Triggers on: apply staging file, update MCA XML, apply to database, commit staging, import staging."
+description: "MCA XML update skill. Reads one or more approved staging JSON files from staging/, validates them, applies CREATE or UPDATE actions to database/MCA_DB_vX.X.xml, archives applied files, and runs xml2sql.py to generate a .sql dump. Triggers on: apply staging file, update MCA XML, apply to database, commit staging, import staging."
 metadata:
-  version: "2.0"
-  last_updated: "2026-03-31"
+  version: "2.2"
+  last_updated: "2026-04-01"
 ---
 
-# MCA XML Update Skill v1.0 — Apply Staging Files to the Knowledge Base
+# MCA XML Update Skill v2.2 — Apply Staging Files to the Knowledge Base
 
-Reads one or more approved staging JSON files from `staging/`, validates them, shows a pre-flight summary for human confirmation, applies each CREATE or UPDATE action to `database/MCA_DB_vX.X.xml` via a dedicated `xml_writer_agent`, and archives applied files to `staging/applied/`.
+Reads one or more approved staging JSON files from `staging/`, validates them, applies each CREATE or UPDATE action to `database/MCA_DB_vX.X.xml` via a dedicated `xml_writer_agent`, archives applied files to `staging/applied/`, and generates a `.sql` dump via `xml2sql.py`.
 
 > **Prerequisite:** Staging files must already exist (produced by the MCA Paper Curator skill). This skill does not extract or grade — it only applies approved changes.
+>
+> **Fresh-start support:** If no `database/MCA_DB_v*.xml` exists, `xsd_writer_agent` is automatically invoked to bootstrap a skeleton XML before applying any staging files. No manual setup is required.
 
 ---
 
@@ -25,10 +27,10 @@ Apply all staging files
 ```
 
 **Output:**
-1. Validation report for each staging file (warnings flagged before any writes)
-2. Pre-flight summary — CREATEs, UPDATEs, warnings — awaiting user confirmation
-3. Changes applied to `database/MCA_DB_vX.X.xml`
-4. Applied files moved to `staging/applied/`
+1. Validation report for each staging file (warnings shown, hard failures block execution)
+2. Changes applied to `database/MCA_DB_vX.X.xml`
+3. Applied files moved to `staging/applied/`
+4. `.sql` dump generated at `database/MCA_DB_[version].sql`
 5. Summary of new passport IDs assigned and fields updated
 
 ---
@@ -47,13 +49,14 @@ Apply all staging files
 
 ---
 
-## Agent Team (1 Agent)
+## Agent Team (2 Agents)
 
 | # | Agent | Role | Phase |
 |---|-------|------|-------|
-| 1 | `xml_writer_agent` | Applies a single staging file's CREATE or UPDATE action to the XML | Phase 2 |
+| 1 | `xsd_writer_agent` | Bootstraps a fresh database: generates `MCA_schema.xsd` and an empty skeleton XML; invoked only when no `MCA_DB_v*.xml` exists | Phase 2 (conditional) |
+| 2 | `xml_writer_agent` | Applies a single staging file's CREATE or UPDATE action to the XML | Phase 2 |
 
-One `xml_writer_agent` is spawned per staging file. Files are processed sequentially (not in parallel) to avoid write conflicts on the shared XML.
+One `xml_writer_agent` is spawned per staging file. Files are processed sequentially (not in parallel) to avoid write conflicts on the shared XML. `xsd_writer_agent` is spawned at most once per session, only on a fresh database.
 
 ---
 
@@ -80,9 +83,9 @@ User: "Apply staging file(s)" + [file path(s) or "all"]
                  - extraction_notes is non-empty
                  - source_paper.pmid is null
      |
-=== Phase 1: PRE-FLIGHT SUMMARY & CONFIRMATION ===
+=== Phase 1: PRE-FLIGHT SUMMARY (non-blocking) ===
      |
-     +-> Present to user:
+     +-> Present to user (informational only — does not pause for confirmation):
          ┌─────────────────────────────────────────────┐
          │  Files to apply: N                          │
          │  CREATEs: X  |  UPDATEs: Y                 │
@@ -95,15 +98,24 @@ User: "Apply staging file(s)" + [file path(s) or "all"]
          │    → Append: bloom_triggers (3), ...        │
          │    → Add: 2 clinical associations           │
          │                                             │
-         │  ⚠  Warnings (review before confirming):   │
+         │  ⚠  Warnings (non-blocking):               │
          │    - <file>: PMID missing on 2 associations │
          │    - <file>: evidence grade is UNCERTAIN    │
          └─────────────────────────────────────────────┘
-         ** STOP — await explicit user confirmation before proceeding **
-         If user says no or requests changes, stop here.
+         Proceed immediately to Phase 2.
      |
 === Phase 2: APPLY VIA xml_writer_agent ===
      |
+     +-> Locate the most recent XML snapshot:
+         - Glob database/MCA_DB_v*.xml; sort by version string descending; use the latest
+         - If NO XML file found (fresh database):
+             → Invoke xsd_writer_agent with:
+                 output_version_string = "v0_1_YYYYMMDD" (today's date)
+                 output_xml_path       = "database/MCA_DB_v0_1_YYYYMMDD.xml"
+                 output_xsd_path       = "database/MCA_schema.xsd"
+             → On success: use output_xml_path as source_xml_path and proceed
+             → On error: halt; report xsd_writer_agent error to user
+         - Set source_xml_path to the located (or just-generated) file
      +-> Determine output filename before processing:
          - Read current MAJOR and MINOR from the source XML filename
          - Set YYYYMMDD to today's date
@@ -140,9 +152,15 @@ User: "Apply staging file(s)" + [file path(s) or "all"]
                "staging_file": "staging/applied/YYYY-MM-DD_taxon-name.json"
              }
          - Write updated array back to database/curation_log.json (pretty-printed, 2-space indent)
+     +-> Run xml2sql.py to generate a .sql dump of the updated XML:
+         - Command: python3 database/xml2sql.py <output_xml_path>
+         - Output: database/MCA_DB_[output_version_string].sql (same stem as XML, .sql extension)
+         - Run after all staging files have been applied (once per session, not per file)
+         - If xml2sql.py fails, log the error in the report but do not fail the overall session
      +-> Report to user:
          - Output XML: database/MCA_DB_[output_version_string].xml (new file)
          - Source XML preserved: database/MCA_DB_[previous_version_string].xml
+         - SQL dump: database/MCA_DB_[output_version_string].sql
          - Files applied: N
          - New passport IDs assigned: [list]
          - Fields updated per taxon: [summary]
@@ -155,11 +173,12 @@ User: "Apply staging file(s)" + [file path(s) or "all"]
 
 ## Checkpoint Rules
 
-1. **Phase 0 — validate before touching XML**: Never write to the XML if any staging file fails hard validation (malformed JSON, missing required fields, UPDATE with unknown passport_id). Warn-only issues (missing PMIDs, UNCERTAIN grade) do not block — they are surfaced in Phase 1.
-2. **Phase 1 — mandatory confirmation**: Always pause and show the pre-flight summary. Never apply changes without explicit user confirmation.
+1. **Phase 0 — validate before touching XML**: Never write to the XML if any staging file fails hard validation (malformed JSON, missing required fields, UPDATE with unknown passport_id). Warn-only issues (missing PMIDs, UNCERTAIN grade) do not block — they are shown in the Phase 1 summary.
+2. **Phase 1 — non-blocking summary**: Show the pre-flight summary and any warnings, then proceed immediately to Phase 2 without pausing for user confirmation.
 3. **Phase 2 — sequential writes**: Process one staging file at a time. Never run multiple `xml_writer_agent` calls in parallel — they write to the same XML file.
 4. **Phase 2 — no removal of existing data**: UPDATE actions may only append to list fields and overwrite scalar fields if a new value is explicitly provided. Never delete existing XML elements.
 5. **Phase 3 — archive on success only**: Only move a staging file to `staging/applied/` if the agent confirms it was applied without errors.
+6. **Phase 3 — xml2sql runs once per session**: Run `python3 database/xml2sql.py <output_xml_path>` once after all staging files have been applied. A failure here does not roll back the XML writes.
 
 ---
 
@@ -178,11 +197,11 @@ New passport IDs are assigned by the orchestrator before calling `xml_writer_age
 
 **Derivation:** Inspect `proposed_changes.identity.lineage` or `proposed_changes.biology` to determine domain. If ambiguous, ask the user before proceeding.
 
-**Increment rule:** Find the highest existing `NNNNNN` for the relevant domain prefix across all passports in the XML; increment by 1 and zero-pad to 6 digits.
+**Increment rule:** Find the highest existing `NNNNNN` for the relevant domain prefix across all passports in the XML; increment by 1 and zero-pad to 6 digits. If the XML is a fresh skeleton with no passports, start at `000001`.
 
 ---
 
-## UPDATE Diff Rules (mirroring STAGING_FILE.md)
+## UPDATE Diff Rules (mirroring `.claude/skills/mca-paper-curator/templates/STAGING_FILE.md`)
 
 | Field type | Behaviour |
 |------------|-----------|
@@ -254,6 +273,7 @@ Applied files are never deleted — they serve as the audit trail of what was im
    [THIS SKILL: mca-xml-update]
         |
    database/MCA_DB_vX.X.xml (updated)
+   database/MCA_DB_vX.X.sql  (generated by xml2sql.py)
         |
    staging/applied/YYYY-MM-DD_[taxon].json (archived)
 ```
@@ -264,6 +284,7 @@ Applied files are never deleted — they serve as the audit trail of what was im
 
 | Agent | Definition File |
 |-------|----------------|
+| `xsd_writer_agent` | `agents/XSD_WRITER_AGENT.md` |
 | `xml_writer_agent` | `agents/XML_WRITER_AGENT.md` |
 
 ---
@@ -272,11 +293,11 @@ Applied files are never deleted — they serve as the audit trail of what was im
 
 | Item | Content |
 |------|---------|
-| Skill Version | 2.0 |
+| Skill Version | 2.2 |
 | Last Updated | 2026-04-01 |
 | Maintainer | Heewon Seo |
 | Input | `staging/YYYY-MM-DD_[taxon].json` (one or more) |
-| Output | New `database/MCA_DB_vMAJOR_MINOR_YYYYMMDD.xml` + archived staging files |
+| Output | New `database/MCA_DB_vMAJOR_MINOR_YYYYMMDD.xml` + `.sql` dump + archived staging files |
 | Upstream Skill | MCA Paper Curator (Skill 1) |
 
 ---
@@ -285,5 +306,7 @@ Applied files are never deleted — they serve as the audit trail of what was im
 
 | Version | Date | Changes |
 |---------|------|---------|
+| 2.2 | 2026-04-01 | Added `xsd_writer_agent` (Phase 2, conditional): when no `MCA_DB_v*.xml` exists, bootstraps a skeleton XML and `MCA_schema.xsd` before proceeding. Enables "start from scratch" workflow. |
+| 2.1 | 2026-04-01 | Removed Phase 1 mandatory confirmation — pre-flight summary is now informational only; skill proceeds automatically. Added xml2sql.py execution in Phase 3 to generate a `.sql` dump after each session. |
 | 2.0 | 2026-04-01 | Schema v2.0: domain field, ext-id attributes on tag elements, Metabolites section, AssocRefs on associations, content_hash computed on write, version removed from per-passport fields |
 | 1.0 | 2026-03-31 | Initial version: single xml_writer_agent, batch support, pre-flight confirmation, staging archive |

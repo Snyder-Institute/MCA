@@ -49,7 +49,8 @@ Defines the JSON schema for staging files written by the MCA Paper Curator skill
       "gram_status": "",
       "oxygen_tolerance": "",
       "morphology": "",
-      "key_traits": []
+      "key_traits": [],
+      "bacdive_url": ""
     },
 
     "ecology": {
@@ -87,7 +88,7 @@ Defines the JSON schema for staging files written by the MCA Paper Curator skill
     "clinical_associations": [
       {
         "association_text": "",
-        "evidence_grade": "E1 | E2 | E3 | UNCERTAIN",
+        "evidence_level": "E1 | E2 | E3 | UNCERTAIN",
         "evidence_type": "",
         "assoc_refs": [
           {"ref_type": "mesh", "ref_id": "", "ref_label": null},

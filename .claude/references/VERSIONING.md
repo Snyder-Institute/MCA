@@ -86,3 +86,5 @@ This means `<version>` on a passport records which snapshot last modified it, no
 ## Routing Agent Note
 
 When Skill 1 (mca-paper-curator) searches for existing passports, it should always read the **most recent XML file** (highest YYYYMMDD for the current MAJOR_MINOR track) in `database/`.
+
+If **no XML file exists** (fresh-start workflow), the routing agent routes all taxa as `CREATE` with `passport_id: null`. No XML is required for mca-paper-curator to complete — it only writes staging files. Skill 2 (mca-xml-update) will bootstrap the XML via `xsd_writer_agent` before applying the first staging file.

@@ -3,7 +3,7 @@
 -- Version:  1.0
 -- Engine:   InnoDB
 -- Charset:  utf8mb4 / utf8mb4_unicode_ci
--- Tables:   10
+-- Tables:   11
 -- ============================================================
 
 CREATE DATABASE IF NOT EXISTS MCA
@@ -74,6 +74,7 @@ CREATE TABLE biology (
   gram_status      ENUM('gram-positive','gram-negative','gram-variable','not applicable','unknown')                                                    NOT NULL DEFAULT 'unknown',
   morphology       VARCHAR(255) NULL,
   oxygen_tolerance ENUM('aerobe','facultative anaerobe','obligate anaerobe','microaerophile','aerotolerant anaerobe','not applicable','unknown') NOT NULL DEFAULT 'unknown',
+  bacdive_url      VARCHAR(500) NULL,                                -- BacDive taxon page URL (source attribution)
 
   created_at       TIMESTAMP    NOT NULL DEFAULT CURRENT_TIMESTAMP,
   updated_at       TIMESTAMP    NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
@@ -155,7 +156,26 @@ CREATE TABLE metabolite (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 -- ============================================================
--- 5) Taxon-level evidence PMIDs (0..N per passport)
+-- 5) Papers — metadata for every source paper referenced
+-- ============================================================
+
+CREATE TABLE paper (
+  pmid         INT UNSIGNED  NOT NULL,
+  title        TEXT          NULL,
+  authors      TEXT          NULL,
+  journal      VARCHAR(500)  NULL,
+  year         SMALLINT UNSIGNED NULL,
+  study_design VARCHAR(255)  NULL,
+  population   TEXT          NULL,
+  sample_size  INT UNSIGNED  NULL,
+
+  created_at   TIMESTAMP     NOT NULL DEFAULT CURRENT_TIMESTAMP,
+
+  PRIMARY KEY (pmid)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+-- ============================================================
+-- 7) Taxon-level evidence PMIDs (0..N per passport)
 -- ============================================================
 
 CREATE TABLE passport_pmid (
@@ -174,7 +194,7 @@ CREATE TABLE passport_pmid (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 -- ============================================================
--- 6) Clinical associations
+-- 8) Clinical associations
 -- ============================================================
 
 CREATE TABLE association (

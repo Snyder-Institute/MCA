@@ -14,15 +14,26 @@ Determines the action (CREATE or UPDATE) for each taxon confirmed in Phase 0 by 
 | Input | Description |
 |-------|-------------|
 | Phase 0 output | Confirmed taxa list from `paper_analyst_agent` (preferred names, synonyms, NCBI TaxIDs) |
-| Current XML | Most recent `database/MCA_DB_*.xml` file — use the highest-versioned file present |
+| Current XML | Most recent `database/MCA_DB_*.xml` file — use the highest-versioned file present; may be absent |
 | `cross_check_flags` | `cross_check_flags[]` array from Phase 0 `paper_analyst_agent` output — XML passport names found in paper text but absent from the confirmed taxa list; routing_agent processes these flags but does **not** re-scan the paper text |
+
+---
+
+## No XML Found (Fresh Database)
+
+If no `database/MCA_DB_*.xml` file exists:
+- Route **all** taxa as `CREATE`, `passport_id: null`
+- Set `matched_on: null` for all taxa
+- Add a routing note to each taxon: `"No existing XML database found — routed as CREATE"`
+- Set `cross_check_flags: []` (no XML to scan against)
+- Do **not** halt, restore, or look for legacy XML files — proceed immediately
 
 ---
 
 ## Task
 
 For each taxon in the confirmed taxa list:
-1. Search the XML for a matching passport
+1. Search the XML for a matching passport (skip if no XML found — see above)
 2. Determine action: CREATE or UPDATE
 3. Return `passport_id` (for UPDATE) or `null` (for CREATE)
 4. Flag ambiguous matches for user resolution

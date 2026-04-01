@@ -15,11 +15,11 @@ Received from Phase 0 (`paper_analyst_agent`) output:
 
 | Input | Description |
 |-------|-------------|
-| `pmid` | PubMed ID of the paper (may be null if not found) |
+| `abstract` | Full paper abstract — primary input for grading. The abstract typically states study design, population, and primary outcomes. If `study_design` or `population` are ambiguous from metadata alone, the abstract resolves them. |
 | `title` | Full paper title |
 | `journal` | Journal name |
 | `year` | Publication year |
-| `study_design` | Study design as identified by `paper_analyst_agent` (e.g., "prospective cohort", "RCT", "mouse model") |
+| `study_design` | Study design as identified by `paper_analyst_agent` (e.g., "prospective cohort", "RCT", "mouse model") — use as a starting point; verify against abstract |
 | `population` | Study population description (e.g., "312 adult IBD patients", "C57BL/6 mice") |
 | `sample_size` | Reported sample size (may be null) |
 
