@@ -5,3 +5,6 @@
 .vscode
 
 web/db_connect.php
+
+# Staging files (transient curation drafts — not for version control)
+staging/
