@@ -42,7 +42,7 @@ if ($search_query !== '') {
         $results = array_values($seen);
 
         if (count($results) === 1) {
-            header("Location: passport.php?id=" . urlencode($results[0]['passport_id']));
+            header("Location: " . $results[0]['passport_id']);
             exit;
         }
     } catch (PDOException $e) {
@@ -72,7 +72,7 @@ include 'header.php';
             </thead>
             <tbody>
                 <?php foreach ($results as $row): ?>
-                    <tr style="border-bottom: 1px solid #eee; cursor: pointer;" onclick="window.location.href='passport.php?id=<?php echo urlencode($row['passport_id']); ?>'">
+                    <tr style="border-bottom: 1px solid #eee; cursor: pointer;" onclick="window.location.href='<?php echo $row['passport_id']; ?>'">
                         <td style="padding: 15px 10px;">
                             <div style="font-weight: bold; font-style: italic; color: #007bff;"><?php echo htmlspecialchars($row['preferred_name']); ?></div>
                             <div style="font-size: 11px; color: #999; margin-top: 4px;"><?php echo htmlspecialchars(str_replace(';', ' |', $row['lineage'])); ?></div>

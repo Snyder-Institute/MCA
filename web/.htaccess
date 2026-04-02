@@ -1,0 +1,11 @@
+Options -MultiViews
+RewriteEngine On
+
+# Clean passport URLs: /MCA-BAC-000025 -> passport.php?id=MCA-BAC-000025
+RewriteRule ^(MCA-[A-Z]+-[0-9]+)$ passport.php?id=$1 [L,QSA]
+
+# Extensionless PHP: /passports -> passports.php
+RewriteCond %{REQUEST_FILENAME} !-f
+RewriteCond %{REQUEST_FILENAME} !-d
+RewriteCond %{REQUEST_FILENAME}.php -f
+RewriteRule ^(.+)$ $1.php [L]

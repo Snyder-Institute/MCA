@@ -243,7 +243,7 @@ include 'header.php';
                             $ev = $taxon['top_evidence'] ?? null;
                             $ev_class = $ev ? 'ev-' . htmlspecialchars($ev) : '';
                         ?>
-                        <tr class="table-row-link" onclick="window.location.href='passport.php?id=<?php echo urlencode($taxon['passport_id']); ?>'">
+                        <tr class="table-row-link" onclick="window.location.href='<?php echo $taxon['passport_id']; ?>'">
                             <td style="padding: 12px 15px; font-family: monospace; color: #555;">
                                 <?php echo htmlspecialchars($taxon['passport_id']); ?>
                             </td>
@@ -289,7 +289,7 @@ include 'header.php';
     <div id="card-grid">
         <?php foreach ($all_taxa as $taxon): ?>
             <?php $ev_c = $taxon['top_evidence'] ?? null; ?>
-            <div class="passport-card" onclick="window.location.href='passport.php?id=<?php echo urlencode($taxon['passport_id']); ?>'">
+            <div class="passport-card" onclick="window.location.href='<?php echo $taxon['passport_id']; ?>'">
                 <!-- Row 1: ID -->
                 <div class="pc-row1"><?php echo htmlspecialchars($taxon['passport_id']); ?></div>
 

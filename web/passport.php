@@ -488,7 +488,7 @@ include 'header.php';
                             $has_risk  = in_array('risk_context', $cats);
                             $rt_ev     = $rt['top_evidence'] ?? null;
                         ?>
-                        <a href="passport.php?id=<?php echo urlencode($rt['passport_id']); ?>" class="related-taxon-pill" target="_blank">
+                        <a href="<?php echo $rt['passport_id']; ?>" class="related-taxon-pill" target="_blank">
                             <span class="related-taxon-id"><?php echo htmlspecialchars($rt['passport_id']); ?></span>
                             <div class="rt-name-row">
                                 <span class="related-taxon-name"><?php echo htmlspecialchars($rt['preferred_name']); ?></span>

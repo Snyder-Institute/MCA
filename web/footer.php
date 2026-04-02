@@ -37,7 +37,7 @@
                             div.innerHTML = `<strong>${item.preferred_name}</strong> <small style="color:#888; margin-left:8px;">(${item.passport_id})</small>${detail}`;
                             
                             div.onclick = () => {
-                                window.location.href = `passport.php?id=${encodeURIComponent(item.passport_id)}`;
+                                window.location.href = item.passport_id;
                             };
                             resultsDiv.appendChild(div);
                         });
