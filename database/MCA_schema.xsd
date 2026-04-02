@@ -78,6 +78,7 @@
       <xs:enumeration value="family"/>
       <xs:enumeration value="genus"/>
       <xs:enumeration value="species"/>
+      <xs:enumeration value="subspecies"/>
       <xs:enumeration value="strain"/>
       <xs:enumeration value="clade"/>
     </xs:restriction>
@@ -213,11 +214,12 @@
 
   <xs:complexType name="ClinicalProfileType">
     <xs:sequence>
-      <xs:element name="ClinicalRoles"    type="ClinicalRolesType"    minOccurs="0"/>
-      <xs:element name="TypicalSpecimens" type="TypicalSpecimensType" minOccurs="0"/>
-      <xs:element name="BloomTriggers"    type="BloomTriggersType"    minOccurs="0"/>
-      <xs:element name="RiskContexts"     type="RiskContextsType"     minOccurs="0"/>
-      <xs:element name="AmrHighlights"    type="AmrHighlightsType"    minOccurs="0"/>
+      <xs:element name="ClinicalRoles"       type="ClinicalRolesType"       minOccurs="0"/>
+      <xs:element name="TypicalSpecimens"    type="TypicalSpecimensType"    minOccurs="0"/>
+      <xs:element name="BloomTriggers"       type="BloomTriggersType"       minOccurs="0"/>
+      <xs:element name="RiskContexts"        type="RiskContextsType"        minOccurs="0"/>
+      <xs:element name="AmrHighlights"       type="AmrHighlightsType"       minOccurs="0"/>
+      <xs:element name="VirulenceFactors"    type="VirulenceFactorsType"    minOccurs="0"/>
     </xs:sequence>
   </xs:complexType>
 
@@ -268,6 +270,20 @@
           <xs:simpleContent>
             <xs:extension base="xs:string">
               <xs:attribute name="aro_id" type="xs:string" use="optional"/>
+            </xs:extension>
+          </xs:simpleContent>
+        </xs:complexType>
+      </xs:element>
+    </xs:sequence>
+  </xs:complexType>
+
+  <xs:complexType name="VirulenceFactorsType">
+    <xs:sequence>
+      <xs:element name="virulence_factor" minOccurs="0" maxOccurs="unbounded">
+        <xs:complexType>
+          <xs:simpleContent>
+            <xs:extension base="xs:string">
+              <xs:attribute name="vfdb_id" type="xs:string" use="optional"/>
             </xs:extension>
           </xs:simpleContent>
         </xs:complexType>

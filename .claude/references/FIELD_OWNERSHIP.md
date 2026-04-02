@@ -129,6 +129,13 @@ Each row is one list item. `ext_id` meaning depends on `category` (see schema co
 | `value` | `entity_extractor_agent` | Extract AMR phenotypes explicitly reported in this paper for this taxon; map to CV | Paper text |
 | `ext_id` (CARD ARO ID) | `aro_agent` | Map phenotype name to ARO identifier via local CARD ontology data; fall back to CARD web API if local data unavailable | CARD ontology / CARD web API |
 
+### category = `virulence_factor`
+
+| Field | Populated by | Strategy | Source |
+|-------|-------------|----------|--------|
+| `value` | `entity_extractor_agent` | Extract virulence factor names explicitly reported in this paper for this taxon; use VFDB `vf_name` spelling where possible | Paper text |
+| `ext_id` (VFDB VFID) | `vfdb_agent` | Look up `value` against local VFDB JSON mirror keyed by organism name; match on `vf_name` / `vf_fullname`; no network calls | Local VFDB JSON mirror (`vfdb.json`) |
+
 ---
 
 ## Table: `metabolite`
@@ -216,11 +223,12 @@ One row per source paper. Populated from `source_paper` in the staging file. Ded
 |-------|------------------|-------------|
 | `paper_analyst_agent` | `passport`, `paper` | `preferred_name`, `taxon_rank`, `ncbi_taxid`; all `paper` fields |
 | `db_fetch_agent` | `passport`, `biology`, `taxon_tag` | `domain`, `lineage`; `gram_status`, `oxygen_tolerance`, `morphology`; `synonym`, `key_trait`, `primary_niche.value`, `reservoir` |
-| `entity_extractor_agent` | `passport`, `taxon_tag`, `metabolite`, `association`, `assoc_pmid`, `passport_pmid` | `is_pathobiont`; `transmission_route`, `role`, `typical_specimen.value`, `risk_context`, `bloom_trigger.value`, `amr_highlight.value`; all metabolite fields; `association_text`, `evidence_type`; PMIDs |
+| `entity_extractor_agent` | `passport`, `taxon_tag`, `metabolite`, `association`, `assoc_pmid`, `passport_pmid` | `is_pathobiont`; `transmission_route`, `role`, `typical_specimen.value`, `risk_context`, `bloom_trigger.value`, `amr_highlight.value`, `virulence_factor.value`; all metabolite fields; `association_text`, `evidence_type`; PMIDs |
 | `grading_agent` | `association` | `evidence_level` |
 | `mesh_agent` | `taxon_tag`, `assoc_ref` | `primary_niche.ext_id`, `typical_specimen.ext_id`; `ref_id` + `ref_label` for mesh refs |
 | `kegg_agent` | `taxon_tag`, `metabolite`, `assoc_ref` | `bloom_trigger.ext_id`; `kegg_compound_id`, `chebi_id`; `ref_id` for kegg_disease refs |
 | `aro_agent` | `taxon_tag` | `amr_highlight.ext_id` |
+| `vfdb_agent` | `taxon_tag` | `virulence_factor.ext_id` |
 | `xml_writer_agent` | All tables | All surrogate PKs, all FKs, `content_hash`, all `created_at` / `updated_at` timestamps |
 | `mca-xml-update` orchestrator | `passport` | `passport_id`, `last_reviewed` |
 | `xml2sql.py` | `meta` | `db_version` |

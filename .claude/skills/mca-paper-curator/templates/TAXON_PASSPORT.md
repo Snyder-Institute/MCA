@@ -52,6 +52,7 @@ All field values must conform to `references/CONTROLLED_VOCABULARY.md`.
 | Bloom Triggers | *(semicolon-separated)* |
 | Risk Contexts | *(semicolon-separated)* |
 | AMR Highlights | *(semicolon-separated, or "none documented")* |
+| Virulence Factors | *(semicolon-separated VF names; populated in Phase 2 with VFDB IDs; leave blank if none reported)* |
 
 ---
 

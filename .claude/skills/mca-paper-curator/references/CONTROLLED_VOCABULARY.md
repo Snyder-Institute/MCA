@@ -231,6 +231,29 @@ Free-text list, standardize using:
 - `none documented`
 - `unknown`
 
+### Virulence Factors
+Use the exact VF short name as recorded in VFDB (`vf_name` field). The `vfdb_agent` will match these names to VFIDs. Use the name as reported in the paper; do not normalise to VFDB names during extraction — the agent handles matching.
+
+**VFDB functional categories** (for context — not stored as a separate field):
+- `Adherence` — fimbriae, adhesins, type IV pili
+- `Invasion` — factors enabling host cell entry
+- `Effector delivery system` — type II–VII secretion systems
+- `Exotoxin` — pore-forming toxins, AB toxins, superantigens
+- `Exoenzyme` — proteases, lipases, coagulase, kinases
+- `Biofilm` — biofilm formation factors
+- `Immune modulation` — factors evading or subverting immune response
+- `Motility` — flagella-related factors
+- `Nutritional/Metabolic factor` — iron acquisition, nutrient uptake
+- `Stress survival` — factors enabling survival under host conditions
+- `Regulation` — global virulence regulators
+- `Antimicrobial activity/Competitive advantage` — bacteriocins, contact-dependent inhibition
+- `Post-translational modification` — toxin-activating enzymes
+- `Others` — VFDB catchall category
+
+**Sentinel values:**
+- `none documented` — paper explicitly states no virulence factors relevant to this taxon
+- `unknown` — paper does not address virulence factors
+
 ---
 
 ## Evidence Fields

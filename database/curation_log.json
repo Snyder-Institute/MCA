@@ -313,5 +313,32 @@
     "source_pmid": 35831502,
     "xml_file": "database/MCA_DB_v1_4_20260401.xml",
     "staging_file": "staging/applied/2026-04-01_bacteroides-fragilis.json"
+  },
+  {
+    "passport_id": "MCA-BAC-000006",
+    "preferred_name": "Clostridioides difficile",
+    "action": "BACKFILL_VFDB",
+    "vf_count": 14,
+    "xml_file": "MCA_DB_v1_5_20260402.xml",
+    "source": "vfdb_backfill.py",
+    "date": "2026-04-02"
+  },
+  {
+    "passport_id": "MCA-BAC-000018",
+    "preferred_name": "Enterococcus faecalis",
+    "action": "BACKFILL_VFDB",
+    "vf_count": 12,
+    "xml_file": "MCA_DB_v1_5_20260402.xml",
+    "source": "vfdb_backfill.py",
+    "date": "2026-04-02"
+  },
+  {
+    "passport_id": "MCA-BAC-000033",
+    "preferred_name": "Bacteroides fragilis",
+    "action": "BACKFILL_VFDB",
+    "vf_count": 9,
+    "xml_file": "MCA_DB_v1_5_20260402.xml",
+    "source": "vfdb_backfill.py",
+    "date": "2026-04-02"
   }
 ]

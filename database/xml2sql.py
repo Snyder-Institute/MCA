@@ -61,7 +61,8 @@ TAG_SPECS = [
     ('ClinicalProfile/TypicalSpecimens/typical_specimen', 'typical_specimen',   'mesh_anatomy_id'),
     ('ClinicalProfile/RiskContexts/risk_context',         'risk_context',       None),
     ('ClinicalProfile/BloomTriggers/bloom_trigger',       'bloom_trigger',      'kegg_drug_id'),
-    ('ClinicalProfile/AmrHighlights/amr_highlight',       'amr_highlight',      'aro_id'),
+    ('ClinicalProfile/AmrHighlights/amr_highlight',          'amr_highlight',      'aro_id'),
+    ('ClinicalProfile/VirulenceFactors/virulence_factor',    'virulence_factor',   'vfdb_id'),
 ]
 
 

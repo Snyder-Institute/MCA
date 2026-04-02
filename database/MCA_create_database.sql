@@ -100,6 +100,7 @@ CREATE TABLE biology (
 --  risk_context        (none)
 --  bloom_trigger       KEGG Drug ID     e.g. D00645
 --  amr_highlight       CARD ARO ID      e.g. ARO:3000026
+--  virulence_factor    VFDB VFID        e.g. VF0592
 -- ============================================================
 
 CREATE TABLE taxon_tag (
@@ -115,7 +116,8 @@ CREATE TABLE taxon_tag (
                 'typical_specimen',
                 'risk_context',
                 'bloom_trigger',
-                'amr_highlight'
+                'amr_highlight',
+                'virulence_factor'
               ) NOT NULL,
   value       VARCHAR(255) NOT NULL,
   ext_id      VARCHAR(20)  NULL,                                -- category-specific external ID

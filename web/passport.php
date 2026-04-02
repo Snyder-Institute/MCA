@@ -30,6 +30,12 @@ try {
             return $s->fetchAll(PDO::FETCH_COLUMN);
         }
 
+        function getTagsWithExtId($pdo, $p_id, $category) {
+            $s = $pdo->prepare("SELECT value, ext_id FROM taxon_tag WHERE passport_id = ? AND category = ? ORDER BY id ASC");
+            $s->execute([$p_id, $category]);
+            return $s->fetchAll(PDO::FETCH_ASSOC);
+        }
+
         $synonyms    = getTags($pdo, $p_id, 'synonym');
         $traits      = getTags($pdo, $p_id, 'key_trait');
         $niches      = getTags($pdo, $p_id, 'primary_niche');
@@ -40,6 +46,7 @@ try {
         $triggers    = getTags($pdo, $p_id, 'bloom_trigger');
         $risk_groups = getTags($pdo, $p_id, 'risk_context');
         $amr_alerts  = getTags($pdo, $p_id, 'amr_highlight');
+        $vf_entries  = getTagsWithExtId($pdo, $p_id, 'virulence_factor');
 
         $pmid_stmt = $pdo->prepare("SELECT pmid FROM passport_pmid WHERE passport_id = ? ORDER BY pmid ASC");
         $pmid_stmt->execute([$p_id]);
@@ -353,6 +360,21 @@ include 'header.php';
                     <?php endif; ?>
                     <?php if (!empty($amr_alerts)): ?>
                         <div class="data-item"><span class="data-label">AMR Highlights</span><span class="data-value"><?php echo htmlspecialchars(implode('; ', $amr_alerts)); ?></span></div>
+                    <?php endif; ?>
+                    <?php if (!empty($vf_entries)): ?>
+                        <div class="data-item">
+                            <span class="data-label">Virulence Factors</span>
+                            <span class="data-value" style="display:flex; flex-wrap:wrap; gap:6px; align-items:center;">
+                                <?php foreach ($vf_entries as $vf): ?>
+                                    <span style="display:inline-flex; align-items:center; gap:4px;">
+                                        <?php echo htmlspecialchars($vf['value']); ?>
+                                        <?php if (!empty($vf['ext_id'])): ?>
+                                            <span style="display:inline-block; padding:1px 5px; border-radius:3px; font-size:10px; font-weight:700; background:#fce7f3; color:#9d174d; border:1px solid #f9a8d4; font-family:monospace;"><?php echo htmlspecialchars($vf['ext_id']); ?></span>
+                                        <?php endif; ?>
+                                    </span><?php if (!array_key_last($vf_entries) !== array_search($vf, $vf_entries)): ?><span style="color:#ccc;">·</span><?php endif; ?>
+                                <?php endforeach; ?>
+                            </span>
+                        </div>
                     <?php endif; ?>
                 </div>
                 <div>

@@ -73,6 +73,9 @@ Defines the JSON schema for staging files written by the MCA Paper Curator skill
       "risk_contexts": [],
       "amr_highlights": [
         {"value": "", "aro_id": null}
+      ],
+      "virulence_factors": [
+        {"value": "", "vfdb_id": null}
       ]
     },
 
@@ -121,7 +124,7 @@ Required on CREATE. Derived from the first element of `lineage`. Must be one of:
 ### `taxon_level_pmids` and `assoc_refs[].pmids`
 Arrays of integers, not strings.
 
-### Ext-ID fields (`mesh_anatomy_id`, `kegg_drug_id`, `aro_id`, `kegg_compound_id`, `chebi_id`, `ref_id`)
+### Ext-ID fields (`mesh_anatomy_id`, `kegg_drug_id`, `aro_id`, `vfdb_id`, `kegg_compound_id`, `chebi_id`, `ref_id`)
 All nullable. Populate during curation if the ID is known; leave `null` if not. Ontology enrichment is progressive — a `null` is not an error.
 
 ### `assoc_refs`
