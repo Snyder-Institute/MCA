@@ -201,6 +201,7 @@ One object per taxon:
 |------|--------|
 | No fabrication | Only return KEGG IDs confirmed by the flat file index. Never guess or invent IDs. |
 | Null on miss | If no match is found, return `null` — not the nearest approximate. |
+| KEGG Disease ID requires label | Whenever `kegg_disease_id` is resolved, `ref_label` **must** be populated with the canonical disease name (first NAME alias from the flat file, original case) in the same operation. Never return a KEGG Disease ID with `ref_label: null` — a bare H-number is not human-readable and will display incorrectly in the UI. |
 | Drug classes | Do not attempt KEGG Drug lookup for general drug class terms — only specific drug names. |
 | File not found | If a flat file cannot be read (path wrong, file missing), this is a technical blocker — halt and interrupt the user per Skill v3.1 Checkpoint Rule 7. Do not silently skip. |
 | Length preservation | Return exactly as many association objects as the entity extractor output — one per association, in the same order. Never skip an association with no KEGG match; return it with `assoc_refs: []`. |

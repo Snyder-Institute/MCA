@@ -85,7 +85,8 @@ Each null field is assigned one of three tags:
    - Full condition name
    - Abbreviation expansions: CDI, IBD, IBS, CRC, T2D, T2DM, UC, CD (Crohn's), GERD
    - Shorter/alternate phrasing (e.g., remove qualifiers like "recurrent", "pediatric")
-3. If still null → `confirmed_null: no_kegg_disease_entry`
+3. **When a match is found: always populate `ref_label` with the canonical disease name from the flat file (first NAME alias, original case) at the same time as `ref_id`.** Never write a `kegg_disease_id` without its `ref_label` — a bare ID is not human-readable.
+4. If still null → `confirmed_null: no_kegg_disease_entry`
 
 ### `mesh_id` (on clinical associations)
 1. Extract condition term from `association_text`
@@ -168,6 +169,7 @@ Annotates the staging object with a `null_review` block per taxon:
 | No fabrication | Only assign IDs confirmed by the data source. Never guess. |
 | Null on uncertainty | If confidence is below the threshold for auto-fill, use `needs_review` — not `confirmed_null`. |
 | Sentinel pass-through | `none documented` and `unknown` are confirmed_null without re-attempt. |
+| KEGG ID requires label | Whenever a `kegg_disease_id` is resolved (whether by this agent or flagged as filled), `ref_label` must be populated with the canonical disease name from the flat file in the same operation. Never write a KEGG Disease ID without its label. |
 | Non-blocking | All lookup failures go to `null_review`; do not halt. |
 | Rate limiting | NLM API: max 3 requests/second. ChEBI: pause 500ms between requests. |
-| Scope | Does not modify text values, evidence grades, or clinical fields — ext_ids and `ncbi_taxid` only. |
+| Scope | Does not modify text values, evidence grades, or clinical fields — ext_ids, `ref_label`, and `ncbi_taxid` only. |
