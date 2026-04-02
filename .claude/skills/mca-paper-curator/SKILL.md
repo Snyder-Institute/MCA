@@ -212,19 +212,32 @@ User: "Curate this paper" + [PDF — filename is PMID, e.g. 38123456.pdf]
      |
 === Phase 4: SANITY CHECK ===
      |
+     +-> Pre-check: db_access_failure retry (orchestrator)
+         Before spawning sanity_check_agent, scan null_review findings for any entry tagged
+         `db_access_failure` (technical failure, not a data gap). For each such entry, the
+         orchestrator may retry the affected Phase 2 or null_review lookup once. If the retry
+         succeeds, update the staging file before passing to sanity_check_agent. This is the
+         only retry mechanism in the pipeline.
+     |
      +-> [sanity_check_agent] (see agents/SANITY_CHECK_AGENT.md)
-         **Spawned with claude-haiku-4-5 for speed.**
-         Reads each written staging file and validates:
+         **Spawned with claude-haiku-4-5 for speed. Annotation only — no agent retries.**
+         Reads each written staging file and:
          - Format checks: all non-null ext_ids match expected patterns (ARO:, D#####, etc.)
          - Controlled vocabulary: closed fields contain only allowed values
          - Logical consistency: pathobiont/role contradictions, grade/study-design mismatches
          - Required fields: preferred_name, domain, action, association PMIDs, etc.
          - Structural completeness: empty association lists, duplicate claims
-         Appends `sanity_check` block with status (PASS / WARN / FAIL) to the staging file.
-         Does NOT modify content — annotation only.
+         - Missing value root-cause analysis: aggregates null_review findings by root cause
+           (sentinel, known_null_class, no_match_in_db, pipeline_miss, etc.); raises pattern
+           flags when ≥2 nulls share the same cause + field type
+         Writes two outputs per taxon:
+           1. `sanity_check` block (with `missing_value_report`) appended to staging JSON
+           2. `staging/YYYY-MM-DD_[taxon]-qc-report.md` — human-readable Markdown report
+              with validation issues, missing value analysis, and pipeline miss log
      |
-     ** Inform user of staging file path(s) and overall QC status (PASS/WARN/FAIL per taxon);
-        no XML is modified at this step **
+     ** Inform user of staging file path(s), QC report path(s), and overall status
+        (PASS/WARN/FAIL per taxon); errors listed inline if status is FAIL.
+        No XML is modified at this step. **
 ```
 
 ---
@@ -363,7 +376,7 @@ One JSON file per taxon, written to `staging/`. Schema defined in `templates/STA
 
 | Version | Date | Changes |
 |---------|------|---------|
-| 3.3 | 2026-04-02 | **QC pipeline:** Added two new agents and a new Phase 4. `null_review_agent` (Phase 3, final step): re-attempts all null ext_ids with alternative strategies + web fallbacks; classifies each as `confirmed_null`, `filled`, or `needs_review`. `sanity_check_agent` (Phase 4, Haiku): validates format correctness, controlled vocabulary, logical consistency, and required-field completeness across all fields; appends `sanity_check` block with PASS/WARN/FAIL. Pipeline is now 5 phases (0–4), 11 agents. |
+| 3.3 | 2026-04-02 | **QC pipeline:** Added two new agents and a new Phase 4. `null_review_agent` (Phase 3, final step): re-attempts all null ext_ids with alternative strategies + web fallbacks; classifies each as `confirmed_null`, `filled`, or `needs_review`. `sanity_check_agent` (Phase 4, Haiku): validates format, vocabulary, logical consistency, and required fields; adds missing value root-cause analysis (Check 6) with 7 root cause categories and pattern flags for pipeline improvement; writes `sanity_check` JSON block + `staging/YYYY-MM-DD_[taxon]-qc-report.md` per taxon. No agent retries — `db_access_failure` retries handled by orchestrator pre-check before sanity_check runs. Pipeline is now 5 phases (0–4), 11 agents. |
 | 3.2 | 2026-04-02 | **VFDB integration:** Added `vfdb_agent` (Phase 2) to map virulence factor names → VFDB VFIDs via local JSON mirror. `entity_extractor_agent` now extracts `virulence_factors[]` from clinical layer. `virulence_factors` added to staging file schema, TAXON_PASSPORT template, and CONTROLLED_VOCABULARY. |
 | 3.1 | 2026-04-01 | **Phase 2 failure handling:** Split enrichment failure rule into two cases — technical blockers (tool permission denied, file inaccessible) now HALT and interrupt the user; data gaps (term not found in ontology) remain non-blocking. Prevents silently producing under-enriched staging files when the cause is a configuration issue, not missing data. |
 | 3.0 | 2026-04-01 | **Architecture redesign:** Added `db_fetch_agent` (NCBI Taxonomy + BacDive) to Phase 1. Biology and ecology fields are now populated from structured databases by TaxID, not extracted from the PDF. `entity_extractor_agent` narrowed to clinical layer only (pathobiont status, clinical roles, typical specimens, bloom triggers, risk contexts, AMR, metabolites, clinical associations). Transmission routes remain paper-sourced (db_fetch_agent does not provide them). Phase 1→2 merge updated to union outputs from db_fetch_agent + entity_extractor_agent. |

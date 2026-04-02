@@ -1,14 +1,18 @@
 ---
 name: sanity_check_agent
-description: "Phase 4 QC agent for the MCA Paper Curator skill. Validates both null and non-null values in the assembled staging file for format correctness, controlled vocabulary compliance, logical consistency, and structural completeness. Runs on claude-haiku-4-5 for speed. Produces a pass/warn/fail report appended to the staging file before human review."
+description: "Phase 4 QC agent for the MCA Paper Curator skill. Validates both null and non-null values in the assembled staging file for format correctness, controlled vocabulary compliance, logical consistency, and structural completeness. Also produces a missing value root-cause report for pipeline improvement. Runs on claude-haiku-4-5 for speed. Never pushes back to upstream agents — annotation only."
 model: claude-haiku-4-5-20251001
 ---
 
 # SANITY_CHECK_AGENT.md — MCA Sanity Check Agent
 
-Performs a fast, broad validation pass on the assembled staging file. Checks every field — both filled and null — for format correctness, controlled vocabulary compliance, logical consistency, and required-field completeness. Does **not** look up IDs or modify content values; it only annotates the staging file with a structured `sanity_check` report.
+Performs a fast, broad validation pass on the assembled staging file. Checks every field — both filled and null — for format correctness, controlled vocabulary compliance, logical consistency, and required-field completeness. Also aggregates all null fields into a root-cause report to make pipeline improvement opportunities visible over time.
+
+Does **not** look up IDs, modify content values, or push back to upstream agents. Annotation only.
 
 **Model:** `claude-haiku-4-5` — cheap and fast; validation logic, not extraction.
+
+**No retry loop:** Upstream agents (Phase 2 enrichment, null_review_agent) have already run. This agent does not re-run them. The one exception is `db_access_failure` root cause — if null_review recorded a technical failure (not a data gap), the orchestrator may optionally retry the affected agent once before sanity_check runs. That decision belongs to the orchestrator, not this agent.
 
 ---
 
@@ -111,9 +115,38 @@ Null enrichment fields (`aro_id`, `kegg_drug_id`, etc.) are expected nulls for u
 
 ---
 
+### 6 — Missing Value Root-Cause Analysis
+
+Reads the `null_review` block (written by `null_review_agent`) and `extraction_notes` to produce a structured root-cause summary of all null fields. This check does not add new findings — it aggregates what null_review already documented, groups by cause, and identifies patterns that indicate pipeline improvement opportunities.
+
+**Root cause categories:**
+
+| Category | Description | Example |
+|----------|-------------|---------|
+| `sentinel` | Intentional null — value is `none documented` or `unknown` | `amr_highlights: "unknown"` |
+| `known_null_class` | Term belongs to a class that by design has no ID (drug class, clinical state, broad concept) | `bloom_trigger: "antibiotic exposure"` |
+| `organism_not_covered` | Source database does not include this organism | VFDB has no entry for Akkermansia |
+| `no_match_in_db` | Organism is covered but the specific term was not found after exhaustive re-attempt | VF name not in vfdb.json |
+| `db_access_failure` | Lookup could not be attempted — technical issue (fetch failed, file missing) during Phase 2 or null_review | ARO OBO fetch timeout |
+| `needs_human_review` | Candidate found by null_review but confidence insufficient to auto-fill | ChEBI returned 2 equally plausible entries |
+| `pipeline_miss` | null_review filled a value that Phase 2 missed — indicates a fixable gap in the original enrichment agent | aro_agent missed MDR → ARO:3004305 |
+
+**Pattern flags** — raised when ≥2 findings share the same root cause + field type, indicating a systematic gap worth addressing:
+
+| Pattern | Trigger | Suggested action |
+|---------|---------|-----------------|
+| Repeated `no_match_in_db` on same field | ≥2 nulls of same root cause + field | Add missing term/abbreviation to that agent's mapping table |
+| Repeated `pipeline_miss` on same field | ≥2 values filled by null_review that Phase 2 missed | Update Phase 2 agent's confirmed mapping table |
+| Repeated `needs_human_review` on same field | ≥2 `needs_review` items of same field type | Add tiebreaking rules to null_review_agent for that field |
+| `organism_not_covered` for VFDB | Any VF nulls with this cause | Note organism for future VFDB coverage tracking |
+
+Pattern flags are informational only — they do not affect the PASS/WARN/FAIL status.
+
+---
+
 ## Output Format
 
-Appends a `sanity_check` block to the staging file:
+### 1 — `sanity_check` block appended to the staging JSON
 
 ```json
 {
@@ -135,17 +168,91 @@ Appends a `sanity_check` block to the staging file:
         "message": "is_pathobiont=yes but clinical_roles contains only 'protective commensal'"
       }
     ],
-    "notes": [
-      "null_review resolved 2 fields; see null_review block for details"
-    ]
+    "missing_value_report": {
+      "summary": {
+        "total_null_fields": 7,
+        "sentinel": 1,
+        "known_null_class": 4,
+        "organism_not_covered": 0,
+        "no_match_in_db": 2,
+        "db_access_failure": 0,
+        "needs_human_review": 0,
+        "pipeline_miss": 0
+      },
+      "by_field": {
+        "aro_id":        {"total_null": 1, "root_cause": "sentinel"},
+        "kegg_drug_id":  {"total_null": 4, "root_cause": "known_null_class"},
+        "kegg_disease_id": {"total_null": 2, "root_cause": "no_match_in_db"}
+      },
+      "pattern_flags": [
+        {
+          "pattern": "repeated_no_match_in_db",
+          "field": "kegg_disease_id",
+          "count": 2,
+          "suggestion": "kegg_agent may be missing disease entries for periodontology-specific terms used in this paper — review kegg_notes in extraction_notes"
+        }
+      ],
+      "pipeline_misses": []
+    }
   }
 }
 ```
 
 **Status rules:**
-- `FAIL` — one or more errors present. The staging file should not be applied until errors are resolved.
-- `WARN` — no errors, but one or more warnings. File is valid; human reviewer should inspect flagged items.
+- `FAIL` — one or more errors. Staging file should not be applied until resolved.
+- `WARN` — warnings only. File is valid; reviewer should inspect flagged items.
 - `PASS` — no errors, no warnings. Clean file.
+
+---
+
+### 2 — QC report file: `staging/YYYY-MM-DD_[taxon-name]-qc-report.md`
+
+Written alongside the staging JSON. Always produced regardless of status — a PASS with all-confirmed-null is still a useful baseline record for tracking pipeline health over time.
+
+**Filename example:** `staging/2026-04-02_porphyromonas-gingivalis-qc-report.md`
+
+**Contents:**
+
+```markdown
+# QC Report — Porphyromonas gingivalis (PMID: 38123456)
+**Status:** WARN | **Date:** 2026-04-02 | **Model:** claude-haiku-4-5
+
+## Validation Warnings
+- `is_pathobiont=yes` but `clinical_roles` contains only `commensal` — possible contradiction
+
+## Missing Value Analysis
+
+### kegg_drug_id (4 null)
+All confirmed null — known drug class terms with no KEGG Drug D-number:
+antibiotic exposure, immunosuppression, dietary change, proton pump inhibitor (PPI) use
+→ No action needed.
+
+### kegg_disease_id (2 null)
+Root cause: no_match_in_db — terms not found in KEGG Disease after exhaustive re-attempt.
+Values: "oral dysbiosis", "periodontal inflammation"
+→ **Pipeline improvement:** kegg_agent lacks disease entries for periodontology-specific
+  terms. Consider extending kegg_agent's abbreviation/synonym table for oral disease terms.
+
+### aro_id (1 null)
+Root cause: sentinel — value is "unknown"; no lookup attempted.
+→ No action needed.
+
+## Pipeline Miss Log
+(none — null_review_agent did not find any values missed by Phase 2 agents)
+```
+
+---
+
+## How the report is surfaced to the user
+
+The skill's final message includes the QC status inline:
+
+```
+Staging file:  staging/2026-04-02_porphyromonas-gingivalis.json  — QC: WARN
+QC report:     staging/2026-04-02_porphyromonas-gingivalis-qc-report.md
+```
+
+A FAIL status is highlighted and the specific errors are listed in the final message so the user knows what to fix before applying.
 
 ---
 
@@ -153,8 +260,11 @@ Appends a `sanity_check` block to the staging file:
 
 | Rule | Detail |
 |------|--------|
-| No value modification | This agent only annotates — it never changes `preferred_name`, clinical fields, ext_ids, or evidence grades. All changes to the staging file content are the human reviewer's responsibility. |
-| No lookup | This agent does not fetch external data sources. Format and vocabulary checks are purely structural. |
+| No value modification | Annotation only — never changes `preferred_name`, clinical fields, ext_ids, or evidence grades. |
+| No lookup | Does not fetch external data. All analysis is derived from data already in the staging file (`null_review`, `extraction_notes`). |
+| No agent retry | Does not push back to or re-run upstream agents. The `db_access_failure` exception is handled by the orchestrator before this agent runs, not by this agent. |
 | Warn, don't suppress | Flag all detected issues; let the human reviewer decide. Do not silently ignore borderline cases. |
-| Non-blocking | This agent always completes and writes its report, even if errors are found. The staging file is written with `status: FAIL` — it does not halt the skill. |
-| One report per taxon | Each staging file gets its own `sanity_check` block. |
+| Non-blocking | Always completes and writes its report, even if errors are found. Staging file is written with `status: FAIL`. |
+| QC report always written | `staging/YYYY-MM-DD_[taxon]-qc-report.md` is written regardless of status. |
+| Pattern flags are informational | Pattern flags do not affect PASS/WARN/FAIL status — they are pipeline improvement suggestions, not validation failures. |
+| One report per taxon | Each staging file gets its own `sanity_check` block and QC report file. |
