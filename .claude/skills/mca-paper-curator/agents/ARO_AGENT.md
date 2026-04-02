@@ -1,6 +1,6 @@
 ---
 name: aro_agent
-description: "Phase 2 enrichment agent for the MCA Paper Curator skill. Maps extracted AMR phenotype names (ESBL, CRE, MRSA, VRE, etc.) to CARD Antibiotic Resistance Ontology (ARO) identifiers using the CARD database. Runs in parallel with mesh_agent and kegg_agent."
+description: "Phase 2 enrichment agent for the MCA Paper Curator skill. Maps extracted AMR phenotype names (ESBL, CRE, MRSA, VRE, etc.) to CARD Antibiotic Resistance Ontology (ARO) identifiers using the full ARO OBO ontology file. Runs in parallel with mesh_agent and kegg_agent."
 ---
 
 # ARO_AGENT.md — MCA CARD/ARO Enrichment Agent
@@ -8,7 +8,7 @@ description: "Phase 2 enrichment agent for the MCA Paper Curator skill. Maps ext
 Maps Antimicrobial Resistance (AMR) phenotype names extracted by `entity_extractor_agent` to stable ARO identifiers from the Comprehensive Antibiotic Resistance Database (CARD). Returns enriched AMR highlight objects with `aro_id` populated where a confident match is found.
 
 **CARD database:** [card.mcmaster.ca](https://card.mcmaster.ca) — maintained by McMaster University.  
-**ARO format:** `ARO:NNNNNNN` (e.g., `ARO:3000026`)
+**ARO format:** `ARO:NNNNNNN` (e.g., `ARO:3004305`)
 
 ---
 
@@ -16,11 +16,16 @@ Maps Antimicrobial Resistance (AMR) phenotype names extracted by `entity_extract
 
 CARD's Antibiotic Resistance Ontology (ARO) is the standard controlled vocabulary for AMR mechanisms, genes, and phenotypes. Each ARO term has:
 - A stable identifier: `ARO:NNNNNNN`
-- A preferred name (e.g., `extended-spectrum beta-lactamase (ESBL)`)
+- A preferred name (e.g., `multidrug resistance antimicrobial phenotype`)
 - Synonyms and related terms
 - Links to resistance mechanisms, affected drug classes, and organism associations
 
 MCA uses ARO IDs on `amr_highlights` to make resistance phenotypes machine-readable and cross-database queryable.
+
+**Important ARO coverage caveat:** ARO covers *acquired* resistance mechanisms, gene families, and clinical phenotype labels for known pathogens (MRSA, VRE, MDR, etc.). It does **not** have terms for:
+- Intrinsic structural resistance in commensal organisms (e.g., intrinsic glycopeptide/vancomycin insensitivity due to natural D-Ala-D-Lac peptidoglycan in Akkermansia, Bifidobacterium, Lactobacillales). These organisms are simply not targets of glycopeptides — there is no acquired Van gene or resistance mechanism.
+- Sentinel values (`none documented`, `unknown`).
+Always return `null` for these cases.
 
 ---
 
@@ -34,57 +39,79 @@ MCA uses ARO IDs on `amr_highlights` to make resistance phenotypes machine-reada
 
 ## Data Source
 
-CARD provides a downloadable ontology file:
+**Primary source — ARO OBO file from OBO Foundry:**
 
-**Download URL:** `https://card.mcmaster.ca/latest/data` (compressed archive; contains `aro.obo` and `card.json`)
-
-**Preferred approach — local CARD ontology file:**
-If `card.json` or `aro.obo` is available locally (e.g., previously downloaded), read from disk and build an in-memory name → ARO ID index. This avoids repeated downloads.
-
-**Fallback — CARD REST API / web lookup:**
-If no local file is available, use the CARD ontology browser to look up individual terms:
+The full ARO phenotype ontology is available as an OBO flat file (8,500+ terms, ~76k lines). Download with:
 ```
-GET https://card.mcmaster.ca/ontology/{aro_accession}
+WebFetch https://purl.obolibrary.org/obo/aro.obo
 ```
-Or use WebSearch to query CARD for each phenotype name.
+This PURL redirects to the GitHub raw file. The OBO file contains all ARO terms including phenotype-level terms (e.g., `multidrug resistance antimicrobial phenotype`, `vancomycin-resistant Enterococcus`) that are **absent from CARD's `card.json`**.
+
+**Do NOT use `card.json` for phenotype lookup** — `card.json` (from `card.mcmaster.ca/latest/data`) contains gene model entries only (resistance genes, proteins, variants). It does not include AMR phenotype terms like `ARO:3004305`. The CARD website is also JavaScript-rendered and cannot be scraped.
+
+**OBO file format** — entries are `[Term]` blocks:
+```
+[Term]
+id: ARO:3004305
+name: multidrug resistance antimicrobial phenotype
+def: "Multidrug-resistant organisms are defined as..." [PMID:...]
+synonym: "MDRO" EXACT []
+is_a: ARO:3000700 ! resistant antimicrobial phenotype
+```
+Parse `id:`, `name:`, and `synonym:` lines per `[Term]` block to build the lookup index.
 
 ---
 
 ## Task
 
-### Task 1 — Build ARO lookup index (if local file available)
+### Task 1 — Build ARO lookup index
 
-1. Check for a local `card.json` or `aro.obo` file. No local CARD path is configured in project memory — if a local file is not present in the working directory or a standard location, proceed directly to the per-term web lookup fallback (Task 2 fallback path). Do not halt.
-2. If `card.json` is available: parse the JSON and build:
+1. Fetch `https://purl.obolibrary.org/obo/aro.obo` using WebFetch (or read from a local cached copy if available at `/tmp/aro.obo` or similar).
+2. Parse OBO format: split on `[Term]`, extract `id:`, `name:`, `synonym:` fields per block.
+3. Build:
    ```
    aro_index: {lowercase_name → ARO_id, ...}
    ```
-   Index all preferred names and synonyms.
-3. If `aro.obo` is available: parse OBO format (`[Term]` blocks with `id:`, `name:`, `synonym:` fields) and build the same index.
-4. If neither is available: fall through to per-term web lookup (Task 2 fallback path).
+   Index the preferred `name:` and all `synonym:` values (strip synonym type suffix like `EXACT []`, `RELATED []`).
+4. If fetch fails: proceed to confirmed mapping table (Task 2) and return `null` for all unconfirmed terms. Log in `aro_notes`. Do not halt.
 
 ### Task 2 — Map AMR phenotype names to ARO IDs
 
 For each AMR highlight in `amr_highlights[]`:
-1. Take the `value` field (e.g., `"ESBL-producing"`, `"CRE"`, `"fluoroquinolone-resistant strains documented"`)
-2. Normalise: strip qualifier words (`-producing`, `-resistant`, `documented`, `strains`, etc.) to extract the core phenotype term (e.g., `"ESBL"`, `"CRE"`, `"fluoroquinolone resistance"`)
-3. Apply common abbreviation expansions before lookup:
 
-| Abbreviation | Expanded term |
+1. **Apply skip rules first** (return `null` immediately without lookup):
+   - Value is `"none documented"` or `"unknown"` → `null`
+   - Value contains `"intrinsic glycopeptide resistance"`, `"intrinsic vancomycin resistance"`, or similar intrinsic structural resistance phrasing in a commensal context → `null` (no ARO phenotype term exists; see Background section)
+
+2. Take the `value` field (e.g., `"ESBL-producing"`, `"CRE"`, `"multidrug-resistant (MDR)"`)
+
+3. Normalise: strip qualifier words (`-producing`, `-resistant`, `documented`, `strains`, parenthetical expansions, etc.) to extract the core phenotype term
+
+4. Apply confirmed mappings first (skip lookup if a match is found here):
+
+| MCA value | Confirmed ARO ID | ARO preferred name |
+|-----------|------------------|--------------------|
+| `multidrug-resistant (MDR)` | `ARO:3004305` | multidrug resistance antimicrobial phenotype |
+| `VRE` / `vancomycin-resistant Enterococcus` | `ARO:3004329` | vancomycin-resistant Enterococcus |
+| `MRSA` / `methicillin-resistant Staphylococcus aureus` | (look up in aro_index) | — |
+| `ESBL-producing` | (look up in aro_index) | — |
+| `CRE` | (look up in aro_index) | — |
+| `CRKP` | (look up in aro_index) | — |
+
+5. Apply common abbreviation expansions before lookup:
+
+| Abbreviation | Expanded term for lookup |
 |---|---|
 | `ESBL` | extended-spectrum beta-lactamase |
 | `CRE` | carbapenem-resistant Enterobacterales |
 | `MRSA` | methicillin-resistant Staphylococcus aureus |
 | `VRE` | vancomycin-resistant Enterococcus |
 | `CRKP` | carbapenem-resistant Klebsiella pneumoniae |
-| `MDR` | multidrug resistance |
+| `MDR` | multidrug resistance antimicrobial phenotype |
 | `PDR` | pan-drug resistance |
-| `ESBL-producing` | extended-spectrum beta-lactamase |
-| `CRE` | carbapenem resistance |
 
-4. Attempt lookup against `aro_index` (exact → alias → substring).
-5. If using web fallback: use WebSearch or WebFetch against CARD to find the ARO ID for the phenotype.
-6. Return the ARO ID in format `ARO:NNNNNNN`. If no confident match: return `null`.
+6. Attempt lookup against `aro_index` (exact → alias → substring).
+7. Return the ARO ID in format `ARO:NNNNNNN`. If no confident match: return `null`.
 
 ---
 
@@ -140,9 +167,12 @@ One object per taxon:
 
 | Rule | Detail |
 |------|--------|
-| No fabrication | Only return ARO IDs confirmed from CARD data. Never guess or invent IDs. |
+| No fabrication | Only return ARO IDs confirmed from the ARO OBO ontology. Never guess or invent IDs. |
 | Null on miss | If no confident match is found, return `null` — not the nearest approximate. |
-| `none documented` | Always returns `aro_id: null` — it is a sentinel value, not a phenotype. |
+| `none documented` | Always returns `aro_id: null` — sentinel value, not a phenotype. |
 | `unknown` | Always returns `aro_id: null`. |
-| Non-blocking | Failure to retrieve CARD data does not halt the skill. Log in `aro_notes` and return all `aro_id: null`. |
-| Data currency | CARD is actively maintained. If the local file is older than 6 months, note in `aro_notes` that a refresh may be warranted. |
+| Intrinsic structural resistance | Intrinsic glycopeptide/vancomycin insensitivity in commensals (Akkermansia, Bifidobacterium, Lactobacillales) has no ARO term. Always `null`. |
+| OBO not `card.json` | Use `aro.obo` from OBO Foundry — `card.json` contains gene models only, not phenotype terms. |
+| CARD website | CARD website (`card.mcmaster.ca`) is JavaScript-rendered and cannot be scraped. Do not attempt. |
+| Non-blocking | Failure to fetch OBO does not halt the skill. Use confirmed mapping table, log failures in `aro_notes`. |
+| Data currency | ARO OBO is actively maintained. If cached OBO is older than 6 months, note in `aro_notes` that a refresh is warranted. |

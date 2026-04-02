@@ -115,9 +115,23 @@ For each clinical association in `clinical_associations[]`:
 For each bloom trigger in `bloom_triggers[]`:
 1. Take the `value` field (e.g., `"antibiotic exposure"`, `"proton pump inhibitor (PPI) use"`)
 2. Extract the drug or drug class name from the value (strip context words like "exposure", "use", "therapy")
-3. Attempt exact → partial match against `drug_index`
-4. If the value is a drug class rather than a specific drug (e.g., `"antibiotic exposure"`), do not attempt lookup — leave `kegg_drug_id` as null and note in `kegg_notes`. KEGG Drug contains individual drugs, not classes.
-5. If a specific drug is named (e.g., `"proton pump inhibitor (PPI) use"` → `"omeprazole"` if extractable, or `"vancomycin"`) → look up and assign.
+3. If the extracted term is a **drug class or clinical state** (not a specific drug compound), leave `kegg_drug_id` as null. KEGG Drug contains individual pharmaceutical compounds — broad categories have no D-numbers. Note in `kegg_notes`.
+
+   The following MCA-standard bloom trigger values **never have KEGG Drug IDs** — always null:
+   - `antibiotic exposure`
+   - `immunosuppression`
+   - `inflammation`
+   - `dietary change` (and parenthetical variants)
+   - `dysbiosis`
+   - `hospitalization`
+   - `surgery`
+   - `chemotherapy`
+   - `proton pump inhibitor (PPI) use` — PPI is a drug class; no single D-number represents the class
+   - `unknown`
+
+4. If the bloom trigger text explicitly names a single specific drug by INN/generic name (e.g., `"vancomycin"`, `"metronidazole"`), look up against `drug_index` and assign the D-number.
+
+5. Attempt exact → partial match against `drug_index` only for values that pass step 4.
 
 ---
 
