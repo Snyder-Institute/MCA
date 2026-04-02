@@ -340,5 +340,27 @@
     "xml_file": "MCA_DB_v1_5_20260402.xml",
     "source": "vfdb_backfill.py",
     "date": "2026-04-02"
+  },
+  {
+    "passport_id": "MCA-BAC-000006",
+    "element": "amr_highlight",
+    "value": "multidrug-resistant (MDR)",
+    "attribute": "aro_id",
+    "attr_value": "ARO:3004305",
+    "action": "ENRICH_EXT_ID",
+    "xml_file": "MCA_DB_v1_6_20260402.xml",
+    "source": "amr_kegg_enrich.py",
+    "date": "2026-04-02"
+  },
+  {
+    "passport_id": "MCA-BAC-000022",
+    "element": "bloom_trigger",
+    "value": "proton pump inhibitor (PPI) use",
+    "attribute": "kegg_drug_id",
+    "attr_value": "D00455",
+    "action": "ENRICH_EXT_ID",
+    "xml_file": "MCA_DB_v1_6_20260402.xml",
+    "source": "amr_kegg_enrich.py",
+    "date": "2026-04-02"
   }
 ]
