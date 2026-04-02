@@ -2,11 +2,11 @@
 name: mca-paper-curator
 description: "MCA curation skill for extracting clinically meaningful microbial entities and relationships from a research paper (PDF) and writing a structured staging file for human review. Covers paper analysis, entity extraction, CREATE/UPDATE routing against the existing XML, and evidence grading via a dedicated subagent. Triggers on: curate paper, add paper to MCA, extract from paper, curate taxon, update passport."
 metadata:
-  version: "3.2"
+  version: "3.3"
   last_updated: "2026-04-02"
 ---
 
-# MCA Paper Curator v3.1 — Microbiome Knowledge Base Curation Skill
+# MCA Paper Curator v3.3 — Microbiome Knowledge Base Curation Skill
 
 Reads a research paper (PDF) and writes a structured staging file per taxon. Biology and ecology fields are populated from NCBI Taxonomy and BacDive by TaxID — not from the PDF. The paper is the source only for the clinical layer: pathobiont status, clinical roles, bloom triggers, AMR, metabolites, and clinical associations.
 
@@ -43,7 +43,7 @@ Curate this paper: [attach PDF — filename must be the PMID, e.g. 38123456.pdf]
 
 ---
 
-## Agent Team (9 Agents)
+## Agent Team (11 Agents)
 
 | # | Agent | Role | Phase |
 |---|-------|------|-------|
@@ -54,12 +54,14 @@ Curate this paper: [attach PDF — filename must be the PMID, e.g. 38123456.pdf]
 | 5 | `grading_agent` | Assigns a single evidence grade (E1 / E2 / E3) for the whole paper with written rationale; flags uncertainty when study design is ambiguous or unreported | Phase 1 |
 | 6 | `mesh_agent` | Fetches paper MeSH annotations from NLM E-utilities API; assigns relevant MeSH terms per clinical association; resolves MeSH anatomy IDs for body sites and specimen types | Phase 2 |
 | 7 | `kegg_agent` | Maps clinical conditions → KEGG Disease IDs; bloom trigger drugs → KEGG Drug IDs; metabolite names → KEGG Compound IDs — all via local KEGG flat file mirror | Phase 2 |
-| 8 | `aro_agent` | Maps AMR phenotype names to CARD ARO identifiers via local CARD ontology data or CARD web API | Phase 2 |
+| 8 | `aro_agent` | Maps AMR phenotype names to CARD ARO identifiers via ARO OBO ontology file (OBO Foundry) | Phase 2 |
 | 9 | `vfdb_agent` | Maps virulence factor names to VFDB VFIDs via local VFDB JSON mirror (`vfdb.json`) | Phase 2 |
+| 10 | `null_review_agent` | Re-attempts all null ext_id fields using alternative strategies and web fallbacks; classifies each null as `confirmed_null`, `filled`, or `needs_review` before the staging file is written | Phase 3 |
+| 11 | `sanity_check_agent` | Validates all fields (null and non-null) for format correctness, controlled vocabulary compliance, and logical consistency. **Spawned with claude-haiku-4-5** — fast validation gate before human review. | Phase 4 |
 
 ---
 
-## Orchestration Workflow (4 Phases)
+## Orchestration Workflow (5 Phases)
 
 ```
 User: "Curate this paper" + [PDF — filename is PMID, e.g. 38123456.pdf]
@@ -185,17 +187,44 @@ User: "Curate this paper" + [PDF — filename is PMID, e.g. 38123456.pdf]
          - Maps virulence factor names → VFDB VFIDs
            → populates vfdb_id on virulence_factor objects
      |
-=== Phase 3: STAGING FILE OUTPUT ===
+=== Phase 3: STAGING FILE OUTPUT + NULL REVIEW ===
      |
-     +-> Merge Phase 2 enrichment into the Phase 1 merged object; write staging JSON per taxon
-         - One file per taxon: staging/YYYY-MM-DD_[taxon-name].json
-         - Schema follows templates/STAGING_FILE.md
-         - Phase 2 enrichment is merged into the relevant fields of the Phase 1 object:
+     +-> Step 1 — Merge Phase 2 enrichment into the Phase 1 merged object:
+         - Phase 2 enrichment merged into the relevant fields of the Phase 1 object:
              assoc_refs, mesh_anatomy_id, kegg_drug_id, kegg_compound_id, aro_id, vfdb_id
          - Enrichment notes (mesh_notes, kegg_notes, aro_notes, vfdb_notes) folded into
            extraction_notes[]
      |
-     ** Inform user of staging file path(s); no XML is modified at this step **
+     +-> Step 2 — [null_review_agent] (see agents/NULL_REVIEW_AGENT.md)
+         Runs on the merged object before the staging file is written:
+         - For every null ext_id field, attempts re-lookup with alternative strategies
+           and web fallbacks (ARO OBO, KEGG flat files, NLM API, ChEBI REST, NCBI Esearch)
+         - Classifies each null as:
+             confirmed_null — sentinel value, known-null class, or no match after re-attempt
+             filled         — match found; field updated in staging object
+             needs_review   — candidate found but confidence insufficient to auto-fill
+         - Appends `null_review` block to staging object; applies `filled` values in-place
+     |
+     +-> Step 3 — Write staging JSON per taxon:
+         - One file per taxon: staging/YYYY-MM-DD_[taxon-name].json
+         - Schema follows templates/STAGING_FILE.md
+         - Includes `null_review` block from Step 2
+     |
+=== Phase 4: SANITY CHECK ===
+     |
+     +-> [sanity_check_agent] (see agents/SANITY_CHECK_AGENT.md)
+         **Spawned with claude-haiku-4-5 for speed.**
+         Reads each written staging file and validates:
+         - Format checks: all non-null ext_ids match expected patterns (ARO:, D#####, etc.)
+         - Controlled vocabulary: closed fields contain only allowed values
+         - Logical consistency: pathobiont/role contradictions, grade/study-design mismatches
+         - Required fields: preferred_name, domain, action, association PMIDs, etc.
+         - Structural completeness: empty association lists, duplicate claims
+         Appends `sanity_check` block with status (PASS / WARN / FAIL) to the staging file.
+         Does NOT modify content — annotation only.
+     |
+     ** Inform user of staging file path(s) and overall QC status (PASS/WARN/FAIL per taxon);
+        no XML is modified at this step **
 ```
 
 ---
@@ -214,7 +243,9 @@ User: "Curate this paper" + [PDF — filename is PMID, e.g. 38123456.pdf]
    - **Data gap** (term not found in ontology, API returns empty results, no matching KEGG entry): continue without blocking; log in `extraction_notes`; affected fields remain `null`.
 
    > **Rationale:** A permission denial means the enrichment step did not run at all — the user cannot meaningfully review a staging file that is missing IDs due to a tool misconfiguration. A missing ontology match is expected and reviewable.
-8. **Phase 3 — no XML writes**: This skill ends at writing the staging file; the XML is never touched here
+8. **Phase 3 — null_review is non-blocking**: Lookup failures in `null_review_agent` go into the `null_review` block and do not halt the skill. The staging file is always written.
+9. **Phase 4 — sanity_check is non-blocking**: A `FAIL` status in `sanity_check_agent` does not halt the skill — the staging file is written with the FAIL annotation. The user sees the status in the final report and decides whether to fix before applying.
+10. **Phase 3/4 — no XML writes**: This skill ends at writing the staging file; the XML is never touched here
 
 ---
 
@@ -252,6 +283,8 @@ One JSON file per taxon, written to `staging/`. Schema defined in `templates/STA
 | `kegg_agent` | `agents/KEGG_AGENT.md` |
 | `aro_agent` | `agents/ARO_AGENT.md` |
 | `vfdb_agent` | `agents/VFDB_AGENT.md` |
+| `null_review_agent` | `agents/NULL_REVIEW_AGENT.md` |
+| `sanity_check_agent` | `agents/SANITY_CHECK_AGENT.md` |
 
 ---
 
@@ -292,6 +325,8 @@ One JSON file per taxon, written to `staging/`. Schema defined in `templates/STA
 | UPDATE integrity | UPDATE proposals must not remove or overwrite existing passport data |
 | Uncertainty handling | Ambiguous study designs and unresolvable taxa must be flagged, not silently resolved |
 | Staging completeness | Staging file must be valid against `templates/STAGING_FILE.md` schema before being written |
+| Null review | Every null ext_id must be classified (`confirmed_null` / `filled` / `needs_review`) before the staging file is finalised |
+| Sanity check | Every staging file must have a `sanity_check` block with a PASS / WARN / FAIL status before being presented to the human reviewer |
 
 ---
 
@@ -315,8 +350,8 @@ One JSON file per taxon, written to `staging/`. Schema defined in `templates/STA
 
 | Item | Content |
 |------|---------|
-| Skill Version | 3.1 |
-| Last Updated | 2026-04-01 |
+| Skill Version | 3.3 |
+| Last Updated | 2026-04-02 |
 | Maintainer | Heewon Seo |
 | Input | Research paper (PDF); filename stem must be the PMID (digits only, e.g. `38123456.pdf`) |
 | Output | `staging/YYYY-MM-DD_[taxon-name].json` |
@@ -328,6 +363,7 @@ One JSON file per taxon, written to `staging/`. Schema defined in `templates/STA
 
 | Version | Date | Changes |
 |---------|------|---------|
+| 3.3 | 2026-04-02 | **QC pipeline:** Added two new agents and a new Phase 4. `null_review_agent` (Phase 3, final step): re-attempts all null ext_ids with alternative strategies + web fallbacks; classifies each as `confirmed_null`, `filled`, or `needs_review`. `sanity_check_agent` (Phase 4, Haiku): validates format correctness, controlled vocabulary, logical consistency, and required-field completeness across all fields; appends `sanity_check` block with PASS/WARN/FAIL. Pipeline is now 5 phases (0–4), 11 agents. |
 | 3.2 | 2026-04-02 | **VFDB integration:** Added `vfdb_agent` (Phase 2) to map virulence factor names → VFDB VFIDs via local JSON mirror. `entity_extractor_agent` now extracts `virulence_factors[]` from clinical layer. `virulence_factors` added to staging file schema, TAXON_PASSPORT template, and CONTROLLED_VOCABULARY. |
 | 3.1 | 2026-04-01 | **Phase 2 failure handling:** Split enrichment failure rule into two cases — technical blockers (tool permission denied, file inaccessible) now HALT and interrupt the user; data gaps (term not found in ontology) remain non-blocking. Prevents silently producing under-enriched staging files when the cause is a configuration issue, not missing data. |
 | 3.0 | 2026-04-01 | **Architecture redesign:** Added `db_fetch_agent` (NCBI Taxonomy + BacDive) to Phase 1. Biology and ecology fields are now populated from structured databases by TaxID, not extracted from the PDF. `entity_extractor_agent` narrowed to clinical layer only (pathobiont status, clinical roles, typical specimens, bloom triggers, risk contexts, AMR, metabolites, clinical associations). Transmission routes remain paper-sourced (db_fetch_agent does not provide them). Phase 1→2 merge updated to union outputs from db_fetch_agent + entity_extractor_agent. |
