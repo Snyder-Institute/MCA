@@ -43,9 +43,9 @@ try {
         $routes      = getTags($pdo, $p_id, 'transmission_route');
         $roles       = getTags($pdo, $p_id, 'role');
         $specimens   = getTags($pdo, $p_id, 'typical_specimen');
-        $triggers    = getTags($pdo, $p_id, 'bloom_trigger');
+        $triggers    = getTagsWithExtId($pdo, $p_id, 'bloom_trigger');
         $risk_groups = getTags($pdo, $p_id, 'risk_context');
-        $amr_alerts  = getTags($pdo, $p_id, 'amr_highlight');
+        $amr_alerts  = getTagsWithExtId($pdo, $p_id, 'amr_highlight');
         $vf_entries  = getTagsWithExtId($pdo, $p_id, 'virulence_factor');
 
         $pmid_stmt = $pdo->prepare("SELECT pmid FROM passport_pmid WHERE passport_id = ? ORDER BY pmid ASC");
@@ -359,7 +359,22 @@ include 'header.php';
                         <div class="data-item"><span class="data-label">Typical Specimen</span><span class="data-value"><?php echo htmlspecialchars(implode('; ', $specimens)); ?></span></div>
                     <?php endif; ?>
                     <?php if (!empty($amr_alerts)): ?>
-                        <div class="data-item"><span class="data-label">AMR Highlights</span><span class="data-value"><?php echo htmlspecialchars(implode('; ', $amr_alerts)); ?></span></div>
+                        <div class="data-item">
+                            <span class="data-label">AMR Highlights</span>
+                            <span class="data-value" style="display:flex; flex-wrap:wrap; gap:6px; align-items:center;">
+                                <?php foreach ($amr_alerts as $i => $amr): ?>
+                                    <span style="display:inline-flex; align-items:center; gap:4px;">
+                                        <?php echo htmlspecialchars($amr['value']); ?>
+                                        <?php if (!empty($amr['ext_id'])): ?>
+                                            <?php $aro_num = preg_replace('/^ARO:/', '', $amr['ext_id']); ?>
+                                            <a href="https://card.mcmaster.ca/ontology/<?php echo htmlspecialchars($aro_num); ?>" target="_blank" rel="noopener" style="text-decoration:none;">
+                                                <span style="display:inline-block; padding:1px 5px; border-radius:3px; font-size:10px; font-weight:700; background:#fee2e2; color:#991b1b; border:1px solid #fca5a5; font-family:monospace;"><?php echo htmlspecialchars($amr['ext_id']); ?></span>
+                                            </a>
+                                        <?php endif; ?>
+                                    </span><?php if ($i < count($amr_alerts) - 1): ?><span style="color:#ccc;">·</span><?php endif; ?>
+                                <?php endforeach; ?>
+                            </span>
+                        </div>
                     <?php endif; ?>
                     <?php if (!empty($vf_entries)): ?>
                         <div class="data-item">
@@ -379,7 +394,21 @@ include 'header.php';
                 </div>
                 <div>
                     <?php if (!empty($triggers)): ?>
-                        <div class="data-item"><span class="data-label">Bloom Triggers</span><span class="data-value"><?php echo htmlspecialchars(implode('; ', $triggers)); ?></span></div>
+                        <div class="data-item">
+                            <span class="data-label">Bloom Triggers</span>
+                            <span class="data-value" style="display:flex; flex-wrap:wrap; gap:6px; align-items:center;">
+                                <?php foreach ($triggers as $i => $trig): ?>
+                                    <span style="display:inline-flex; align-items:center; gap:4px;">
+                                        <?php echo htmlspecialchars($trig['value']); ?>
+                                        <?php if (!empty($trig['ext_id'])): ?>
+                                            <a href="https://www.kegg.jp/entry/<?php echo htmlspecialchars($trig['ext_id']); ?>" target="_blank" rel="noopener" style="text-decoration:none;">
+                                                <span style="display:inline-block; padding:1px 5px; border-radius:3px; font-size:10px; font-weight:700; background:#ffedd5; color:#9a3412; border:1px solid #fdba74; font-family:monospace;"><?php echo htmlspecialchars($trig['ext_id']); ?></span>
+                                            </a>
+                                        <?php endif; ?>
+                                    </span><?php if ($i < count($triggers) - 1): ?><span style="color:#ccc;">·</span><?php endif; ?>
+                                <?php endforeach; ?>
+                            </span>
+                        </div>
                     <?php endif; ?>
                     <?php if (!empty($risk_groups)): ?>
                         <div class="data-item"><span class="data-label">Risk Contexts</span><span class="data-value"><?php echo htmlspecialchars(implode('; ', $risk_groups)); ?></span></div>

@@ -193,6 +193,14 @@ All colors are defined inline in PHP templates or in per-page `<style>` blocks. 
 
 MeSH/KEGG section labels (`MeSH:` / `KEGG:`) are rendered at 13px bold `#333` (neutral, no color).
 
+### Inline ext_id badges (used in `passport.php` — Clinical Profile fields)
+
+| Type | Background | Text | Border | Used on |
+|------|-----------|------|--------|---------|
+| ARO (CARD) | `#fee2e2` | `#991b1b` | `#fca5a5` | `amr_highlights` — links to `card.mcmaster.ca/ontology/{id}` |
+| KEGG Drug | `#ffedd5` | `#9a3412` | `#fdba74` | `bloom_triggers` — links to `kegg.jp/entry/{id}` |
+| VFDB | `#fce7f3` | `#9d174d` | `#f9a8d4` | `virulence_factors` — no link (local DB only) |
+
 ### Related taxa match tags (used in `passport.php`)
 
 | Tag | Background | Text | Border | Class |
