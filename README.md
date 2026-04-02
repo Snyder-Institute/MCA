@@ -38,6 +38,8 @@ Each taxon in MCA has exactly one **Taxon Passport** — the central structured 
 
 Each passport also carries **Clinical Associations** — individual evidence-graded claims linking the taxon to a specific condition or outcome, each backed by one or more PMIDs.
 
+![Entities and Relationships](images/relationships.png)
+
 ### Evidence grades
 
 | Grade | Meaning |
