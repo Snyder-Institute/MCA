@@ -180,7 +180,7 @@ include 'header.php';
     .ev-tooltip .ev-tooltiptext .dict-term-active { font-weight: 900; color: #000; }
     .ev-tooltip:hover .ev-tooltiptext { visibility: visible; opacity: 1; }
 
-    .assoc-ref-tag { display: inline-flex; align-items: center; gap: 4px; padding: 3px 9px; border-radius: 4px; font-size: 12px; font-weight: 600; text-decoration: none; margin-right: 6px; margin-top: 6px; white-space: nowrap; }
+    .assoc-ref-tag { display: inline-block; padding: 1px 5px; border-radius: 3px; font-size: 10px; font-weight: 700; font-family: monospace; text-decoration: none; white-space: nowrap; }
     .assoc-ref-row { display: flex; align-items: center; flex-wrap: wrap; gap: 0; }
     .assoc-ref-row .assoc-ref-tag { margin-top: 0; }
     .assoc-ref-mesh { background: #d1fae5; color: #065f46; border: 1px solid #6ee7b7; }
@@ -202,7 +202,7 @@ include 'header.php';
     .paper-meta { font-size: 12px; color: #777; margin-top: 4px; line-height: 1.6; }
 
     .timeline-strip { display: flex; gap: 10px; flex-wrap: wrap; margin-top: 8px; }
-    .timeline-card { display: flex; flex-direction: column; align-items: center; padding: 8px 12px; border-radius: 5px; background: #f8f9fa; border: 1px solid #e8e8e8; min-width: 90px; text-align: center; font-size: 12px; }
+    .timeline-card { display: flex; flex-direction: column; align-items: center; justify-content: center; padding: 8px 12px; border-radius: 5px; background: #f8f9fa; border: 1px solid #e8e8e8; flex: 1 1 205px; max-width: 205px; text-align: center; font-size: 12px; box-sizing: border-box; }
     .timeline-year { font-weight: 900; font-size: 14px; color: #404f7c; }
     .timeline-design { font-size: 10px; color: #888; margin-top: 2px; text-transform: capitalize; }
 
@@ -315,22 +315,34 @@ include 'header.php';
             <?php if (empty($metabolites)): ?>
                 <p class="muted" style="font-size: 13px; margin: 0; color: #aaa;">No metabolite relationships documented for this taxon.</p>
             <?php else: ?>
-                <?php foreach ($metabolites as $met): ?>
-                    <div class="data-item">
-                        <span class="data-label"><?php
-                            if (!empty($met['kegg_compound_id'])): ?>
-                                <a href="https://www.genome.jp/entry/<?php echo urlencode($met['kegg_compound_id']); ?>" target="_blank" style="color: #111; text-decoration: underline dotted #aaa;"><?php echo htmlspecialchars($met['metabolite_name']); ?></a>
-                            <?php else:
-                                echo htmlspecialchars($met['metabolite_name']);
-                            endif; ?>
-                        </span>
-                        <span class="data-value">
-                            <span class="metabolite-rel"><?php echo htmlspecialchars($met['relationship']); ?></span>
-                            <?php if (!empty($met['chebi_id'])): ?>
-                                <a href="https://www.ebi.ac.uk/chebi/searchId.do?chebiId=<?php echo urlencode($met['chebi_id']); ?>" target="_blank" class="assoc-ref-tag assoc-ref-mesh" style="margin-left: 8px;">ChEBI ↗</a>
-                            <?php endif; ?>
-                        </span>
-                    </div>
+                <?php
+                $met_grouped = [];
+                foreach ($metabolites as $met) {
+                    $met_grouped[$met['relationship']][] = $met;
+                }
+                foreach (['produces', 'consumes', 'modifies'] as $rel):
+                ?>
+                <div class="data-item">
+                    <span class="data-label" style="min-width:90px; text-transform:capitalize;"><?php echo $rel; ?></span>
+                    <span class="data-value" style="display:flex; flex-wrap:wrap; align-items:center; gap:6px;">
+                        <?php if (!empty($met_grouped[$rel])): ?>
+                            <?php foreach ($met_grouped[$rel] as $i => $met): ?>
+                                <span style="display:inline-flex; align-items:center; gap:4px;">
+                                    <span><?php echo htmlspecialchars($met['metabolite_name']); ?></span>
+                                    <?php if (!empty($met['kegg_compound_id'])): ?>
+                                        <a href="https://www.genome.jp/entry/<?php echo urlencode($met['kegg_compound_id']); ?>" target="_blank" style="text-decoration:none;">
+                                            <span style="display:inline-block; padding:1px 5px; border-radius:3px; font-size:10px; font-weight:700; background:#ffedd5; color:#9a3412; border:1px solid #fdba74; font-family:monospace;"><?php echo htmlspecialchars($met['kegg_compound_id']); ?></span>
+                                        </a>
+                                    <?php endif; ?>
+                                    <?php if (!empty($met['chebi_id'])): ?>
+                                        <a href="https://www.ebi.ac.uk/chebi/searchId.do?chebiId=<?php echo urlencode($met['chebi_id']); ?>" target="_blank" class="assoc-ref-tag assoc-ref-mesh">ChEBI ↗</a>
+                                    <?php endif; ?>
+                                </span>
+                                <?php if ($i < count($met_grouped[$rel]) - 1): ?><span style="color:#ccc;">·</span><?php endif; ?>
+                            <?php endforeach; ?>
+                        <?php endif; ?>
+                    </span>
+                </div>
                 <?php endforeach; ?>
             <?php endif; ?>
         </div>
@@ -358,6 +370,28 @@ include 'header.php';
                     <?php if (!empty($specimens)): ?>
                         <div class="data-item"><span class="data-label">Typical Specimen</span><span class="data-value"><?php echo htmlspecialchars(implode('; ', $specimens)); ?></span></div>
                     <?php endif; ?>
+                    <?php if (!empty($triggers)): ?>
+                        <div class="data-item">
+                            <span class="data-label">Bloom Triggers</span>
+                            <span class="data-value" style="display:flex; flex-wrap:wrap; gap:6px; align-items:center;">
+                                <?php foreach ($triggers as $i => $trig): ?>
+                                    <span style="display:inline-flex; align-items:center; gap:4px;">
+                                        <?php echo htmlspecialchars($trig['value']); ?>
+                                        <?php if (!empty($trig['ext_id'])): ?>
+                                            <a href="https://www.kegg.jp/entry/<?php echo htmlspecialchars($trig['ext_id']); ?>" target="_blank" rel="noopener" style="text-decoration:none;">
+                                                <span style="display:inline-block; padding:1px 5px; border-radius:3px; font-size:10px; font-weight:700; background:#ffedd5; color:#9a3412; border:1px solid #fdba74; font-family:monospace;"><?php echo htmlspecialchars($trig['ext_id']); ?></span>
+                                            </a>
+                                        <?php endif; ?>
+                                    </span><?php if ($i < count($triggers) - 1): ?><span style="color:#ccc;">·</span><?php endif; ?>
+                                <?php endforeach; ?>
+                            </span>
+                        </div>
+                    <?php endif; ?>
+                </div>
+                <div>
+                    <?php if (!empty($risk_groups)): ?>
+                        <div class="data-item"><span class="data-label">Risk Contexts</span><span class="data-value"><?php echo htmlspecialchars(implode('; ', $risk_groups)); ?></span></div>
+                    <?php endif; ?>
                     <?php if (!empty($amr_alerts)): ?>
                         <div class="data-item">
                             <span class="data-label">AMR Highlights</span>
@@ -384,34 +418,14 @@ include 'header.php';
                                     <span style="display:inline-flex; align-items:center; gap:4px;">
                                         <?php echo htmlspecialchars($vf['value']); ?>
                                         <?php if (!empty($vf['ext_id'])): ?>
-                                            <span style="display:inline-block; padding:1px 5px; border-radius:3px; font-size:10px; font-weight:700; background:#fce7f3; color:#9d174d; border:1px solid #f9a8d4; font-family:monospace;"><?php echo htmlspecialchars($vf['ext_id']); ?></span>
+                                            <a href="https://www.mgc.ac.cn/cgi-bin/VFs/vfs.cgi?VFID=<?php echo urlencode($vf['ext_id']); ?>" target="_blank" rel="noopener" style="text-decoration:none;">
+                                                <span style="display:inline-block; padding:1px 5px; border-radius:3px; font-size:10px; font-weight:700; background:#fce7f3; color:#9d174d; border:1px solid #f9a8d4; font-family:monospace;"><?php echo htmlspecialchars($vf['ext_id']); ?></span>
+                                            </a>
                                         <?php endif; ?>
                                     </span><?php if (!array_key_last($vf_entries) !== array_search($vf, $vf_entries)): ?><span style="color:#ccc;">·</span><?php endif; ?>
                                 <?php endforeach; ?>
                             </span>
                         </div>
-                    <?php endif; ?>
-                </div>
-                <div>
-                    <?php if (!empty($triggers)): ?>
-                        <div class="data-item">
-                            <span class="data-label">Bloom Triggers</span>
-                            <span class="data-value" style="display:flex; flex-wrap:wrap; gap:6px; align-items:center;">
-                                <?php foreach ($triggers as $i => $trig): ?>
-                                    <span style="display:inline-flex; align-items:center; gap:4px;">
-                                        <?php echo htmlspecialchars($trig['value']); ?>
-                                        <?php if (!empty($trig['ext_id'])): ?>
-                                            <a href="https://www.kegg.jp/entry/<?php echo htmlspecialchars($trig['ext_id']); ?>" target="_blank" rel="noopener" style="text-decoration:none;">
-                                                <span style="display:inline-block; padding:1px 5px; border-radius:3px; font-size:10px; font-weight:700; background:#ffedd5; color:#9a3412; border:1px solid #fdba74; font-family:monospace;"><?php echo htmlspecialchars($trig['ext_id']); ?></span>
-                                            </a>
-                                        <?php endif; ?>
-                                    </span><?php if ($i < count($triggers) - 1): ?><span style="color:#ccc;">·</span><?php endif; ?>
-                                <?php endforeach; ?>
-                            </span>
-                        </div>
-                    <?php endif; ?>
-                    <?php if (!empty($risk_groups)): ?>
-                        <div class="data-item"><span class="data-label">Risk Contexts</span><span class="data-value"><?php echo htmlspecialchars(implode('; ', $risk_groups)); ?></span></div>
                     <?php endif; ?>
                 </div>
             </div>
@@ -464,23 +478,23 @@ include 'header.php';
                                     usort($mesh_refs, fn($a, $b) => strcasecmp($a['ref_label'] ?: $a['ref_id'], $b['ref_label'] ?: $b['ref_id']));
                                     usort($kegg_refs, fn($a, $b) => strcasecmp($a['ref_label'] ?: $a['ref_id'], $b['ref_label'] ?: $b['ref_id']));
                                     ?>
-                                    <div style="margin-top: 8px; display: flex; flex-direction: column; gap: 4px;">
-                                        <?php if (!empty($mesh_refs)): ?>
-                                            <div class="assoc-ref-row">
-                                                <span style="font-size: 13px; font-weight: 700; color: #333; margin-right: 6px; white-space: nowrap;">MeSH:</span>
-                                                <?php foreach ($mesh_refs as $ref): ?>
-                                                    <a href="https://meshb.nlm.nih.gov/record/ui?ui=<?php echo urlencode($ref['ref_id']); ?>" target="_blank" class="assoc-ref-tag assoc-ref-mesh"><?php echo htmlspecialchars(!empty($ref['ref_label']) ? $ref['ref_label'] : $ref['ref_id']); ?></a>
-                                                <?php endforeach; ?>
-                                            </div>
-                                        <?php endif; ?>
-                                        <?php if (!empty($kegg_refs)): ?>
-                                            <div class="assoc-ref-row">
-                                                <span style="font-size: 13px; font-weight: 700; color: #333; margin-right: 6px; white-space: nowrap;">KEGG:</span>
-                                                <?php foreach ($kegg_refs as $ref): ?>
-                                                    <a href="https://www.genome.jp/entry/<?php echo urlencode($ref['ref_id']); ?>" target="_blank" class="assoc-ref-tag assoc-ref-kegg"><?php echo htmlspecialchars(!empty($ref['ref_label']) ? $ref['ref_label'] : $ref['ref_id']); ?></a>
-                                                <?php endforeach; ?>
-                                            </div>
-                                        <?php endif; ?>
+                                    <div style="margin-top: 8px; display: flex; flex-wrap: wrap; align-items: center; gap: 8px;">
+                                        <?php foreach ($mesh_refs as $ref): ?>
+                                            <span style="display:inline-flex; align-items:center; gap:4px;">
+                                                <?php if (!empty($ref['ref_label'])): ?>
+                                                    <span style="font-size:13px; color:#333;"><?php echo htmlspecialchars($ref['ref_label']); ?></span>
+                                                <?php endif; ?>
+                                                <a href="https://meshb.nlm.nih.gov/record/ui?ui=<?php echo urlencode($ref['ref_id']); ?>" target="_blank" class="assoc-ref-tag assoc-ref-mesh"><?php echo htmlspecialchars($ref['ref_id']); ?></a>
+                                            </span>
+                                        <?php endforeach; ?>
+                                        <?php foreach ($kegg_refs as $ref): ?>
+                                            <span style="display:inline-flex; align-items:center; gap:4px;">
+                                                <?php if (!empty($ref['ref_label'])): ?>
+                                                    <span style="font-size:13px; color:#333;"><?php echo htmlspecialchars($ref['ref_label']); ?></span>
+                                                <?php endif; ?>
+                                                <a href="https://www.genome.jp/entry/<?php echo urlencode($ref['ref_id']); ?>" target="_blank" class="assoc-ref-tag assoc-ref-kegg"><?php echo htmlspecialchars($ref['ref_id']); ?></a>
+                                            </span>
+                                        <?php endforeach; ?>
                                         <?php foreach ($other_refs as $ref): ?>
                                             <span class="assoc-ref-tag assoc-ref-other"><?php echo htmlspecialchars(!empty($ref['ref_label']) ? $ref['ref_label'] : $ref['ref_id']); ?></span>
                                         <?php endforeach; ?>
@@ -578,5 +592,10 @@ include 'header.php';
         <iframe src="glossary.php?popup=1" style="width: 100%; height: 100%; border: none;"></iframe>
     </div>
 </div>
+<script>
+document.addEventListener('keydown', function(e) {
+    if (e.key === 'Escape') document.getElementById('dict-modal').style.display = 'none';
+});
+</script>
 
 <?php include 'footer.php'; ?>

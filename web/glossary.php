@@ -50,6 +50,10 @@ if (!$is_popup) {
             <div class="glossary-text">The official NCBI Taxonomy database identifier, linking each entry to a globally recognised taxonomic record. Clicking the TaxID opens the corresponding NCBI Taxonomy page.</div>
         </div>
         <div class="glossary-item">
+            <span class="glossary-term">BacDive ID</span>
+            <div class="glossary-text">Identifier linking to the BacDive entry for this taxon's type strain. BacDive is a standardised microbiological culture collection database maintained by DSMZ, providing curated microbiological metadata including culture conditions, physiology, and isolation sources. Available at species level and below.</div>
+        </div>
+        <div class="glossary-item">
             <span class="glossary-term">Rank</span>
             <div class="glossary-text">The taxonomic level of the entry, such as family, genus, species, or strain.</div>
         </div>
@@ -80,10 +84,6 @@ if (!$is_popup) {
         <div class="glossary-item">
             <span class="glossary-term">Key Traits</span>
             <div class="glossary-text">Biologically relevant features such as spore formation, biofilm production, or toxin production. Sourced from BacDive.</div>
-        </div>
-        <div class="glossary-item">
-            <span class="glossary-term">BacDive</span>
-            <div class="glossary-text">A link to the BacDive entry for this taxon's type strain. BacDive is a standardised microbiological culture database maintained by DSMZ.</div>
         </div>
     </div>
 
@@ -126,16 +126,26 @@ if (!$is_popup) {
             <div class="glossary-text">Common specimen types in which the organism is identified in a clinical context (e.g., stool, blood, respiratory). Extracted from curated literature.</div>
         </div>
         <div class="glossary-item">
-            <span class="glossary-term">Bloom Triggers</span>
-            <div class="glossary-text">Specific conditions that enable this taxon to expand to clinically relevant abundance, such as antibiotic exposure, immunosuppression, or dysbiosis. Extracted from curated literature.</div>
-        </div>
-        <div class="glossary-item">
             <span class="glossary-term">Risk Contexts</span>
             <div class="glossary-text">Clinical settings or patient populations where this taxon is most likely to cause harm (e.g., ICU, post-antibiotic, immunocompromised). Extracted from curated literature.</div>
         </div>
         <div class="glossary-item">
             <span class="glossary-term">Antimicrobial Resistance</span>
-            <div class="glossary-text">Notable resistance phenotypes that impact clinical management (e.g., ESBL, CRE, VRE). Linked to the CARD Antibiotic Resistance Ontology (ARO) where available. Extracted from curated literature.</div>
+            <div class="glossary-text">Notable resistance phenotypes that impact clinical management (e.g., ESBL, CRE, VRE). Extracted from curated literature. Where available, linked to the CARD Antibiotic Resistance Ontology (ARO):
+                <div style="margin-top:8px;">multidrug-resistant (MDR) <span style="display:inline-block; padding:1px 5px; border-radius:3px; font-size:10px; font-weight:700; background:#fee2e2; color:#991b1b; border:1px solid #fca5a5; font-family:monospace;">ARO:3004305</span></div>
+            </div>
+        </div>
+        <div class="glossary-item">
+            <span class="glossary-term">Bloom Triggers</span>
+            <div class="glossary-text">Conditions that enable this taxon to expand to clinically relevant abundance (e.g., antibiotic exposure, immunosuppression). Extracted from curated literature. Specific drugs are linked to KEGG Drug (D numbers):
+                <div style="margin-top:8px;">proton pump inhibitor (PPI) use <span style="display:inline-block; padding:1px 5px; border-radius:3px; font-size:10px; font-weight:700; background:#ffedd5; color:#9a3412; border:1px solid #fdba74; font-family:monospace;">D00455</span></div>
+            </div>
+        </div>
+        <div class="glossary-item">
+            <span class="glossary-term">Virulence Factors</span>
+            <div class="glossary-text">Molecular factors that contribute to pathogenicity (e.g., toxins, adhesins, capsule). Linked to the Virulence Factor Database (VFDB) where available:
+                <div style="margin-top:8px;">Toxin A <span style="display:inline-block; padding:1px 5px; border-radius:3px; font-size:10px; font-weight:700; background:#fce7f3; color:#9d174d; border:1px solid #f9a8d4; font-family:monospace;">VF0592</span></div>
+            </div>
         </div>
     </div>
 
@@ -178,11 +188,15 @@ if (!$is_popup) {
         </div>
         <div class="glossary-item">
             <span class="glossary-term">MeSH</span>
-            <div class="glossary-text">Standardised Medical Subject Headings (MeSH) terms assigned by NLM to the source paper, filtered to those directly relevant to the association. Clicking a MeSH term opens its definition in the NLM MeSH Browser.</div>
+            <div class="glossary-text">Standardised Medical Subject Headings (MeSH) terms assigned by NLM to the source paper, filtered to those directly relevant to the association. Clicking a badge opens the NLM MeSH Browser entry.
+                <div style="margin-top:8px;">Cross Infection <span style="display:inline-block; padding:1px 5px; border-radius:3px; font-size:10px; font-weight:700; background:#d1fae5; color:#065f46; border:1px solid #6ee7b7; font-family:monospace;">D003428</span></div>
+            </div>
         </div>
         <div class="glossary-item">
             <span class="glossary-term">KEGG</span>
-            <div class="glossary-text">KEGG Disease identifiers mapping the associated clinical condition to KEGG's disease classification. Clicking a KEGG term opens the corresponding KEGG Disease entry.</div>
+            <div class="glossary-text">KEGG Disease identifiers mapping the associated clinical condition to KEGG's disease classification. Clicking a badge opens the corresponding KEGG Disease entry.
+                <div style="margin-top:8px;">Enterococcal infection <span style="display:inline-block; padding:1px 5px; border-radius:3px; font-size:10px; font-weight:700; background:#ffedd5; color:#9a3412; border:1px solid #fdba74; font-family:monospace;">H01444</span></div>
+            </div>
         </div>
     </div>
 

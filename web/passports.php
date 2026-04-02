@@ -223,6 +223,16 @@ include 'header.php';
                         <th style="padding: 12px 15px;">Domain</th>
                         <th style="padding: 12px 15px;">Preferred name</th>
                         <th style="padding: 12px 15px;">
+                            <span class="th-tooltip">Evidence
+                                <div class="tooltip-box">
+                                    <strong>Evidence grade</strong><br>
+                                    E3 = Strong human clinical evidence<br>
+                                    E2 = Moderate human evidence<br>
+                                    E1 = Limited / preliminary
+                                </div>
+                            </span>
+                        </th>
+                        <th style="padding: 12px 15px;">
                             <span class="th-tooltip">Pathobiont
                                 <div class="tooltip-box">
                                     <strong>Pathobiont status</strong><br>
@@ -234,7 +244,6 @@ include 'header.php';
                             </span>
                         </th>
                         <th style="padding: 12px 15px;">Clinical roles</th>
-                        <th style="padding: 12px 15px;">Evidence</th>
                     </tr>
                 </thead>
                 <tbody>
@@ -244,7 +253,7 @@ include 'header.php';
                             $ev_class = $ev ? 'ev-' . htmlspecialchars($ev) : '';
                         ?>
                         <tr class="table-row-link" onclick="window.location.href='<?php echo $taxon['passport_id']; ?>'">
-                            <td style="padding: 12px 15px; font-family: monospace; color: #555;">
+                            <td style="padding: 12px 15px; font-family: monospace; font-size: 11px; color: #555; white-space: nowrap;">
                                 <?php echo htmlspecialchars($taxon['passport_id']); ?>
                             </td>
                             <td style="padding: 12px 15px;">
@@ -259,6 +268,11 @@ include 'header.php';
                                 </strong>
                             </td>
                             <td style="padding: 12px 15px;">
+                                <?php if ($ev): ?>
+                                    <span class="ev-badge <?php echo $ev_class; ?>"><?php echo htmlspecialchars($ev); ?></span>
+                                <?php endif; ?>
+                            </td>
+                            <td style="padding: 12px 15px;">
                                 <?php if ($taxon['is_pathobiont'] === 'yes'): ?>
                                     <span class="pc-pathobiont-yes">Yes</span>
                                 <?php elseif ($taxon['is_pathobiont'] === 'context dependent'): ?>
@@ -270,14 +284,7 @@ include 'header.php';
                                 <?php endif; ?>
                             </td>
                             <td style="padding: 12px 15px; font-size: 13px; color: #666;">
-                                <?php echo $taxon['roles'] ? htmlspecialchars($taxon['roles']) : '<span class="muted">n/a</span>'; ?>
-                            </td>
-                            <td style="padding: 12px 15px;">
-                                <?php if ($ev): ?>
-                                    <span class="ev-badge <?php echo $ev_class; ?>"><?php echo htmlspecialchars($ev); ?></span>
-                                <?php else: ?>
-                                    <span class="muted">n/a</span>
-                                <?php endif; ?>
+                                <?php echo $taxon['roles'] ? htmlspecialchars($taxon['roles']) : ''; ?>
                             </td>
                         </tr>
                     <?php endforeach; ?>
