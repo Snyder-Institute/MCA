@@ -5,7 +5,9 @@ RewriteEngine On
 RewriteRule ^(MCA-[A-Z]+-[0-9]+)$ passport.php?id=$1 [L,QSA]
 
 # Extensionless PHP: /passports -> passports.php
+# Exclude index to avoid interfering with DirectoryIndex
 RewriteCond %{REQUEST_FILENAME} !-f
 RewriteCond %{REQUEST_FILENAME} !-d
+RewriteCond %{REQUEST_URI} !^/?index$
 RewriteCond %{REQUEST_FILENAME}.php -f
 RewriteRule ^(.+)$ $1.php [L]

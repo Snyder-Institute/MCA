@@ -384,5 +384,12 @@
     "xml_file": "MCA_DB_v1_6_20260402.xml",
     "source": "amr_kegg_enrich.py",
     "date": "2026-04-02"
+  },
+  {
+    "action": "BACKFILL_REF_LABEL",
+    "description": "Add missing ref_label to KEGG Disease assoc_refs (H01444, H00338)",
+    "xml_file": "MCA_DB_v1_7_20260402.xml",
+    "source": "manual patch",
+    "date": "2026-04-02"
   }
 ]
