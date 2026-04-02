@@ -100,6 +100,16 @@ For each AMR highlight in `amr_highlights[]`:
 
 **Confidence threshold:** Only assign an ARO ID when confident the match describes the same resistance concept. A partial match to a tangentially related term is worse than `null`.
 
+*What counts as tangentially related (return `null`):*
+- Phenotype is `"fluoroquinolone resistance"` and the only ARO match is `"methicillin resistance"` — different drug class, different mechanism → `null`
+- Phenotype is `"ESBL-producing"` and the only ARO substring match is `"ESBL inhibitor"` — the inhibitor entry describes a drug, not a resistance mechanism → `null`
+- Phenotype is `"multidrug-resistant"` and matches a specific single-drug resistance term (e.g., `"vancomycin resistance"`) — too narrow for a broad phenotype → `null`; use the broad ARO class term instead if available
+
+*What counts as an acceptable match (assign the ID):*
+- Phenotype is `"ESBL-producing"` and ARO has `"extended-spectrum beta-lactamase"` as a preferred name or synonym → assign
+- Phenotype is `"carbapenem-resistant"` and ARO has `"carbapenem resistance"` as a preferred name → assign
+- Phenotype abbreviation expands (via abbreviation table) to a term that matches exactly → assign
+
 ---
 
 ## Output Format

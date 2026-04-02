@@ -78,12 +78,12 @@ FORMULA     C4H8O2
 Read and parse all three flat files on startup. Build three in-memory indexes:
 
 ```
-disease_index:  {lowercase_name → H_id, ...}   (all NAME aliases)
-drug_index:     {lowercase_name → D_id, ...}    (English names only — USP/INN/BP lines)
-compound_index: {lowercase_name → C_id, ...}    (all NAME aliases)
+disease_index:  {lowercase_name → (H_id, canonical_name), ...}   (all NAME aliases; canonical_name = first NAME alias, original case)
+drug_index:     {lowercase_name → (D_id, canonical_name), ...}    (English names only — USP/INN/BP lines)
+compound_index: {lowercase_name → (C_id, canonical_name), ...}    (all NAME aliases; canonical_name = first NAME alias)
 ```
 
-Each `NAME` field can have multiple aliases (semicolon or newline-separated). Index all aliases for each entry.
+Each `NAME` field can have multiple aliases (semicolon or newline-separated). Index all aliases for each entry. The `canonical_name` is the first (primary) NAME alias for the entry, preserved in original case — used to populate `ref_label` in the output.
 
 Parsing steps per file:
 1. Split on `///`
@@ -101,7 +101,11 @@ For each clinical association in `clinical_associations[]`:
    - Example: *"Reduced Akkermansia abundance is associated with type 2 diabetes"* → condition: `type 2 diabetes`
 2. Attempt exact match (case-insensitive) against `disease_index`.
 3. If no exact match: attempt partial match — find entries where the condition name is a substring of an indexed disease name, or vice versa.
-4. If multiple matches: select the most specific / best-fitting match. Record in `kegg_notes` if ambiguous.
+4. If multiple partial matches: apply these tiebreaking rules in order:
+   - **Prefer shorter disease names** — a shorter KEGG Disease name is more specific (e.g., `"Type 2 diabetes"` beats `"Type 2 diabetes mellitus with neurological complications"` for query `"type 2 diabetes"`).
+   - **Prefer the match where the query is a larger fraction of the KEGG name** — e.g., query `"CDI"` expanded to `"Clostridioides difficile infections"` matches H00282 at 100%, beating a partial hit on a longer composite entry.
+   - **If still tied**: select the entry with the lower H-number (earlier entries tend to be canonical). Record the choice in `kegg_notes`.
+   - Example: query `"colorectal cancer"` matches both H00020 `"Colorectal cancer"` (exact after normalisation) and H02404 `"Hereditary colorectal cancer"` (substring). Prefer H00020 — shorter and higher-fraction match.
 5. If no match found: leave `kegg_disease_id` as null. Do not force a match.
 
 ---
@@ -152,7 +156,7 @@ One object per taxon:
       {
         "association_text": "",
         "assoc_refs": [
-          {"ref_type": "kegg_disease", "ref_id": "H00282", "ref_label": null}
+          {"ref_type": "kegg_disease", "ref_id": "H00282", "ref_label": "Clostridioides difficile infection"}
         ]
       }
     ],
@@ -171,7 +175,7 @@ One object per taxon:
 
 - `clinical_associations` list order must match the entity extractor order.
 - `assoc_refs` contains only `ref_type: "kegg_disease"` entries — MeSH terms are added by `mesh_agent`.
-- `ref_label` is always `null` for KEGG Disease — the ID is sufficient.
+- `ref_label` must be populated with the canonical disease name from the flat file (first NAME alias, original case) whenever a KEGG Disease ID is resolved. Only set to `null` if the lookup failed (ID is also null in that case).
 - Omit a field from `enriched_fields` entirely if no IDs were resolved for it.
 - Populate `kegg_notes` when: no match found for a term, ambiguous match chosen, drug class term skipped, file read error encountered.
 

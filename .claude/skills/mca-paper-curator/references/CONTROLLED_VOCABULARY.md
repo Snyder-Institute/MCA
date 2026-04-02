@@ -19,6 +19,7 @@ Allowed values:
 - `family`
 - `genus`
 - `species`
+- `subspecies`
 - `strain`
 - `clade`
 
@@ -250,5 +251,5 @@ When a paper uses non-standard terminology:
 2. Record the original term from the paper in parentheses in the extracted value
    - Example: paper says "large bowel" → use `gut (large bowel)`
 3. If no reasonable mapping exists:
-   - For **closed-vocabulary fields** (`gram_status`, `oxygen_tolerance`, `morphology`, `is_pathobiont`, `clinical_roles`, `reservoirs`, `typical_specimens`, `amr_highlights`): use `unknown` and flag in `extraction_notes`
-   - For **free-text list fields** (`primary_niches`, `transmission_routes`, `bloom_triggers`, `risk_contexts`, `key_traits`): use the paper's exact term and flag in `extraction_notes`
+   - For **closed-vocabulary fields** (`gram_status`, `oxygen_tolerance`, `morphology`, `is_pathobiont`, `clinical_roles`, `reservoirs`, `typical_specimens`, `amr_highlights`): use `unknown` and flag in `extraction_notes`. These fields have a fixed allowed-values list; any value not in the list must be mapped to the nearest allowed term or discarded.
+   - For **free-text list fields** (`primary_niches`, `transmission_routes`, `bloom_triggers`, `risk_contexts`, `key_traits`): use the paper's exact term and flag in `extraction_notes`. **This is the intentional exception to the controlled-vocabulary rule** — these fields accept novel terms not yet in the vocabulary because their value set grows with each curation cycle. `ENTITY_EXTRACTOR_AGENT.md`'s instruction to "match CONTROLLED_VOCABULARY.md" applies to closed-vocabulary fields only; free-text list fields are explicitly exempt.

@@ -157,10 +157,16 @@ User: "Apply staging file(s)" + [file path(s) or "all"]
          - Output: database/MCA_DB_[output_version_string].sql (same stem as XML, .sql extension)
          - Run after all staging files have been applied (once per session, not per file)
          - If xml2sql.py fails, log the error in the report but do not fail the overall session
+     +-> Copy the updated XML to the web data directory:
+         - Command: cp <output_xml_path> web/data/MCA_DB_latest.xml
+         - Create web/data/ if it does not exist (mkdir -p web/data)
+         - This gives the web front-end a stable, path-fixed download link decoupled from versioned filenames
+         - If the copy fails, log the error in the report but do not fail the overall session
      +-> Report to user:
          - Output XML: database/MCA_DB_[output_version_string].xml (new file)
          - Source XML preserved: database/MCA_DB_[previous_version_string].xml
          - SQL dump: database/MCA_DB_[output_version_string].sql
+         - Web copy: web/data/MCA_DB_latest.xml (updated)
          - Files applied: N
          - New passport IDs assigned: [list]
          - Fields updated per taxon: [summary]
@@ -173,12 +179,13 @@ User: "Apply staging file(s)" + [file path(s) or "all"]
 
 ## Checkpoint Rules
 
-1. **Phase 0 — validate before touching XML**: Never write to the XML if any staging file fails hard validation (malformed JSON, missing required fields, UPDATE with unknown passport_id). Warn-only issues (missing PMIDs, UNCERTAIN grade) do not block — they are shown in the Phase 1 summary.
+1. **Phase 0 — validate before touching XML**: Never write to the XML if any staging file fails hard validation (malformed JSON, missing required fields, UPDATE with unknown passport_id). Warn-only issues (missing PMIDs, UNCERTAIN grade) do not block — they are shown in the Phase 1 summary. **Batch failure scope: if even one file in the batch fails hard validation, no files in the batch are written to the XML.** Valid files are not applied while invalid ones are held back — the entire batch is blocked until the user resolves the hard failure and resubmits.
 2. **Phase 1 — non-blocking summary**: Show the pre-flight summary and any warnings, then proceed immediately to Phase 2 without pausing for user confirmation.
 3. **Phase 2 — sequential writes**: Process one staging file at a time. Never run multiple `xml_writer_agent` calls in parallel — they write to the same XML file.
 4. **Phase 2 — no removal of existing data**: UPDATE actions may only append to list fields and overwrite scalar fields if a new value is explicitly provided. Never delete existing XML elements.
 5. **Phase 3 — archive on success only**: Only move a staging file to `staging/applied/` if the agent confirms it was applied without errors.
 6. **Phase 3 — xml2sql runs once per session**: Run `python3 database/xml2sql.py <output_xml_path>` once after all staging files have been applied. A failure here does not roll back the XML writes.
+7. **Phase 3 — web copy runs after xml2sql**: Copy `<output_xml_path>` to `web/data/MCA_DB_latest.xml` after xml2sql completes (or after the XML write if xml2sql failed). A failure here does not roll back the XML writes.
 
 ---
 
@@ -195,7 +202,7 @@ New passport IDs are assigned by the orchestrator before calling `xml_writer_age
 | `VIR` | Viruses / Phages |
 | `ARC` | Archaea |
 
-**Derivation:** Inspect `proposed_changes.identity.lineage` or `proposed_changes.biology` to determine domain. If ambiguous, ask the user before proceeding.
+**Derivation:** Inspect `proposed_changes.identity.lineage` (first element) or `proposed_changes.identity.domain` to determine the domain prefix. If neither is present and the domain cannot be inferred, **halt Phase 2 immediately, report the ambiguity to the user inline** (e.g., `"Cannot assign passport_id for [taxon]: domain not determinable from staging file. Please add identity.domain (Bacteria | Archaea | Fungi | Virus | Eukaryote) to the staging file and resubmit."`), and skip this staging file. Do not guess the domain. Other files in the batch that are unambiguous continue processing.
 
 **Increment rule:** Find the highest existing `NNNNNN` for the relevant domain prefix across all passports in the XML; increment by 1 and zero-pad to 6 digits. If the XML is a fresh skeleton with no passports, start at `000001`.
 
@@ -293,11 +300,11 @@ Applied files are never deleted — they serve as the audit trail of what was im
 
 | Item | Content |
 |------|---------|
-| Skill Version | 2.2 |
+| Skill Version | 2.3 |
 | Last Updated | 2026-04-01 |
 | Maintainer | Heewon Seo |
 | Input | `staging/YYYY-MM-DD_[taxon].json` (one or more) |
-| Output | New `database/MCA_DB_vMAJOR_MINOR_YYYYMMDD.xml` + `.sql` dump + archived staging files |
+| Output | New `database/MCA_DB_vMAJOR_MINOR_YYYYMMDD.xml` + `.sql` dump + `web/data/MCA_DB_latest.xml` + archived staging files |
 | Upstream Skill | MCA Paper Curator (Skill 1) |
 
 ---
@@ -306,6 +313,7 @@ Applied files are never deleted — they serve as the audit trail of what was im
 
 | Version | Date | Changes |
 |---------|------|---------|
+| 2.3 | 2026-04-01 | Phase 3: after xml2sql, copy output XML to `web/data/MCA_DB_latest.xml` (stable web-accessible path, decoupled from versioned filenames). Added Checkpoint Rule 7. |
 | 2.2 | 2026-04-01 | Added `xsd_writer_agent` (Phase 2, conditional): when no `MCA_DB_v*.xml` exists, bootstraps a skeleton XML and `MCA_schema.xsd` before proceeding. Enables "start from scratch" workflow. |
 | 2.1 | 2026-04-01 | Removed Phase 1 mandatory confirmation — pre-flight summary is now informational only; skill proceeds automatically. Added xml2sql.py execution in Phase 3 to generate a `.sql` dump after each session. |
 | 2.0 | 2026-04-01 | Schema v2.0: domain field, ext-id attributes on tag elements, Metabolites section, AssocRefs on associations, content_hash computed on write, version removed from per-passport fields |

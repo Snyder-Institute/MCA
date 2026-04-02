@@ -125,7 +125,9 @@ Arrays of integers, not strings.
 All nullable. Populate during curation if the ID is known; leave `null` if not. Ontology enrichment is progressive — a `null` is not an error.
 
 ### `assoc_refs`
-One entry per external ID linked to the association. Use `[]` if none are known. `ref_label` is the human-readable name (e.g., MeSH preferred term); omit or set to `null` for KEGG Disease IDs.
+One entry per external ID linked to the association. Use `[]` if none are known. `ref_label` is the human-readable name for the referenced term:
+- `ref_type: "mesh"` — `ref_label` is the MeSH preferred term (e.g., `"Clostridioides difficile Infections"`)
+- `ref_type: "kegg_disease"` — `ref_label` is the canonical KEGG Disease name from the flat file first NAME alias (e.g., `"Pseudomembranous colitis"`); set to `null` only if the ID lookup failed (in which case `ref_id` is also null)
 
 ### `metabolites`
 Use `[]` if no metabolite data is present in the paper. Each entry requires at minimum `metabolite_name` and `relationship`; the ID fields are optional.
@@ -135,6 +137,13 @@ Write 2–3 sentences covering the paper's key findings **as they relate specifi
 
 ### `clinical_associations[].association_text`
 Write a single self-contained sentence (two sentences maximum) that states: the taxon, the clinical finding or outcome, the direction and magnitude if reported (e.g., OR, p-value, correlation), and the study context. Paraphrase — do not quote verbatim. Include statistics if reported. Do not merge multiple distinct findings into one block; use separate association objects instead.
+
+### `evidence.grade` vs `clinical_associations[].evidence_level`
+These are **intentionally different fields** at two different scopes:
+- `evidence.grade` — a **single grade for the whole paper**, assigned by `grading_agent` based on study design. It applies to every association extracted from this paper.
+- `clinical_associations[].evidence_level` — the **per-association grade** written into the XML and SQL. In practice this inherits the paper-level `grade` value; a curator may override it for a specific association if that finding comes from a sub-study with a different design.
+
+Do not conflate them. The staging file carries both; the XML writer writes `evidence_level` per association.
 
 ### `evidence_type`
 The study design that generated this specific association — typically matches `source_paper.study_design` for single-design papers (e.g., `"prospective cohort"`, `"RCT"`, `"systematic review"`).

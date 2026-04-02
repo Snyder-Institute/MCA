@@ -1,6 +1,6 @@
 # MCA Entity & Ontology Mapping
 
-**Status:** Design notes — work in progress  
+**Status:** Implemented — all design decisions resolved and in production  
 **Last updated:** 2026-04-01
 
 ---
@@ -101,31 +101,20 @@ When both MeSH and KEGG Disease are available, both are included.
 ```
 
 MeSH API: https://eutils.ncbi.nlm.nih.gov/entrez/eutils/  
-KEGG Disease (local mirror): `kegg/medicus/disease.tar.gz`
+KEGG Disease (local mirror): `kegg/medicus/disease/disease` (flat file, pre-extracted)
 
 ---
 
-## 6. Metabolites — NOT YET IN SCHEMA ⚠️
+## 6. Metabolites — Implemented ✓
 
-Metabolites are not currently tracked in MCA. This is a significant gap for microbiome context, since many microbial–disease links are mediated by metabolites (butyrate, SCFAs, bile acids, TMAO, urolithins, etc.).
+Metabolites are tracked as a satellite block on taxon passports (`<Metabolites>` in XML; `metabolite` table in SQL). Each metabolite entry captures: name, relationship (produces/consumes/modifies), KEGG Compound ID, and ChEBI ID.
 
-### Design decision needed:
-- **Option A:** Metabolites as satellite entries on taxon passports (`mca_taxon_metabolite` table)  
-  → "This taxon produces/consumes these metabolites"
-- **Option B:** Metabolites as a first-class entity (own records, like taxon passports)  
-  → Richer; allows metabolite-centric views and metabolite–disease links
-- **Option C:** Metabolites embedded in clinical associations only  
-  → Simplest; but loses producer/consumer context
-
-### Candidate standard IDs for metabolites:
 | Database | Scope | Example |
 |---|---|---|
 | **KEGG Compound** | metabolic reactions, pathways | C00246 = butyric acid |
 | **ChEBI** (EBI) | chemical entities of biological interest | CHEBI:17968 = butyrate |
-| **HMDB** | human metabolome focus | HMDB0000039 = butyric acid |
-| **PubChem CID** | broadest chemical coverage | CID 264 = butyric acid |
 
-KEGG Compound is preferred if KEGG integration is already planned for KEGG Disease and KEGG Drug.
+Design decision (Option A) was chosen: metabolites as satellite entries on taxon passports — MCA is taxon-centred.
 
 ---
 
@@ -169,13 +158,14 @@ User will provide KEGG DB. Candidate KEGG resources to link:
 
 ---
 
-## Next steps (pick up here next session)
+## Implementation status
 
-All design decisions are resolved. 
+All planned ontology integrations are complete and in production as of v1.1:
 
-**Implementation order:**
-- Step 1: Add `mesh_terms` + `kegg_disease_ids` to clinical associations (staging schema + XML schema + paper-curator skill)
-- Step 2: Add `kegg_drug_id` to bloom_triggers
-- Step 3: Design and implement metabolite entity
-- Step 4: Add MeSH anatomy IDs to `primary_niches` and `typical_specimens`
-- Step 5: Add CARD/ARO IDs to `amr_highlights`
+| Priority | Entity | ID added | Status |
+|---|---|---|---|
+| 1 | Clinical conditions (associations) | MeSH + KEGG Disease | ✓ Done |
+| 2 | Drugs/antibiotics (bloom_triggers) | KEGG Drug | ✓ Done |
+| 3 | Metabolites | KEGG Compound + ChEBI | ✓ Done |
+| 4 | Body sites (niches, specimens) | MeSH anatomy | ✓ Done |
+| 5 | AMR phenotypes | CARD/ARO | ✓ Done |

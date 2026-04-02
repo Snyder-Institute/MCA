@@ -46,7 +46,7 @@ CREATE TABLE passport (
   id             INT UNSIGNED  NOT NULL AUTO_INCREMENT,
   passport_id    VARCHAR(20)   NOT NULL,                        -- MCA-BAC-000001 (stable external ID)
   preferred_name VARCHAR(255)  NOT NULL,
-  taxon_rank     ENUM('family','genus','species','strain','clade') NOT NULL,
+  taxon_rank     ENUM('family','genus','species','subspecies','strain','clade') NOT NULL,
   domain         ENUM('Bacteria','Archaea','Fungi','Virus','Eukaryote') NOT NULL,
   lineage        TEXT          NOT NULL,                        -- pipe-separated; kept for display
   ncbi_taxid     INT UNSIGNED  NULL,

@@ -9,11 +9,11 @@ if ($q !== '') {
     try {
         $stmt = $pdo->prepare("
             SELECT DISTINCT p.passport_id, p.preferred_name
-            FROM mca_taxon_passport p
-            LEFT JOIN mca_taxon_synonym s ON p.passport_id = s.passport_id
-            WHERE p.preferred_name LIKE ? 
-               OR p.passport_id LIKE ? 
-               OR s.synonym LIKE ?
+            FROM passport p
+            LEFT JOIN taxon_tag s ON s.passport_id = p.id AND s.category = 'synonym'
+            WHERE p.preferred_name LIKE ?
+               OR p.passport_id LIKE ?
+               OR s.value LIKE ?
             ORDER BY p.preferred_name ASC
             LIMIT 10
         ");

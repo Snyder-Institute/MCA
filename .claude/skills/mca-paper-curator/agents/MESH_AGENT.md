@@ -28,7 +28,8 @@ Enriches entity extractor output with Medical Subject Headings (MeSH) identifier
 2. Parse the `<MeshHeadingList>` block from the XML. Extract all `<DescriptorName>` elements with their `UI` attribute (the MeSH ID, e.g., `D003141`).
 3. For each clinical association in the entity extractor output:
    - Read the `association_text`
-   - Identify which MeSH terms describe the disease, condition, or outcome referenced in that association (semantic match — a term is relevant if it describes the primary clinical condition or outcome in the claim)
+   - Identify which MeSH terms describe the disease, condition, or outcome referenced in that association. **Semantic match rule:** a term is relevant if it describes what the association is *about* — the clinical condition, outcome, or risk factor the taxon is being linked to.
+   - **When an association mentions multiple conditions:** assign MeSH terms for all conditions that are central to the claim. "Primary" means directly named in the association text, not merely background context. Example: *"C. difficile infection is associated with increased IBD severity and recurrence"* → assign both `Clostridioides difficile Infections` (D003141) and `Inflammatory Bowel Diseases` (D015212), because both are named outcomes. Do NOT assign `Recurrence` (D012008) unless the association specifically quantifies recurrence rate — a generic mention does not qualify.
    - Include all relevant terms; skip a term if it describes only the study methodology or the taxon itself rather than the condition
 4. If no relevant MeSH terms can be identified for an association, return `assoc_refs: []` for that association — do not force a match.
 
@@ -58,13 +59,36 @@ These calls are made by the **orchestrator** before spawning this agent — not 
 
 ## Filtering Rules for Association MeSH Matching
 
-| Include | Exclude |
-|---------|---------|
-| MeSH terms describing the disease, syndrome, or clinical outcome in the association_text | Terms describing the taxon itself (e.g., organism name) |
-| Terms describing a population or risk factor directly named in the association | Study design terms (e.g., "Cohort Studies", "Clinical Trials") |
-| Terms describing a treatment outcome if the association discusses treatment response | General methodology terms |
+**Key decision test:** Does this MeSH term describe *what the clinical association is about*? If yes — include it. If it describes *how the study was conducted* or *who was studied* — exclude it.
 
-When uncertain whether a MeSH term is relevant to a specific association: include it and note in `extraction_notes`.
+### Include
+
+| Category | Examples |
+|----------|---------|
+| Disease, syndrome, or clinical condition named in the association | `Clostridioides difficile Infections`, `Critical Illness`, `Inflammatory Bowel Diseases`, `Sepsis` |
+| Clinical outcome or complication discussed in the association | `Recurrence`, `Disease Progression`, `Hospitalization` |
+| Ecological or microbiome context directly referenced | `Dysbiosis`, `Microbiota`, `Gastrointestinal Microbiome` |
+| Specific clinical intervention if the association is about treatment response | `Fecal Microbiota Transplantation` (when the association reports FMT outcomes) |
+| Body site or specimen type when the association explicitly concerns that site | `Colon`, `Blood` (when the association is about that location) |
+| Risk factor or vulnerable population directly named in the association text | `Immunocompromised Host`, `Cross Infection` (nosocomial exposure) |
+| Taxon name as MeSH term **only** when the association is about that taxon's role in a defined clinical context | `Enterobacteriaceae` (when association states Enterobacteriaceae-specific finding) |
+
+### Exclude
+
+| Category | Examples |
+|----------|---------|
+| Study design and methodology terms | `Cohort Studies`, `Longitudinal Studies`, `Prospective Studies`, `Randomized Controlled Trials`, `Meta-Analysis` |
+| Organism scope terms (who/what was studied) | `Humans`, `Mice`, `Animals`, `Male`, `Female`, `Adult`, `Child` |
+| Laboratory and sequencing methods | `RNA, Ribosomal, 16S`, `Metagenomics`, `Sequence Analysis, DNA` |
+| Generic epidemiological descriptors not specific to the association | `Incidence`, `Prevalence`, `Risk Factors` (unless the association is specifically about quantifying that risk) |
+| Taxon name terms when the taxon is the subject of the passport, not the condition | Do not tag every association with the passport taxon's own MeSH term — it adds no information |
+| Broad biological process terms with no clinical specificity | `Inflammation`, `Immunity` (use only if the association is specifically about that process) |
+
+### Ambiguous cases
+
+- A MeSH term that applies to some but not all associations in the paper: assign only to the specific associations it describes — do not apply it globally to all.
+- When genuinely uncertain: include the term, note the uncertainty in `mesh_notes`.
+- When a paper returns no MeSH headings (e.g., NLM has not yet indexed it): return `assoc_refs: []` for all associations; note in `mesh_notes`.
 
 ---
 

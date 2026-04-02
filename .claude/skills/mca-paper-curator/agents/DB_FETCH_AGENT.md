@@ -77,7 +77,7 @@ Then fetch the top hit TaxID.
 | family or above | No direct family-level endpoint. Query by the **type genus** of the family if known; otherwise skip BacDive and log `"BacDive v2 has no family-level endpoint; BacDive fetch skipped"` in `db_fetch_notes`. Biology/ecology fields remain `null`. |
 
 BacDive returns JSON. Each response contains an array of strain records. When multiple records are returned, aggregate as follows:
-- **Scalar fields** (`gram_status`, `oxygen_tolerance`, `morphology`): use the majority value across records. If records are heterogeneous (>20% minority), set to `null` and log in `db_fetch_notes`.
+- **Scalar fields** (`gram_status`, `oxygen_tolerance`, `morphology`): use the majority value across records. Heterogeneity is measured as: (count of records with the minority value) ÷ (total records returned by BacDive for this taxon). If this fraction exceeds 20%, set the field to `null` and log in `db_fetch_notes` (e.g., `"gram_status: 3/12 records gram-positive, 9/12 gram-negative — heterogeneous, set to null"`). If heterogeneity is exactly 20%, use the majority value.
 - **List fields** (`primary_niches`, `reservoirs`): union of all unique controlled-vocabulary values across records.
 
 **Field mapping:**

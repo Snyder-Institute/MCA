@@ -261,10 +261,13 @@ def main():
                 f'{esc(ev_grade)}, {esc(ev_type)}, {esc(created_at)}, {esc(updated_at)});'
             )
 
-            for ref in ca.findall('AssocRefs/ref'):
-                ref_type  = ref.get('type')
-                ref_id    = ref.get('id')
-                ref_label = ref.get('label')
+            # Support both attribute-based <ref type="..." id="..." label="..."/>
+            # and element-based <assoc_ref><ref_type>...</ref_type>...</assoc_ref>
+            _refs = ca.findall('AssocRefs/ref') + ca.findall('AssocRefs/assoc_ref')
+            for ref in _refs:
+                ref_type  = ref.get('type')  or get_text(ref, 'ref_type')
+                ref_id    = ref.get('id')    or get_text(ref, 'ref_id')
+                ref_label = ref.get('label') or get_text(ref, 'ref_label')
                 if ref_type and ref_id:
                     w(
                         f'INSERT INTO assoc_ref '
