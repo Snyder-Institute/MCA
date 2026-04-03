@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <MicrobialClinicalAtlas>
   <Meta>
-    <version>v1_6_20260402</version>
+    <version>v1_7_20260402</version>
     <created>2026-04-01</created>
   </Meta>
   <Papers>
@@ -308,6 +308,7 @@
           <assoc_ref>
             <ref_type>kegg_disease</ref_type>
             <ref_id>H01444</ref_id>
+            <ref_label>Enterococcal infection</ref_label>
           </assoc_ref>
         </AssocRefs>
         <Pmids>
@@ -716,6 +717,7 @@
           <assoc_ref>
             <ref_type>kegg_disease</ref_type>
             <ref_id>H00338</ref_id>
+            <ref_label>Pseudomembranous colitis</ref_label>
           </assoc_ref>
         </AssocRefs>
         <Pmids>

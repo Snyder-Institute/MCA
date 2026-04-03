@@ -9,6 +9,8 @@ Maps extracted entity names to KEGG identifiers using the local KEGG flat file m
 
 **Local KEGG mirror path:** See project memory (`reference_kegg_path.md`) — do not hardcode in this file.
 
+**Entity independence:** The three entity types — KEGG Disease (Task 2), KEGG Drug (Task 3), and KEGG Compound (Task 4) — are handled in a single pass because they share the same flat-file parsing infrastructure (Task 1). They are otherwise **independent**: changes to the matching logic for one type do not affect the others. If only one type needs updating, only that task needs to be revised. `null_review_agent` mirrors each task separately for the same reason.
+
 ---
 
 ## Inputs

@@ -423,6 +423,56 @@ include 'header.php';
         </table>
     </div>
 
+    <!-- ── Local data mirrors ───────────────────────────────────── -->
+    <div class="about-section">
+        <h2>Curation Data Mirrors</h2>
+        <p style="font-size: 14px; color: #555; margin: 0 0 12px;">
+            For curation speed and reproducibility, the pipeline maintains local snapshots of all reference databases used during enrichment. These mirrors are updated periodically and are not served publicly.
+        </p>
+        <table class="dm-table">
+            <thead>
+                <tr><th>Database</th><th>Snapshot date</th><th>Used by</th></tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td><strong>NCBI Taxonomy</strong></td>
+                    <td>2026-04-02</td>
+                    <td>TaxID lookup, name resolution</td>
+                </tr>
+                <tr>
+                    <td><strong>BacDive</strong></td>
+                    <td>2026-04-02</td>
+                    <td>Gram status, oxygen tolerance, morphology, isolation sources</td>
+                </tr>
+                <tr>
+                    <td><strong>KEGG</strong></td>
+                    <td>2025-10-26</td>
+                    <td>Disease, drug, and compound ID enrichment</td>
+                </tr>
+                <tr>
+                    <td><strong>CARD / ARO</strong></td>
+                    <td>2026-04-02</td>
+                    <td>AMR resistance ontology IDs</td>
+                </tr>
+                <tr>
+                    <td><strong>ChEBI</strong></td>
+                    <td>2026-04-02</td>
+                    <td>Metabolite ID enrichment</td>
+                </tr>
+                <tr>
+                    <td><strong>VFDB</strong></td>
+                    <td>2026-03-27</td>
+                    <td>Virulence factor annotations</td>
+                </tr>
+                <tr>
+                    <td><strong>DOID</strong></td>
+                    <td>2026-04-02</td>
+                    <td>Disease ontology cross-referencing</td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+
     <!-- ── Download ───────────────────────────────────────────────── -->
     <div class="about-section">
         <h2>Download &amp; Source</h2>

@@ -30,6 +30,8 @@ GET https://eutils.ncbi.nlm.nih.gov/entrez/eutils/efetch.fcgi
 ```
 
 Fallback (name search when TaxID is null):
+1. **Local index first** — load `ncbi_names_index.json` (path from project memory `reference_ncbi_path.md`, passed by orchestrator): `{scientific_name → taxid}`. Look up `preferred_name` directly.
+2. **API fallback** — if not found in local index:
 ```
 GET https://eutils.ncbi.nlm.nih.gov/entrez/eutils/esearch.fcgi
     ?db=taxonomy&term={preferred_name}[Scientific Name]&retmode=json
@@ -54,27 +56,27 @@ Then fetch the top hit TaxID.
 
 **Authentication:** None required. As of February 2026 the BacDive API is freely accessible with no sign-up and no account.
 
-**Use API v2.** The old v1 endpoints (`/taxon/{id}/`) are frozen at the April 2025 data state and kept only for backward compatibility — do not use them.
+**Base URL:** `https://api.bacdive.dsmz.de` — no `/v2/` path prefix despite being API v2.
 
-**Base URL:** `https://api.bacdive.dsmz.de`
+**Local cache first (preferred):** Before making any live BacDive API call, check the local cache at the path stored in project memory `reference_bacdive_path.md` (keyed by `ncbi_taxid`). If the taxon is present in the cache and has `strains` entries, use those records directly — skip all API calls. Only fall back to live API if the taxon is absent from the cache or the cache is unavailable.
 
-**Endpoints:**
+**Endpoints (live API fallback):**
 
 | Use case | Endpoint |
 |----------|----------|
-| Fetch full strain record by BacDive ID | `GET /v2/fetch/{bacdive_id}` |
-| Search by taxon (species) | `GET /v2/taxon/{genus}/{species_epithet}` |
-| Search by taxon (genus only) | `GET /v2/taxon/{genus}` |
-| Search by 16S accession | `GET /v2/sequence_16s/{seq_acc_num}` |
-| Search by genome accession | `GET /v2/sequence_genome/{seq_acc_num}` |
+| Fetch full strain record by BacDive ID | `GET /fetch/{bacdive_id}` |
+| Search by taxon (species) | `GET /taxon/{genus}/{species_epithet}` |
+| Search by taxon (genus only) | `GET /taxon/{genus}` |
+| Search by 16S accession | `GET /sequence_16s/{seq_acc_num}` |
+| Search by genome accession | `GET /sequence_genome/{seq_acc_num}` |
 
 **Taxon name parsing for query construction:**
 
 | Taxon rank | Query strategy |
 |------------|---------------|
-| species | `GET /v2/taxon/{genus}/{species_epithet}` |
-| genus | `GET /v2/taxon/{genus}` |
-| family or above | No direct family-level endpoint. Query by the **type genus** of the family if known; otherwise skip BacDive and log `"BacDive v2 has no family-level endpoint; BacDive fetch skipped"` in `db_fetch_notes`. Biology/ecology fields remain `null`. |
+| species | `GET /taxon/{genus}/{species_epithet}` |
+| genus | `GET /taxon/{genus}` |
+| family or above | No direct family-level endpoint. Query by the **type genus** of the family if known; otherwise skip BacDive and log `"BacDive has no family-level endpoint; BacDive fetch skipped"` in `db_fetch_notes`. Biology/ecology fields remain `null`. |
 
 BacDive returns JSON. Each response contains an array of strain records. When multiple records are returned, aggregate as follows:
 - **Scalar fields** (`gram_status`, `oxygen_tolerance`, `morphology`): use the majority value across records. Heterogeneity is measured as: (count of records with the minority value) ÷ (total records returned by BacDive for this taxon). If this fraction exceeds 20%, set the field to `null` and log in `db_fetch_notes` (e.g., `"gram_status: 3/12 records gram-positive, 9/12 gram-negative — heterogeneous, set to null"`). If heterogeneity is exactly 20%, use the majority value.

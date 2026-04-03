@@ -39,13 +39,23 @@ Always return `null` for these cases.
 
 ## Data Source
 
-**Primary source — ARO OBO file from OBO Foundry:**
+**Primary source — local ARO JSON index (pre-built):**
 
-The full ARO phenotype ontology is available as an OBO flat file (8,500+ terms, ~76k lines). Download with:
+A pre-built JSON index is available at the path recorded in project memory (`reference_aro_path.md`). The orchestrator resolves this path and passes it to this agent before it runs.
+
+```
+aro_index.json  →  {aro_id → {name: str, synonyms: [str, ...]}}
+```
+
+8,564 terms, built from `aro.obo` on 2026-04-02. Load the JSON file directly — no web fetch required.
+
+**Fallback — ARO OBO file from OBO Foundry:**
+
+If the local index file is missing, fall back to:
 ```
 WebFetch https://purl.obolibrary.org/obo/aro.obo
 ```
-This PURL redirects to the GitHub raw file. The OBO file contains all ARO terms including phenotype-level terms (e.g., `multidrug resistance antimicrobial phenotype`, `vancomycin-resistant Enterococcus`) that are **absent from CARD's `card.json`**.
+The OBO file contains all ARO terms including phenotype-level terms (e.g., `multidrug resistance antimicrobial phenotype`, `vancomycin-resistant Enterococcus`) that are **absent from CARD's `card.json`**.
 
 **Do NOT use `card.json` for phenotype lookup** — `card.json` (from `card.mcmaster.ca/latest/data`) contains gene model entries only (resistance genes, proteins, variants). It does not include AMR phenotype terms like `ARO:3004305`. The CARD website is also JavaScript-rendered and cannot be scraped.
 
@@ -66,14 +76,16 @@ Parse `id:`, `name:`, and `synonym:` lines per `[Term]` block to build the looku
 
 ### Task 1 — Build ARO lookup index
 
-1. Fetch `https://purl.obolibrary.org/obo/aro.obo` using WebFetch (or read from a local cached copy if available at `/tmp/aro.obo` or similar).
-2. Parse OBO format: split on `[Term]`, extract `id:`, `name:`, `synonym:` fields per block.
-3. Build:
+1. Load the local `aro_index.json` (path passed by orchestrator from project memory `reference_aro_path.md`).
+   - Format: `{aro_id → {name: str, synonyms: [str, ...]}}`
+   - 8,564 terms
+2. Build an in-memory name lookup:
    ```
-   aro_index: {lowercase_name → ARO_id, ...}
+   aro_lookup: {lowercase_name → aro_id, ...}
    ```
-   Index the preferred `name:` and all `synonym:` values (strip synonym type suffix like `EXACT []`, `RELATED []`).
-4. If fetch fails: proceed to confirmed mapping table (Task 2) and return `null` for all unconfirmed terms. Log in `aro_notes`. Do not halt.
+   Index the preferred `name` and all `synonyms` values (already plain strings — no suffix stripping needed).
+3. If local file is missing: fall back to `WebFetch https://purl.obolibrary.org/obo/aro.obo`, parse OBO format (split on `[Term]`, extract `id:`, `name:`, `synonym:` fields). Log the fallback in `aro_notes`.
+4. If both fail: proceed to confirmed mapping table (Task 2) and return `null` for all unconfirmed terms. Log in `aro_notes`. Do not halt.
 
 ### Task 2 — Map AMR phenotype names to ARO IDs
 

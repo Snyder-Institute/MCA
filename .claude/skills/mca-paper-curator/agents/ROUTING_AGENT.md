@@ -52,11 +52,23 @@ Search the XML in the following order. Stop at the first match.
 
 ---
 
+## Pending Staging File Check (parallel curation guard)
+
+Before assigning `CREATE` to any taxon, scan the `staging/` directory for existing `.json` files (excluding `staging/applied/`). For each candidate file found, check whether it contains `"action": "CREATE"` and a `preferred_name` or `ncbi_taxid` matching the current taxon. If a pending CREATE is found for the same taxon:
+
+- Route as `AMBIGUOUS` with routing note: `"Pending CREATE staging file found for this taxon: [filename] — possible duplicate from a parallel curation session. Confirm which staging file to keep before applying."`
+- Do not halt — the staging file is still written with `action: AMBIGUOUS`.
+
+This guard is only needed for `CREATE` decisions. `UPDATE` routing (taxon already in the XML) is unaffected.
+
+---
+
 ## Routing Decisions
 
 | Result | Action | Behaviour |
 |--------|--------|-----------|
-| No match found | `CREATE` | New passport required; `passport_id` = `null` |
+| No match found in XML, no pending CREATE in staging/ | `CREATE` | New passport required; `passport_id` = `null` |
+| No match in XML, but pending CREATE found in staging/ | `AMBIGUOUS` | Parallel curation collision — flag for user resolution |
 | Single match found | `UPDATE` | Existing passport found; return its `passport_id` |
 | Match found via synonym | `UPDATE` | Note the synonym used in the paper in `routing_notes` |
 | Multiple matches found | `AMBIGUOUS` | Flag for user resolution — do not auto-select |

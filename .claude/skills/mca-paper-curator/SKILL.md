@@ -2,23 +2,29 @@
 name: mca-paper-curator
 description: "MCA curation skill for extracting clinically meaningful microbial entities and relationships from a research paper (PDF) and writing a structured staging file for human review. Covers paper analysis, entity extraction, CREATE/UPDATE routing against the existing XML, and evidence grading via a dedicated subagent. Triggers on: curate paper, add paper to MCA, extract from paper, curate taxon, update passport."
 metadata:
-  version: "3.3"
+  version: "3.6"
   last_updated: "2026-04-02"
 ---
 
-# MCA Paper Curator v3.3 — Microbiome Knowledge Base Curation Skill
+# MCA Paper Curator v3.6 — Microbiome Knowledge Base Curation Skill
 
-Reads a research paper (PDF) and writes a structured staging file per taxon. Biology and ecology fields are populated from NCBI Taxonomy and BacDive by TaxID — not from the PDF. The paper is the source only for the clinical layer: pathobiont status, clinical roles, bloom triggers, AMR, metabolites, and clinical associations.
+Reads one or more research papers (PDFs) and writes structured staging files per taxon. Biology and ecology fields are populated from NCBI Taxonomy and BacDive by TaxID — not from the PDF. The paper is the source only for the clinical layer: pathobiont status, clinical roles, bloom triggers, AMR, metabolites, and clinical associations.
 
 ---
 
 ## Quick Start
 
+**Single paper:**
 ```
 Curate this paper: [attach PDF — filename must be the PMID, e.g. 38123456.pdf]
 ```
 
-**Input convention:** The PDF filename (without extension) is the PMID. Before any analysis begins, the skill validates that the filename is a valid PMID (digits only, 1–8 characters). If the filename is not a valid PMID, the skill halts and asks the user to rename the file.
+**Multiple papers (parallel):**
+```
+Curate these papers: [attach PDF1, PDF2, PDF3 — each filename must be its PMID]
+```
+
+**Input convention:** Each PDF filename (without extension) is the PMID. Before any analysis begins, the skill validates every filename. If any filename is not a valid PMID, the skill halts and asks the user to rename that file before proceeding. When multiple PDFs are provided, each paper runs its own complete pipeline (Phases 0–4) in parallel as an independent agent. Staging files are written per taxon per paper; all results are reported together at the end.
 
 **Output:**
 1. Paper metadata summary (PMID from filename, title, study design, population)
@@ -26,6 +32,7 @@ Curate this paper: [attach PDF — filename must be the PMID, e.g. 38123456.pdf]
 3. CREATE / UPDATE routing decision per taxon
 4. Evidence grade (E1 / E2 / E3 / UNCERTAIN) with written rationale
 5. Staging file written to `staging/YYYY-MM-DD_[taxon-name].json`
+6. QC report written to `staging/YYYY-MM-DD_[taxon-name]-qc-report.md`
 
 ---
 
@@ -43,7 +50,7 @@ Curate this paper: [attach PDF — filename must be the PMID, e.g. 38123456.pdf]
 
 ---
 
-## Agent Team (11 Agents)
+## Agent Team (12 Agents)
 
 | # | Agent | Role | Phase |
 |---|-------|------|-------|
@@ -51,30 +58,74 @@ Curate this paper: [attach PDF — filename must be the PMID, e.g. 38123456.pdf]
 | 2 | `db_fetch_agent` | Given TaxID, queries NCBI Taxonomy (lineage, synonyms) and BacDive (biology, ecology); populates all fields available from structured databases | Phase 1 |
 | 3 | `entity_extractor_agent` | Extracts the clinical layer from the paper: pathobiont status, clinical roles, typical specimens, bloom triggers, risk contexts, AMR highlights, virulence factors, metabolites, and clinical associations | Phase 1 |
 | 4 | `routing_agent` | Checks each taxon against the current XML; determines CREATE or UPDATE; identifies `passport_id` for updates | Phase 1 |
-| 5 | `grading_agent` | Assigns a single evidence grade (E1 / E2 / E3) for the whole paper with written rationale; flags uncertainty when study design is ambiguous or unreported | Phase 1 |
+| 5 | `grading_agent` | Assigns a single evidence grade (E1 / E2 / E3) for the whole paper with written rationale; assigns `UNCERTAIN` (with `uncertain_reason`) when study design is ambiguous or unreported — staging file is still written | Phase 1 |
 | 6 | `mesh_agent` | Fetches paper MeSH annotations from NLM E-utilities API; assigns relevant MeSH terms per clinical association; resolves MeSH anatomy IDs for body sites and specimen types | Phase 2 |
 | 7 | `kegg_agent` | Maps clinical conditions → KEGG Disease IDs; bloom trigger drugs → KEGG Drug IDs; metabolite names → KEGG Compound IDs — all via local KEGG flat file mirror | Phase 2 |
-| 8 | `aro_agent` | Maps AMR phenotype names to CARD ARO identifiers via ARO OBO ontology file (OBO Foundry) | Phase 2 |
+| 8 | `aro_agent` | Maps AMR phenotype names to CARD ARO identifiers via local ARO JSON index (OBO Foundry source) | Phase 2 |
 | 9 | `vfdb_agent` | Maps virulence factor names to VFDB VFIDs via local VFDB JSON mirror (`vfdb.json`) | Phase 2 |
-| 10 | `null_review_agent` | Re-attempts all null ext_id fields using alternative strategies and web fallbacks; classifies each null as `confirmed_null`, `filled`, or `needs_review` before the staging file is written | Phase 3 |
-| 11 | `sanity_check_agent` | Validates all fields (null and non-null) for format correctness, controlled vocabulary compliance, and logical consistency. **Spawned with claude-haiku-4-5** — fast validation gate before human review. | Phase 4 |
+| 10 | `null_review_agent` | Re-attempts all null ext_id fields using alternative strategies and local index / web fallbacks; classifies each null as `confirmed_null`, `filled`, or `needs_review` before the staging file is written | Phase 3 |
+| 11 | `sanity_check_agent` | Validates all fields (null and non-null) for format correctness, controlled vocabulary compliance, and logical consistency (Checks 1–5). **Spawned with claude-haiku-4-5.** | Phase 4 |
+| 12 | `qc_report_agent` | Aggregates null-field root causes from the `null_review` block, detects pipeline improvement patterns, appends `missing_value_report` to the `sanity_check` block, and writes the human-readable QC Markdown report. **Spawned with claude-haiku-4-5.** | Phase 4 |
 
 ---
 
 ## Orchestration Workflow (5 Phases)
 
 ```
-User: "Curate this paper" + [PDF — filename is PMID, e.g. 38123456.pdf]
+User: "Curate these papers" + [one or more PDFs — each filename is its PMID]
      |
-=== Pre-Phase: FILENAME VALIDATION ===
+=== Pre-Phase: FILENAME VALIDATION (all PDFs, before any pipeline starts) ===
      |
-     +-> Extract filename stem (strip .pdf extension)
+     +-> For each PDF, extract filename stem (strip .pdf extension)
          - Check: stem is digits only AND 1–8 characters long
-         - PASS → use stem as the PMID for the entire session; proceed to Phase 0
-         - FAIL → HALT immediately; inform the user:
+         - ALL pass → proceed to duplicate check for each PDF
+         - ANY fail → HALT immediately; list all invalid filenames and inform the user:
                   "The filename '[stem]' is not a valid PMID.
                    Please rename the file to its PubMed ID (digits only, e.g. 38123456.pdf)
                    and try again."
+     |
+=== Pre-Phase: DUPLICATE PMID CHECK ===
+     |
+     +-> Read `database/curation_log.json`
+         - Scan every entry for `source_pmid` matching the validated PMID
+           (compare as integer; the log stores source_pmid as a JSON number)
+         - If NO matches found → proceed to Phase 0 immediately (no message needed)
+         - If matches found → HALT and warn the user:
+
+           "⚠️  PMID [pmid] has already been curated.
+            The following passports were previously applied from this paper:
+
+            | passport_id       | preferred_name         | action | date_applied |
+            |-------------------|------------------------|--------|--------------|
+            | MCA-BAC-000001    | Clostridioides difficile | CREATE | 2026-04-01  |
+            | ...               | ...                    | ...    | ...          |
+
+            Do you want to:
+              (a) Proceed anyway — useful if you are adding new taxa not yet curated from this paper
+              (b) Abort — the paper has already been fully curated
+
+            Reply 'proceed' or 'abort'."
+
+         - User replies 'abort' → HALT; do not proceed
+         - User replies 'proceed' (any case) → continue to Phase 0;
+           add `duplicate_pmid_warning: true` to the paper_summary block of every
+           staging file produced in this session so the reviewer is aware
+         - If `database/curation_log.json` does not exist → treat as no matches; proceed to Phase 0
+     |
+=== PARALLEL LAUNCH (multi-PDF only) ===
+     |
+     +-> When multiple PDFs are provided, spawn one independent pipeline per PDF
+         (Phases 0–4) as parallel agents. Each pipeline is fully self-contained:
+         its own paper_analyst, db_fetch, entity_extractor, routing, grading,
+         mesh/kegg/aro/vfdb enrichment, null_review, sanity_check, and qc_report
+         agents run independently for that paper.
+         - NLM API calls (Phase 2 pre-fetch) are made per pipeline — one efetch call
+           per PMID, no sharing between pipelines.
+         - Staging files written by each pipeline are independent; filename collisions
+           only occur if two papers produce the same taxon as a new CREATE — the
+           routing_agent guard (see ROUTING_AGENT.md) handles this via AMBIGUOUS routing.
+         - All pipeline results are collected and reported together in a single
+           summary message to the user at the end.
      |
 === Phase 0: PAPER ANALYSIS ===
      |
@@ -178,7 +229,7 @@ User: "Curate this paper" + [PDF — filename is PMID, e.g. 38123456.pdf]
      |     → populates kegg_compound_id on metabolite objects
      |
      |-> [aro_agent] (see agents/ARO_AGENT.md)
-     |   - Reads local CARD ontology data (or uses CARD web API as fallback)
+     |   - Reads local ARO JSON index; falls back to OBO Foundry file if index is missing
      |   - Maps AMR phenotype names → ARO identifiers
      |     → populates aro_id on amr_highlight objects
      |
@@ -198,7 +249,7 @@ User: "Curate this paper" + [PDF — filename is PMID, e.g. 38123456.pdf]
      +-> Step 2 — [null_review_agent] (see agents/NULL_REVIEW_AGENT.md)
          Runs on the merged object before the staging file is written:
          - For every null ext_id field, attempts re-lookup with alternative strategies
-           and web fallbacks (ARO OBO, KEGG flat files, NLM API, ChEBI REST, NCBI Esearch)
+           using local indexes first (ARO, ChEBI, NCBI), then web fallbacks (KEGG flat files, NLM API, ChEBI REST, NCBI Esearch)
          - Classifies each null as:
              confirmed_null — sentinel value, known-null class, or no match after re-attempt
              filled         — match found; field updated in staging object
@@ -221,22 +272,29 @@ User: "Curate this paper" + [PDF — filename is PMID, e.g. 38123456.pdf]
      |
      +-> [sanity_check_agent] (see agents/SANITY_CHECK_AGENT.md)
          **Spawned with claude-haiku-4-5 for speed. Annotation only — no agent retries.**
-         Reads each written staging file and:
-         - Format checks: all non-null ext_ids match expected patterns (ARO:, D#####, etc.)
-         - Controlled vocabulary: closed fields contain only allowed values
-         - Logical consistency: pathobiont/role contradictions, grade/study-design mismatches
-         - Required fields: preferred_name, domain, action, association PMIDs, etc.
-         - Structural completeness: empty association lists, duplicate claims
-         - Missing value root-cause analysis: aggregates null_review findings by root cause
-           (sentinel, known_null_class, no_match_in_db, pipeline_miss, etc.); raises pattern
-           flags when ≥2 nulls share the same cause + field type
+         Checks 1–5 only — reads each written staging file and:
+         - Check 1 — Format: all non-null ext_ids match expected patterns (ARO:, D#####, etc.)
+         - Check 2 — Controlled vocabulary: closed fields contain only allowed values
+         - Check 3 — Logical consistency: pathobiont/role contradictions, grade/study-design mismatches
+         - Check 4 — Required fields: preferred_name, domain, action, association PMIDs, etc.
+         - Check 5 — Structural completeness: empty association lists, duplicate claims
+         Writes one output per taxon:
+           `sanity_check` block (status + errors + warnings) appended to staging JSON
+     |
+     +-> [qc_report_agent] (see agents/QC_REPORT_AGENT.md)
+         **Spawned with claude-haiku-4-5 for speed. Runs after sanity_check_agent.**
+         Reads `null_review` block and `sanity_check` block from each staging file and:
+         - Aggregates all null-field root causes into 7 categories
+           (sentinel, known_null_class, no_match_in_db, pipeline_miss, etc.)
+         - Raises pattern flags when ≥2 nulls share the same root cause + field type
          Writes two outputs per taxon:
-           1. `sanity_check` block (with `missing_value_report`) appended to staging JSON
+           1. `missing_value_report` appended to `sanity_check` block in staging JSON
            2. `staging/YYYY-MM-DD_[taxon]-qc-report.md` — human-readable Markdown report
               with validation issues, missing value analysis, and pipeline miss log
      |
      ** Inform user of staging file path(s), QC report path(s), and overall status
         (PASS/WARN/FAIL per taxon); errors listed inline if status is FAIL.
+        For multi-PDF runs: group results by paper (PMID) in the summary.
         No XML is modified at this step. **
 ```
 
@@ -245,7 +303,8 @@ User: "Curate this paper" + [PDF — filename is PMID, e.g. 38123456.pdf]
 ## Checkpoint Rules
 
 0. **Pre-phase — filename validation**: If the filename stem is not digits-only (1–8 chars), halt immediately and ask the user to rename the file; do not proceed
-1. **No mid-skill stops**: The skill runs end-to-end (Phase 0 → Phase 3) without pausing for user confirmation at any phase boundary. The user reviews everything in the final staging file.
+0b. **Pre-phase — duplicate PMID check**: After filename validation, read `database/curation_log.json` and check whether the PMID appears as any `source_pmid`. If it does, HALT and show the user a table of previously applied passports; wait for an explicit 'proceed' or 'abort' reply before continuing. If the log file does not exist, proceed without a warning.
+1. **No mid-skill stops**: The skill runs end-to-end (Phase 0 → Phase 4) without pausing for user confirmation at any phase boundary (except the duplicate PMID gate in checkpoint 0b). The user reviews everything in the final staging file.
 2. **Phase 0 — paper summary**: Written directly into the staging file; no user confirmation required; PMID is always taken from the filename, not the PDF text
 3. **Phase 1 — extraction boundary**: Only extract what the paper explicitly states; do not infer or embellish beyond reported findings
 4. **Phase 1 — UPDATE diff**: For UPDATE actions, only propose fields that differ from what is already in the XML; do not overwrite unchanged fields
@@ -257,7 +316,7 @@ User: "Curate this paper" + [PDF — filename is PMID, e.g. 38123456.pdf]
 
    > **Rationale:** A permission denial means the enrichment step did not run at all — the user cannot meaningfully review a staging file that is missing IDs due to a tool misconfiguration. A missing ontology match is expected and reviewable.
 8. **Phase 3 — null_review is non-blocking**: Lookup failures in `null_review_agent` go into the `null_review` block and do not halt the skill. The staging file is always written.
-9. **Phase 4 — sanity_check is non-blocking**: A `FAIL` status in `sanity_check_agent` does not halt the skill — the staging file is written with the FAIL annotation. The user sees the status in the final report and decides whether to fix before applying.
+9. **Phase 4 — non-blocking**: Neither `sanity_check_agent` nor `qc_report_agent` halts the skill. A `FAIL` status in `sanity_check_agent` is written to the staging file as an annotation; `qc_report_agent` always writes its `.md` report regardless of status. The user sees all findings in the final message and decides whether to fix before applying.
 10. **Phase 3/4 — no XML writes**: This skill ends at writing the staging file; the XML is never touched here
 
 ---
@@ -298,6 +357,7 @@ One JSON file per taxon, written to `staging/`. Schema defined in `templates/STA
 | `vfdb_agent` | `agents/VFDB_AGENT.md` |
 | `null_review_agent` | `agents/NULL_REVIEW_AGENT.md` |
 | `sanity_check_agent` | `agents/SANITY_CHECK_AGENT.md` |
+| `qc_report_agent` | `agents/QC_REPORT_AGENT.md` |
 
 ---
 
@@ -339,20 +399,25 @@ One JSON file per taxon, written to `staging/`. Schema defined in `templates/STA
 | Uncertainty handling | Ambiguous study designs and unresolvable taxa must be flagged, not silently resolved |
 | Staging completeness | Staging file must be valid against `templates/STAGING_FILE.md` schema before being written |
 | Null review | Every null ext_id must be classified (`confirmed_null` / `filled` / `needs_review`) before the staging file is finalised |
-| Sanity check | Every staging file must have a `sanity_check` block with a PASS / WARN / FAIL status before being presented to the human reviewer |
+| Sanity check | Every staging file must have a `sanity_check` block (PASS / WARN / FAIL + errors/warnings from `sanity_check_agent`) and a `missing_value_report` block (root-cause analysis from `qc_report_agent`) before being presented to the human reviewer |
 
 ---
 
 ## Integration
 
 ```
-[User provides PDF]
+[User provides PDF(s)]
         |
-   SKILL.md (this skill) — Phases 0-3
+   SKILL.md — pre-phase validation + duplicate check (all PDFs)
         |
-   staging/YYYY-MM-DD_[taxon].json   <-- human reviews this file
+   ┌────────────────┬────────────────┬──────────────────┐
+   │  Pipeline: PDF1│  Pipeline: PDF2│  Pipeline: PDF3  │  (parallel)
+   │  Phases 0–4   │  Phases 0–4   │  Phases 0–4      │
+   └────────────────┴────────────────┴──────────────────┘
         |
-   MCA XML Update Skill (Skill 2, not yet written)
+   staging/YYYY-MM-DD_[taxon].json (one per taxon per paper)
+        |   <-- human reviews staging files
+   MCA XML Update Skill (mca-xml-update)
         |
    database/MCA_DB_vX.X.xml (updated)
 ```
@@ -363,10 +428,10 @@ One JSON file per taxon, written to `staging/`. Schema defined in `templates/STA
 
 | Item | Content |
 |------|---------|
-| Skill Version | 3.3 |
+| Skill Version | 3.6 |
 | Last Updated | 2026-04-02 |
 | Maintainer | Heewon Seo |
-| Input | Research paper (PDF); filename stem must be the PMID (digits only, e.g. `38123456.pdf`) |
+| Input | One or more research papers (PDFs); each filename stem must be the PMID (digits only, e.g. `38123456.pdf`) |
 | Output | `staging/YYYY-MM-DD_[taxon-name].json` |
 | Downstream Skill | MCA XML Update Skill (`mca-xml-update`) |
 
@@ -374,15 +439,4 @@ One JSON file per taxon, written to `staging/`. Schema defined in `templates/STA
 
 ## Changelog
 
-| Version | Date | Changes |
-|---------|------|---------|
-| 3.3 | 2026-04-02 | **QC pipeline:** Added two new agents and a new Phase 4. `null_review_agent` (Phase 3, final step): re-attempts all null ext_ids with alternative strategies + web fallbacks; classifies each as `confirmed_null`, `filled`, or `needs_review`. `sanity_check_agent` (Phase 4, Haiku): validates format, vocabulary, logical consistency, and required fields; adds missing value root-cause analysis (Check 6) with 7 root cause categories and pattern flags for pipeline improvement; writes `sanity_check` JSON block + `staging/YYYY-MM-DD_[taxon]-qc-report.md` per taxon. No agent retries — `db_access_failure` retries handled by orchestrator pre-check before sanity_check runs. Pipeline is now 5 phases (0–4), 11 agents. |
-| 3.2 | 2026-04-02 | **VFDB integration:** Added `vfdb_agent` (Phase 2) to map virulence factor names → VFDB VFIDs via local JSON mirror. `entity_extractor_agent` now extracts `virulence_factors[]` from clinical layer. `virulence_factors` added to staging file schema, TAXON_PASSPORT template, and CONTROLLED_VOCABULARY. |
-| 3.1 | 2026-04-01 | **Phase 2 failure handling:** Split enrichment failure rule into two cases — technical blockers (tool permission denied, file inaccessible) now HALT and interrupt the user; data gaps (term not found in ontology) remain non-blocking. Prevents silently producing under-enriched staging files when the cause is a configuration issue, not missing data. |
-| 3.0 | 2026-04-01 | **Architecture redesign:** Added `db_fetch_agent` (NCBI Taxonomy + BacDive) to Phase 1. Biology and ecology fields are now populated from structured databases by TaxID, not extracted from the PDF. `entity_extractor_agent` narrowed to clinical layer only (pathobiont status, clinical roles, typical specimens, bloom triggers, risk contexts, AMR, metabolites, clinical associations). Transmission routes remain paper-sourced (db_fetch_agent does not provide them). Phase 1→2 merge updated to union outputs from db_fetch_agent + entity_extractor_agent. |
-| 2.3 | 2026-04-01 | **Second integrity pass (9 fixes):** Cross-check scanning moved to paper_analyst_agent; routing_agent now receives and processes cross_check_flags[] from Phase 0 only. Length-preservation rule added to mesh_agent and kegg_agent. MESH_AGENT.md: CONTROLLED_VOCABULARY.md added to inputs. ARO_AGENT.md: removed misleading project-memory reference for CARD path. ENTITY_EXTRACTOR_AGENT.md: preferred_name ownership clarified (Phase 0 is authoritative). Grading criteria rewritten as purely study-design-based (E3 = multiple cohorts/meta-analysis/guidelines; E2 = single cohort or RCT; E1 = animal/in vitro/mechanistic). CONTROLLED_VOCABULARY.md: typical_specimens and amr_highlights added to closed-vocab mapping list. SKILL.md Quick Start output #4: UNCERTAIN added. |
-| 2.2 | 2026-04-01 | **Extraction rule completeness pass:** added synonym rule (NCBI Common names only); added key_traits controlled vocabulary; added is_pathobiont decision rule; added clinical_roles mapping guidance; restricted ecology/bloom_trigger scope to Results/Discussion only; added biology null-rule for supra-species ranks; added association_text format rule; added paper_summary per-taxon scope rule. **Integrity fixes:** resolved UNCERTAIN grade contradiction (staging file always written); resolved AMBIGUOUS routing contradiction (no mid-skill stops; staging file written with flag); corrected grading_agent phase label (Phase 2→Phase 1); added Phase 1→2 merge step to workflow; added cross_check_flags orphan file (`staging/YYYY-MM-DD_cross-check-flags.json`); fixed wrong MeSH anatomy IDs in MESH_AGENT.md example (gut D007422, stool D005243); added Metabolites section to TAXON_PASSPORT.md template; fixed TAXON_PASSPORT_EXAMPLE.md passport_id (MCA-BAC-000007) and synonym (NCBI only); added kegg_mirror_path to KEGG_AGENT.md inputs. |
-| 2.1 | 2026-04-01 | Added 3 Phase 2 enrichment agents: mesh_agent (NLM MeSH), kegg_agent (KEGG Disease/Drug/Compound), aro_agent (CARD/ARO); grading_agent moved to Phase 1; workflow expanded to 4 phases; Phase 2 is best-effort/non-blocking |
-| 2.0 | 2026-04-01 | Schema v2.0: domain field, ext-id objects for niches/specimens/triggers/AMR, metabolites, assoc_refs, evidence_type on associations; routing agent uses current XML glob; downstream skill reference corrected |
-| 1.1 | 2026-03-31 | Input is always a PDF; filename stem is the PMID; added pre-phase filename validation (halt if not digits-only 1–8 chars) |
-| 1.0 | 2026-03-31 | Initial version: 4-agent pipeline, 3-phase workflow, CREATE/UPDATE routing, staging file output |
+See [`CHANGELOG.md`](CHANGELOG.md) for the full version history.

@@ -61,6 +61,7 @@ For each taxon in the confirmed taxa list:
 | Rule | Detail |
 |------|--------|
 | Fidelity | Only extract what the paper explicitly states. Do not infer beyond reported findings. |
+| No conflict notes | Do not add extraction_notes about findings appearing to contradict existing passport data or other studies. MCA collects every finding as reported — apparent contradictions across studies are expected and intentional. Interpretation is the user's job. |
 | Controlled vocabulary | All values must match `references/CONTROLLED_VOCABULARY.md`. Map non-standard terms; note the original in parentheses. |
 | Null vs unknown | Use `null` when the paper does not report a field. Use `"unknown"` only when it is a valid controlled vocabulary value for that field. |
 | Synonyms | Populate `synonyms` from NCBI Taxonomy "Common names" only. Do not derive synonyms from the paper text, other databases, or background knowledge. If NCBI has no common names for this taxon, use `[]`. |
