@@ -6,10 +6,10 @@ Usage:
     python3 xml2sql.py database/MCA_DB_v1_0_20260401.xml
 
 Output:
-    database/MCA_DB_v1_0_20260401.sql  (same directory, same stem, .sql extension)
+    database/MCA_DB_v1_0_20260401.sql.gz  (same directory, same stem, .sql.gz extension)
 
 Import into MySQL:
-    mysql MCA < database/MCA_DB_v1_0_20260401.sql
+    gunzip -c database/MCA_DB_v1_0_20260401.sql.gz | mysql MCA
 
 Notes:
     - Associations with evidence_grade UNCERTAIN are skipped (not in the SQL ENUM)
@@ -21,6 +21,7 @@ Notes:
 
 import sys
 import os
+import gzip
 import xml.etree.ElementTree as ET
 from datetime import date
 
@@ -72,7 +73,7 @@ def main():
         sys.exit(1)
 
     xml_path = sys.argv[1]
-    out_path = os.path.splitext(xml_path)[0] + '.sql'
+    out_path = os.path.splitext(xml_path)[0] + '.sql.gz'
     today = date.today().isoformat()
 
     tree = ET.parse(xml_path)
@@ -87,7 +88,7 @@ def main():
     w('-- MCA database dump')
     w(f'-- Source XML : {os.path.basename(xml_path)}')
     w(f'-- Generated  : {today}')
-    w(f'-- Import     : mysql MCA < {os.path.basename(out_path)}')
+    w(f'-- Import     : gunzip -c {os.path.basename(out_path)} | mysql MCA')
     w()
     w('USE MCA;')
     w()
@@ -312,7 +313,7 @@ def main():
     if skipped_assocs:
         w(f'-- {skipped_assocs} association(s) skipped (UNCERTAIN grade — not in SQL ENUM)')
 
-    with open(out_path, 'w', encoding='utf-8') as f:
+    with gzip.open(out_path, 'wt', encoding='utf-8') as f:
         f.write('\n'.join(lines) + '\n')
 
     print(f'Written : {out_path}')
