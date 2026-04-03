@@ -2,11 +2,11 @@
 name: mca-paper-curator
 description: "MCA curation skill for extracting clinically meaningful microbial entities and relationships from a research paper (PDF) and writing a structured staging file for human review. Covers paper analysis, entity extraction, CREATE/UPDATE routing against the existing XML, and evidence grading via a dedicated subagent. Triggers on: curate paper, add paper to MCA, extract from paper, curate taxon, update passport."
 metadata:
-  version: "3.6"
-  last_updated: "2026-04-02"
+  version: "3.7"
+  last_updated: "2026-04-03"
 ---
 
-# MCA Paper Curator v3.6 — Microbiome Knowledge Base Curation Skill
+# MCA Paper Curator v3.7 — Microbiome Knowledge Base Curation Skill
 
 Reads one or more research papers (PDFs) and writes structured staging files per taxon. Biology and ecology fields are populated from NCBI Taxonomy and BacDive by TaxID — not from the PDF. The paper is the source only for the clinical layer: pathobiont status, clinical roles, bloom triggers, AMR, metabolites, and clinical associations.
 
@@ -31,8 +31,8 @@ Curate these papers: [attach PDF1, PDF2, PDF3 — each filename must be its PMID
 2. Identified taxa and extracted MCA entity fields
 3. CREATE / UPDATE routing decision per taxon
 4. Evidence grade (E1 / E2 / E3 / UNCERTAIN) with written rationale
-5. Staging file written to `staging/YYYY-MM-DD_[taxon-name].json`
-6. QC report written to `staging/YYYY-MM-DD_[taxon-name]-qc-report.md`
+5. Staging file written to `staging/[PMID]_[DATE]_[taxon-name].json`
+6. QC report written to `staging/[PMID]_[DATE]_[taxon-name]-qc-report.md`
 
 ---
 
@@ -44,7 +44,7 @@ Curate these papers: [attach PDF1, PDF2, PDF3 — each filename must be its PMID
 
 | Scenario | What to do instead |
 |----------|--------------------|
-| Applying an approved staging file to the XML | Use the MCA XML Update Skill (Skill 2, not yet written) |
+| Applying an approved staging file to the XML | Use the MCA XML Update Skill (`mca-xml-update`) |
 | General literature search (no curation intent) | Standard research query |
 | Editing an existing passport manually | Edit the XML directly |
 
@@ -59,7 +59,7 @@ Curate these papers: [attach PDF1, PDF2, PDF3 — each filename must be its PMID
 | 3 | `entity_extractor_agent` | Extracts the clinical layer from the paper: pathobiont status, clinical roles, typical specimens, bloom triggers, risk contexts, AMR highlights, virulence factors, metabolites, and clinical associations | Phase 1 |
 | 4 | `routing_agent` | Checks each taxon against the current XML; determines CREATE or UPDATE; identifies `passport_id` for updates | Phase 1 |
 | 5 | `grading_agent` | Assigns a single evidence grade (E1 / E2 / E3) for the whole paper with written rationale; assigns `UNCERTAIN` (with `uncertain_reason`) when study design is ambiguous or unreported — staging file is still written | Phase 1 |
-| 6 | `mesh_agent` | Fetches paper MeSH annotations from NLM E-utilities API; assigns relevant MeSH terms per clinical association; resolves MeSH anatomy IDs for body sites and specimen types | Phase 2 |
+| 6 | `mesh_agent` | Receives pre-fetched NLM MeSH data from the orchestrator (no network calls itself); assigns relevant MeSH disease terms per clinical association; applies pre-resolved anatomy IDs to body sites and specimen types | Phase 2 |
 | 7 | `kegg_agent` | Maps clinical conditions → KEGG Disease IDs; bloom trigger drugs → KEGG Drug IDs; metabolite names → KEGG Compound IDs — all via local KEGG flat file mirror | Phase 2 |
 | 8 | `aro_agent` | Maps AMR phenotype names to CARD ARO identifiers via local ARO JSON index (OBO Foundry source) | Phase 2 |
 | 9 | `vfdb_agent` | Maps virulence factor names to VFDB VFIDs via local VFDB JSON mirror (`vfdb.json`) | Phase 2 |
@@ -86,15 +86,15 @@ User: "Curate these papers" + [one or more PDFs — each filename is its PMID]
      |
 === Pre-Phase: DUPLICATE PMID CHECK ===
      |
-     +-> Read `database/curation_log.json`
-         - Scan every entry for `source_pmid` matching the validated PMID
-           (compare as integer; the log stores source_pmid as a JSON number)
-         - If NO matches found → proceed to Phase 0 immediately (no message needed)
-         - If matches found → HALT and warn the user:
+     +-> Step 1 — Check `database/papers_log.json` (primary source of truth):
+         Read the file and look for an entry with `pmid` matching the validated PMID.
+         (compare as integer)
+         - Entry found with `status: "curated"` → HALT and warn the user:
 
-           "⚠️  PMID [pmid] has already been curated.
-            The following passports were previously applied from this paper:
+           "⚠️  PMID [pmid] has already been curated (papers_log.json status: curated).
+            [title if available]
 
+            Passports applied from this paper (curation_log.json):
             | passport_id       | preferred_name         | action | date_applied |
             |-------------------|------------------------|--------|--------------|
             | MCA-BAC-000001    | Clostridioides difficile | CREATE | 2026-04-01  |
@@ -106,11 +106,27 @@ User: "Curate these papers" + [one or more PDFs — each filename is its PMID]
 
             Reply 'proceed' or 'abort'."
 
-         - User replies 'abort' → HALT; do not proceed
-         - User replies 'proceed' (any case) → continue to Phase 0;
-           add `duplicate_pmid_warning: true` to the paper_summary block of every
-           staging file produced in this session so the reviewer is aware
+         - Entry found with `status: "pending"` → proceed to Phase 0 immediately (no message needed)
+         - Entry not found in papers_log.json → fall back to Step 2
+         - `database/papers_log.json` does not exist → fall back to Step 2
+
+     +-> Step 2 — Fallback: check `database/curation_log.json`:
+         (Only reached if PMID not found in papers_log.json or file missing)
+         - Scan every entry for `source_pmid` matching the validated PMID
+         - If NO matches found → proceed to Phase 0 immediately (no message needed)
+         - If matches found → HALT and warn using same format as Step 1
          - If `database/curation_log.json` does not exist → treat as no matches; proceed to Phase 0
+
+     +-> On proceed (user replies 'proceed'):
+         - Continue to Phase 0; add `duplicate_pmid_warning: true` to the paper_summary
+           block of every staging file produced in this session
+
+     +-> After staging files are written (end of Phase 4):
+         - Update `database/papers_log.json`: set the entry for this PMID to
+           `status: "curated"`, `in_papers_block: true`, and populate `passports`
+           list from the staging files written in this session.
+           If no entry exists yet (PMID was not in papers_log), create one.
+           This keeps papers_log.json current without requiring a separate maintenance step.
      |
 === PARALLEL LAUNCH (multi-PDF only) ===
      |
@@ -139,6 +155,13 @@ User: "Curate these papers" + [one or more PDFs — each filename is its PMID]
            cross_check_flags[] for any XML passport name found in the paper but
            absent from the confirmed taxa list (potential Phase 0 omissions)
          - Writes paper summary into staging file (no user confirmation required)
+     |
+=== Phase 1 PRE-FETCH: RESOLVE BACDIVE PATH (orchestrator — before spawning any Phase 1 agents) ===
+     |
+     +-> Read memory entry `reference_bacdive_path.md`; resolve absolute path.
+         Pass as `bacdive_cache_path` to each `db_fetch_agent` instance.
+         If path cannot be resolved: treat as a technical blocker — halt and interrupt
+         the user before spawning any Phase 1 agents.
      |
 === Phase 1: DB FETCH, ENTITY EXTRACTION, ROUTING & GRADING (parallel) ===
      |
@@ -187,16 +210,39 @@ User: "Curate these papers" + [one or more PDFs — each filename is its PMID]
            clinical_associations                 ← from entity_extractor_agent
            transmission_routes                   ← entity_extractor_agent (if reported);
                                                     otherwise [] from db_fetch_agent
+           evidence_grade, grade_rationale,
+           uncertain_reason                      ← from grading_agent (one grade per paper;
+                                                    applied uniformly to all associations in
+                                                    this taxon's staging file)
            extraction_notes                      ← union of db_fetch_notes +
                                                     entity_extractor notes +
                                                     routing_notes
          Process cross_check_flags[] from Phase 0: fold into extraction_notes per
-         ROUTING_AGENT.md rules (orphaned flags → staging/YYYY-MM-DD_cross-check-flags.json).
+         ROUTING_AGENT.md rules (orphaned flags → staging/[PMID]_[DATE]_cross-check-flags.json).
          This merged object is passed to Phase 2 agents and used to assemble the staging file.
      |
-=== Phase 2 PRE-FETCH: NLM API CALLS (orchestrator — before spawning any Phase 2 agents) ===
+=== Phase 2 PRE-FETCH: RESOLVE PATHS + NLM API CALLS (orchestrator — before spawning any Phase 2 agents) ===
      |
-     +-> The orchestrator makes all NLM network calls directly (not via subagents):
+     +-> Step 1 — Resolve all local data source paths from project memory.
+         The orchestrator reads the following memory entries and resolves absolute paths,
+         then passes each path explicitly to the relevant Phase 2 agent and null_review_agent.
+         Agents do not access project memory directly.
+
+         | Memory entry              | Path passed to                              |
+         |---------------------------|---------------------------------------------|
+         | reference_kegg_path.md    | kegg_agent (as kegg_mirror_path)            |
+         | reference_aro_path.md     | aro_agent (as aro_index_path)               |
+         | reference_vfdb_path.md    | vfdb_agent (as vfdb_path)                   |
+         | reference_chebi_path.md   | null_review_agent (as chebi_index_path)     |
+         | reference_ncbi_path.md    | null_review_agent (as ncbi_names_index_path)|
+
+         Note: `reference_bacdive_path.md` is resolved in the Phase 1 pre-fetch step (before
+         db_fetch_agent is spawned) — not here.
+
+         If a required path cannot be resolved: treat as a technical blocker (Checkpoint Rule 7) —
+         halt and interrupt the user before spawning any Phase 2 agents.
+
+     +-> Step 2 — NLM API calls (orchestrator makes these directly, not via subagents):
          1. Fetch paper MeSH annotations:
             WebFetch → https://eutils.ncbi.nlm.nih.gov/entrez/eutils/efetch.fcgi?db=pubmed&id={pmid}&retmode=xml
             Store raw XML as `nlm_efetch_xml`
@@ -234,7 +280,7 @@ User: "Curate these papers" + [one or more PDFs — each filename is its PMID]
      |     → populates aro_id on amr_highlight objects
      |
      +-> [vfdb_agent] (see agents/VFDB_AGENT.md)
-         - Reads local VFDB JSON mirror (no network calls)
+         - Receives vfdb_path from orchestrator (resolved from reference_vfdb_path.md); no network calls
          - Maps virulence factor names → VFDB VFIDs
            → populates vfdb_id on virulence_factor objects
      |
@@ -257,7 +303,7 @@ User: "Curate these papers" + [one or more PDFs — each filename is its PMID]
          - Appends `null_review` block to staging object; applies `filled` values in-place
      |
      +-> Step 3 — Write staging JSON per taxon:
-         - One file per taxon: staging/YYYY-MM-DD_[taxon-name].json
+         - One file per taxon: staging/[PMID]_[DATE]_[taxon-name].json
          - Schema follows templates/STAGING_FILE.md
          - Includes `null_review` block from Step 2
      |
@@ -289,7 +335,7 @@ User: "Curate these papers" + [one or more PDFs — each filename is its PMID]
          - Raises pattern flags when ≥2 nulls share the same root cause + field type
          Writes two outputs per taxon:
            1. `missing_value_report` appended to `sanity_check` block in staging JSON
-           2. `staging/YYYY-MM-DD_[taxon]-qc-report.md` — human-readable Markdown report
+           2. `staging/[PMID]_[DATE]_[taxon]-qc-report.md` — human-readable Markdown report
               with validation issues, missing value analysis, and pipeline miss log
      |
      ** Inform user of staging file path(s), QC report path(s), and overall status
@@ -303,7 +349,7 @@ User: "Curate these papers" + [one or more PDFs — each filename is its PMID]
 ## Checkpoint Rules
 
 0. **Pre-phase — filename validation**: If the filename stem is not digits-only (1–8 chars), halt immediately and ask the user to rename the file; do not proceed
-0b. **Pre-phase — duplicate PMID check**: After filename validation, read `database/curation_log.json` and check whether the PMID appears as any `source_pmid`. If it does, HALT and show the user a table of previously applied passports; wait for an explicit 'proceed' or 'abort' reply before continuing. If the log file does not exist, proceed without a warning.
+0b. **Pre-phase — duplicate PMID check**: After filename validation, check `database/papers_log.json` first (primary source): if an entry exists with `status: "curated"`, HALT and show the user a table of previously applied passports; wait for an explicit 'proceed' or 'abort' reply before continuing. If not found in papers_log.json (or the file is missing), fall back to `database/curation_log.json` and check for any `source_pmid` match — same halt/prompt behaviour if found. If neither file contains the PMID, proceed without a warning.
 1. **No mid-skill stops**: The skill runs end-to-end (Phase 0 → Phase 4) without pausing for user confirmation at any phase boundary (except the duplicate PMID gate in checkpoint 0b). The user reviews everything in the final staging file.
 2. **Phase 0 — paper summary**: Written directly into the staging file; no user confirmation required; PMID is always taken from the filename, not the PDF text
 3. **Phase 1 — extraction boundary**: Only extract what the paper explicitly states; do not infer or embellish beyond reported findings
@@ -336,9 +382,9 @@ User: "Curate these papers" + [one or more PDFs — each filename is its PMID]
 
 One JSON file per taxon, written to `staging/`. Schema defined in `templates/STAGING_FILE.md`.
 
-**Filename format:** `staging/YYYY-MM-DD_[taxon-name-kebab-case].json`
+**Filename format:** `staging/[PMID]_[YYYY-MM-DD]_[taxon-name-kebab-case].json`
 
-**Example:** `staging/2026-03-31_clostridioides-difficile.json`
+**Example:** `staging/38123456_2026-03-31_clostridioides-difficile.json`
 
 ---
 
@@ -415,7 +461,7 @@ One JSON file per taxon, written to `staging/`. Schema defined in `templates/STA
    │  Phases 0–4   │  Phases 0–4   │  Phases 0–4      │
    └────────────────┴────────────────┴──────────────────┘
         |
-   staging/YYYY-MM-DD_[taxon].json (one per taxon per paper)
+   staging/[PMID]_[DATE]_[taxon].json (one per taxon per paper)
         |   <-- human reviews staging files
    MCA XML Update Skill (mca-xml-update)
         |
@@ -428,11 +474,11 @@ One JSON file per taxon, written to `staging/`. Schema defined in `templates/STA
 
 | Item | Content |
 |------|---------|
-| Skill Version | 3.6 |
-| Last Updated | 2026-04-02 |
+| Skill Version | 3.7 |
+| Last Updated | 2026-04-03 |
 | Maintainer | Heewon Seo |
 | Input | One or more research papers (PDFs); each filename stem must be the PMID (digits only, e.g. `38123456.pdf`) |
-| Output | `staging/YYYY-MM-DD_[taxon-name].json` |
+| Output | `staging/[PMID]_[DATE]_[taxon-name].json` |
 | Downstream Skill | MCA XML Update Skill (`mca-xml-update`) |
 
 ---

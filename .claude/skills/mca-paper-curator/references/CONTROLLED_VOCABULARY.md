@@ -187,6 +187,8 @@ Allowed values (can be multiple):
 - `cerebrospinal fluid (CSF)`
 - `biopsy`
 - `nasopharyngeal swab`
+- `saliva`
+- `oral swab`
 - `unknown`
 
 ### Bloom Triggers
@@ -200,6 +202,7 @@ Free-text list, standardize using:
 - `surgery`
 - `chemotherapy`
 - `proton pump inhibitor (PPI) use`
+- `periodontitis`
 - `unknown`
 
 ### Risk Contexts
@@ -217,6 +220,8 @@ Free-text list, standardize using:
 - `post-surgical`
 - `solid organ transplant recipients`
 - `HIV/AIDS`
+- `melanoma patients receiving immune checkpoint inhibitor therapy (ICB)`
+- `NSCLC patients receiving PD-1/PD-L1 blockade`
 - `unknown`
 
 ### AMR Highlights

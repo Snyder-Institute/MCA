@@ -25,13 +25,13 @@ try {
         $db_version = $raw_version ? preg_replace('/^(v\d+)_(\d+)_\d+$/', '$1.$2', $raw_version) : 'n/a';
 
         function getTags($pdo, $p_id, $category) {
-            $s = $pdo->prepare("SELECT value FROM taxon_tag WHERE passport_id = ? AND category = ? ORDER BY id ASC");
+            $s = $pdo->prepare("SELECT DISTINCT value FROM taxon_tag WHERE passport_id = ? AND category = ? ORDER BY value ASC");
             $s->execute([$p_id, $category]);
             return $s->fetchAll(PDO::FETCH_COLUMN);
         }
 
         function getTagsWithExtId($pdo, $p_id, $category) {
-            $s = $pdo->prepare("SELECT value, ext_id FROM taxon_tag WHERE passport_id = ? AND category = ? ORDER BY id ASC");
+            $s = $pdo->prepare("SELECT DISTINCT value, ext_id FROM taxon_tag WHERE passport_id = ? AND category = ? ORDER BY value ASC");
             $s->execute([$p_id, $category]);
             return $s->fetchAll(PDO::FETCH_ASSOC);
         }
@@ -59,7 +59,7 @@ try {
             LEFT JOIN assoc_pmid ap ON ap.association_id = a.id
             WHERE a.passport_id = ?
             GROUP BY a.id
-            ORDER BY a.id ASC
+            ORDER BY FIELD(a.evidence_level, 'E3', 'E2', 'E1', 'UNCERTAIN') ASC, a.id ASC
         ");
         $assoc_stmt->execute([$p_id]);
         $associations = $assoc_stmt->fetchAll(PDO::FETCH_ASSOC);
@@ -159,7 +159,7 @@ include 'header.php';
     .data-list li { margin-bottom: 4px; line-height: 1.4; }
 
     .eg-badge { display: inline-flex; align-items: center; justify-content: center; width: 28px; height: 28px; border-radius: 4px; font-weight: 900; font-size: 11px; margin-right: 15px; flex-shrink: 0; }
-    .eg-E3 { background: #dcfce7; color: #166534; border: 1px solid #4ade80; }
+    .eg-E3 { background: #dbeafe; color: #1e40af; border: 1px solid #93c5fd; }
     .eg-E2 { background: #fef3c7; color: #92400e; border: 1px solid #fbbf24; }
     .eg-E1 { background: #f3f4f6; color: #6b7280; border: 1px solid #d1d5db; }
 
@@ -207,6 +207,20 @@ include 'header.php';
     .timeline-design { font-size: 10px; color: #888; margin-top: 2px; text-transform: capitalize; }
 
     .related-taxa-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 10px; margin-top: 10px; }
+    .two-col-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 30px; }
+
+    @media (max-width: 700px) {
+        .two-col-grid { grid-template-columns: 1fr; gap: 20px; }
+        .passport-header-inner { flex-direction: column !important; align-items: flex-start !important; gap: 12px; }
+        .passport-header-inner > div:last-child { text-align: left !important; }
+        .related-taxa-grid { grid-template-columns: repeat(2, 1fr); }
+        .data-item { flex-direction: column; }
+        .data-label { width: auto !important; margin-bottom: 2px; }
+        h1[style*="42px"] { font-size: 28px !important; }
+    }
+    @media (max-width: 480px) {
+        .related-taxa-grid { grid-template-columns: 1fr; }
+    }
     .related-taxon-pill { display: flex; flex-direction: column; gap: 4px; padding: 10px 12px; border-radius: 5px; background: #f5f6fa; border: 1px solid #e0e2ee; text-decoration: none; color: #222; transition: background 0.15s; }
     .related-taxon-pill:hover { background: #eaecf7; border-color: #404f7c; }
     .related-taxon-id { font-size: 10px; color: #aaa; font-family: monospace; }
@@ -223,7 +237,7 @@ include 'header.php';
 
     <?php if ($taxon): ?>
         <div class="passport-header">
-            <div style="display: flex; justify-content: space-between; align-items: flex-end;">
+            <div class="passport-header-inner" style="display: flex; justify-content: space-between; align-items: flex-end;">
                 <div>
                     <h1 style="margin: 0; font-size: 42px; font-style: italic; color: #000; line-height: 1;">
                         <?php echo htmlspecialchars($taxon['preferred_name']); ?>
@@ -246,7 +260,7 @@ include 'header.php';
 
                     <div style="font-size: 12px; color: #888; white-space: nowrap;">
                         TaxID: <a href="https://www.ncbi.nlm.nih.gov/Taxonomy/Browser/wwwtax.cgi?id=<?php echo $taxon['ncbi_taxid']; ?>" target="_blank" style="color:#000; font-weight:bold; text-decoration: none;"><?php echo htmlspecialchars($taxon['ncbi_taxid']); ?></a>
-                        <?php if (!empty($taxon['bacdive_url'])): $bacdive_id = basename(rtrim($taxon['bacdive_url'], '/')); ?>
+                        <?php if (!empty($taxon['bacdive_url']) && in_array($taxon['taxon_rank'], ['species', 'subspecies', 'strain'])): $bacdive_id = basename(rtrim($taxon['bacdive_url'], '/')); ?>
                         | BacDive: <a href="<?php echo htmlspecialchars($taxon['bacdive_url']); ?>" target="_blank" style="color:#000; font-weight:bold; text-decoration: none;"><?php echo htmlspecialchars($bacdive_id); ?></a>
                         <?php endif; ?>
                         | Rank: <span style="text-transform: capitalize; color: #000; font-weight: bold;"><?php echo htmlspecialchars($taxon['taxon_rank']); ?></span>
@@ -261,7 +275,7 @@ include 'header.php';
         ?>
         <div class="card" style="margin-bottom: 24px;">
             <div class="section-title">Biology &amp; Ecology</div>
-            <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 30px;">
+            <div class="two-col-grid">
                 <div>
                     <div style="font-size: 11px; text-transform: uppercase; letter-spacing: 1px; color: #bbb; font-weight: 700; margin-bottom: 10px;">Biology</div>
                     <?php if ($bio_empty): ?>
@@ -335,7 +349,9 @@ include 'header.php';
                                         </a>
                                     <?php endif; ?>
                                     <?php if (!empty($met['chebi_id'])): ?>
-                                        <a href="https://www.ebi.ac.uk/chebi/searchId.do?chebiId=<?php echo urlencode($met['chebi_id']); ?>" target="_blank" class="assoc-ref-tag assoc-ref-mesh">ChEBI ↗</a>
+                                        <a href="https://www.ebi.ac.uk/chebi/searchId.do?chebiId=<?php echo urlencode($met['chebi_id']); ?>" target="_blank" style="text-decoration:none;">
+                                            <span style="display:inline-block; padding:1px 5px; border-radius:3px; font-size:10px; font-weight:700; background:#d1fae5; color:#065f46; border:1px solid #6ee7b7; font-family:monospace;"><?php echo htmlspecialchars($met['chebi_id']); ?></span>
+                                        </a>
                                     <?php endif; ?>
                                 </span>
                                 <?php if ($i < count($met_grouped[$rel]) - 1): ?><span style="color:#ccc;">·</span><?php endif; ?>
@@ -349,7 +365,7 @@ include 'header.php';
 
         <div class="card" style="margin-bottom: 0px;">
             <div class="section-title">Clinical Profile</div>
-            <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 30px;">
+            <div class="two-col-grid">
                 <div>
                     <div class="data-item">
                         <span class="data-label">Pathobiont</span>
@@ -402,7 +418,7 @@ include 'header.php';
                                         <?php if (!empty($amr['ext_id'])): ?>
                                             <?php $aro_num = preg_replace('/^ARO:/', '', $amr['ext_id']); ?>
                                             <a href="https://card.mcmaster.ca/ontology/<?php echo htmlspecialchars($aro_num); ?>" target="_blank" rel="noopener" style="text-decoration:none;">
-                                                <span style="display:inline-block; padding:1px 5px; border-radius:3px; font-size:10px; font-weight:700; background:#fee2e2; color:#991b1b; border:1px solid #fca5a5; font-family:monospace;"><?php echo htmlspecialchars($amr['ext_id']); ?></span>
+                                                <span style="display:inline-block; padding:1px 5px; border-radius:3px; font-size:10px; font-weight:700; background:#fee2e2; color:#991b1b; border:1px solid #fca5a5; font-family:monospace;"><?php echo htmlspecialchars($aro_num); ?></span>
                                             </a>
                                         <?php endif; ?>
                                     </span><?php if ($i < count($amr_alerts) - 1): ?><span style="color:#ccc;">·</span><?php endif; ?>
@@ -414,7 +430,7 @@ include 'header.php';
                         <div class="data-item">
                             <span class="data-label">Virulence Factors</span>
                             <span class="data-value" style="display:flex; flex-wrap:wrap; gap:6px; align-items:center;">
-                                <?php foreach ($vf_entries as $vf): ?>
+                                <?php foreach ($vf_entries as $i => $vf): ?>
                                     <span style="display:inline-flex; align-items:center; gap:4px;">
                                         <?php echo htmlspecialchars($vf['value']); ?>
                                         <?php if (!empty($vf['ext_id'])): ?>
@@ -422,7 +438,7 @@ include 'header.php';
                                                 <span style="display:inline-block; padding:1px 5px; border-radius:3px; font-size:10px; font-weight:700; background:#fce7f3; color:#9d174d; border:1px solid #f9a8d4; font-family:monospace;"><?php echo htmlspecialchars($vf['ext_id']); ?></span>
                                             </a>
                                         <?php endif; ?>
-                                    </span><?php if (!array_key_last($vf_entries) !== array_search($vf, $vf_entries)): ?><span style="color:#ccc;">·</span><?php endif; ?>
+                                    </span><?php if ($i < count($vf_entries) - 1): ?><span style="color:#ccc;">·</span><?php endif; ?>
                                 <?php endforeach; ?>
                             </span>
                         </div>
@@ -527,7 +543,15 @@ include 'header.php';
                     <a href="https://pubmed.ncbi.nlm.nih.gov/<?php echo htmlspecialchars($paper['pmid']); ?>/" target="_blank" class="timeline-card" style="text-decoration: none; color: inherit;">
                         <span class="timeline-year"><?php echo htmlspecialchars($paper['year'] ?: '?'); ?></span>
                         <?php if (!empty($paper['study_design'])): ?>
-                            <span class="timeline-design"><?php echo htmlspecialchars($paper['study_design']); ?></span>
+                            <?php
+                            // Truncate at em-dash or long "—" to keep cards compact
+                            $sd = $paper['study_design'];
+                            foreach (['—', ' — ', ' - '] as $sep) {
+                                $pos = mb_strpos($sd, $sep);
+                                if ($pos !== false) { $sd = mb_substr($sd, 0, $pos); break; }
+                            }
+                            ?>
+                            <span class="timeline-design"><?php echo htmlspecialchars(trim($sd)); ?></span>
                         <?php endif; ?>
                     </a>
                 <?php endforeach; ?>

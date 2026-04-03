@@ -132,7 +132,7 @@ if (!$is_popup) {
         <div class="glossary-item">
             <span class="glossary-term">Antimicrobial Resistance</span>
             <div class="glossary-text">Notable resistance phenotypes that impact clinical management (e.g., ESBL, CRE, VRE). Extracted from curated literature. Where available, linked to the CARD Antibiotic Resistance Ontology (ARO):
-                <div style="margin-top:8px;">multidrug-resistant (MDR) <span style="display:inline-block; padding:1px 5px; border-radius:3px; font-size:10px; font-weight:700; background:#fee2e2; color:#991b1b; border:1px solid #fca5a5; font-family:monospace;">ARO:3004305</span></div>
+                <div style="margin-top:8px;">multidrug-resistant (MDR) <span style="display:inline-block; padding:1px 5px; border-radius:3px; font-size:10px; font-weight:700; background:#fee2e2; color:#991b1b; border:1px solid #fca5a5; font-family:monospace;">3004305</span></div>
             </div>
         </div>
         <div class="glossary-item">
@@ -160,7 +160,7 @@ if (!$is_popup) {
                     <li><strong>Consumes</strong> — taxon degrades or consumes this metabolite</li>
                     <li><strong>Modifies</strong> — taxon chemically transforms this metabolite</li>
                 </ul>
-                Compounds are linked to KEGG Compound (C numbers) and ChEBI IDs where available.
+                Compounds are linked to KEGG Compound (C numbers) and ChEBI IDs (CHEBI:XXXXXX) where available. IDs are displayed as clickable badges linking to their respective databases.
             </div>
         </div>
     </div>
@@ -173,7 +173,7 @@ if (!$is_popup) {
 
             <div class="nested-level">
                 <div style="margin-bottom: 15px;">
-                    <span class="glossary-term" style="background: #dcfce7; color: #166534;">E3 — Strong human clinical evidence</span>
+                    <span class="glossary-term" style="background: #dbeafe; color: #1e40af;">E3 — Strong human clinical evidence</span>
                     <div class="glossary-text">Supported by systematic reviews, meta-analyses, clinical guidelines, or multiple independent human cohorts reported in a single paper.</div>
                 </div>
                 <div style="margin-bottom: 15px;">

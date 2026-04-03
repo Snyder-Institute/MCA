@@ -1,0 +1,821 @@
+[
+  {
+    "pmid": 24503131,
+    "status": "curated",
+    "pdf_available": true,
+    "in_papers_block": true,
+    "title": "Role of the Intestinal Microbiota in Resistance to Colonization by Clostridium difficile",
+    "journal": "Gastroenterology",
+    "year": 2014,
+    "passports": [
+      {
+        "passport_id": "MCA-BAC-000006",
+        "preferred_name": "Clostridioides difficile",
+        "action": "UPDATE",
+        "date_applied": "2026-04-03"
+      },
+      {
+        "passport_id": "MCA-BAC-000004",
+        "preferred_name": "Lachnospiraceae",
+        "action": "UPDATE",
+        "date_applied": "2026-04-03"
+      }
+    ]
+  },
+  {
+    "pmid": 25385792,
+    "status": "curated",
+    "pdf_available": true,
+    "in_papers_block": true,
+    "title": "Gastrointestinal Dissemination and Transmission of Staphylococcus aureus following Bacteremia",
+    "journal": "Infection and Immunity",
+    "year": 2015,
+    "passports": [
+      {
+        "passport_id": "MCA-BAC-000051",
+        "preferred_name": "Staphylococcus aureus",
+        "action": "CREATE",
+        "date_applied": "2026-04-03"
+      }
+    ]
+  },
+  {
+    "pmid": 29097493,
+    "status": "curated",
+    "pdf_available": true,
+    "in_papers_block": true,
+    "title": "Gut microbiome modulates response to anti-PD-1 immunotherapy in melanoma patients",
+    "journal": "Science",
+    "year": 2018,
+    "passports": [
+      {
+        "passport_id": "MCA-BAC-000003",
+        "preferred_name": "Ruminococcaceae",
+        "action": "UPDATE",
+        "date_applied": "2026-04-03"
+      },
+      {
+        "passport_id": "MCA-BAC-000027",
+        "preferred_name": "Faecalibacterium prausnitzii",
+        "action": "UPDATE",
+        "date_applied": "2026-04-03"
+      },
+      {
+        "passport_id": "MCA-BAC-000028",
+        "preferred_name": "Faecalibacterium",
+        "action": "UPDATE",
+        "date_applied": "2026-04-03"
+      },
+      {
+        "passport_id": "MCA-BAC-000036",
+        "preferred_name": "Bacteroides thetaiotaomicron",
+        "action": "UPDATE",
+        "date_applied": "2026-04-03"
+      }
+    ]
+  },
+  {
+    "pmid": 29097494,
+    "status": "curated",
+    "pdf_available": true,
+    "in_papers_block": true,
+    "title": "Gut microbiome influences efficacy of PD-1-based immunotherapy against epithelial tumors",
+    "journal": "Science",
+    "year": 2018,
+    "passports": [
+      {
+        "passport_id": "MCA-BAC-000015",
+        "preferred_name": "Akkermansia muciniphila",
+        "action": "UPDATE",
+        "date_applied": "2026-04-03"
+      },
+      {
+        "passport_id": "MCA-BAC-000050",
+        "preferred_name": "Alistipes indistinctus",
+        "action": "CREATE",
+        "date_applied": "2026-04-03"
+      }
+    ]
+  },
+  {
+    "pmid": 29302014,
+    "status": "curated",
+    "pdf_available": true,
+    "in_papers_block": true,
+    "title": "The commensal microbiome is associated with anti-PD-1 efficacy in metastatic melanoma patients",
+    "journal": "Science",
+    "year": 2018,
+    "passports": [
+      {
+        "passport_id": "MCA-BAC-000025",
+        "preferred_name": "Bifidobacterium longum",
+        "action": "UPDATE",
+        "date_applied": "2026-04-03"
+      },
+      {
+        "passport_id": "MCA-BAC-000040",
+        "preferred_name": "Collinsella aerofaciens",
+        "action": "UPDATE",
+        "date_applied": "2026-04-03"
+      },
+      {
+        "passport_id": "MCA-BAC-000052",
+        "preferred_name": "Enterococcus faecium",
+        "action": "CREATE",
+        "date_applied": "2026-04-03"
+      },
+      {
+        "passport_id": "MCA-BAC-000053",
+        "preferred_name": "Bifidobacterium adolescentis",
+        "action": "CREATE",
+        "date_applied": "2026-04-03"
+      },
+      {
+        "passport_id": "MCA-BAC-000054",
+        "preferred_name": "Klebsiella pneumoniae",
+        "action": "CREATE",
+        "date_applied": "2026-04-03"
+      },
+      {
+        "passport_id": "MCA-BAC-000055",
+        "preferred_name": "Parabacteroides merdae",
+        "action": "CREATE",
+        "date_applied": "2026-04-03"
+      },
+      {
+        "passport_id": "MCA-BAC-000056",
+        "preferred_name": "Blautia obeum",
+        "action": "CREATE",
+        "date_applied": "2026-04-03"
+      },
+      {
+        "passport_id": "MCA-BAC-000057",
+        "preferred_name": "Roseburia intestinalis",
+        "action": "CREATE",
+        "date_applied": "2026-04-03"
+      },
+      {
+        "passport_id": "MCA-BAC-000059",
+        "preferred_name": "Veillonella parvula",
+        "action": "CREATE",
+        "date_applied": "2026-04-03"
+      }
+    ]
+  },
+  {
+    "pmid": 29414937,
+    "status": "curated",
+    "pdf_available": true,
+    "in_papers_block": true,
+    "title": "c-Maf-dependent regulatory T cells mediate immunological tolerance to a gut pathobiont",
+    "journal": "Nature",
+    "year": 2018,
+    "passports": [
+      {
+        "passport_id": "MCA-BAC-000058",
+        "preferred_name": "Helicobacter hepaticus",
+        "action": "CREATE",
+        "date_applied": "2026-04-03"
+      }
+    ]
+  },
+  {
+    "pmid": 29546356,
+    "status": "curated",
+    "pdf_available": true,
+    "in_papers_block": true,
+    "title": "Clonal Emergence of Invasive Multidrug-Resistant Staphylococcus epidermidis Deconvoluted via a Combination of Whole-Genome Sequencing and Microbiome Analyses",
+    "journal": "Clinical Infectious Diseases",
+    "year": 2018,
+    "passports": [
+      {
+        "passport_id": "MCA-BAC-000023",
+        "preferred_name": "Staphylococcus epidermidis",
+        "action": "UPDATE",
+        "date_applied": "2026-04-02"
+      }
+    ]
+  },
+  {
+    "pmid": 29590047,
+    "status": "curated",
+    "pdf_available": true,
+    "in_papers_block": true,
+    "title": "Translocation of a gut pathobiont drives autoimmunity in mice and humans",
+    "journal": "Science",
+    "year": 2018,
+    "passports": [
+      {
+        "passport_id": "MCA-BAC-000036",
+        "preferred_name": "Bacteroides thetaiotaomicron",
+        "action": "CREATE",
+        "date_applied": "2026-04-02"
+      },
+      {
+        "passport_id": "MCA-BAC-000018",
+        "preferred_name": "Enterococcus faecalis",
+        "action": "UPDATE",
+        "date_applied": "2026-04-02"
+      },
+      {
+        "passport_id": "MCA-BAC-000026",
+        "preferred_name": "Enterococcus gallinarum",
+        "action": "UPDATE",
+        "date_applied": "2026-04-02"
+      }
+    ]
+  },
+  {
+    "pmid": 31548871,
+    "status": "curated",
+    "pdf_available": true,
+    "in_papers_block": true,
+    "title": "First bloodstream infection caused by Prevotella copri in a heart failure elderly patient with Prevotella-dominated gut microbiota: a case report",
+    "journal": "Gut Pathogens",
+    "year": 2019,
+    "passports": [
+      {
+        "passport_id": "MCA-BAC-000046",
+        "preferred_name": "Prevotella copri",
+        "action": "UPDATE",
+        "date_applied": "2026-04-03"
+      }
+    ]
+  },
+  {
+    "pmid": 32129694,
+    "status": "curated",
+    "pdf_available": true,
+    "in_papers_block": true,
+    "title": "Microbiota Insights in Clostridium difficile Infection and Inflammatory Bowel Disease",
+    "journal": "Gut Microbes",
+    "year": 2020,
+    "passports": [
+      {
+        "passport_id": "MCA-BAC-000034",
+        "preferred_name": "Alistipes",
+        "action": "CREATE",
+        "date_applied": "2026-04-02"
+      },
+      {
+        "passport_id": "MCA-BAC-000039",
+        "preferred_name": "Blautia",
+        "action": "CREATE",
+        "date_applied": "2026-04-02"
+      },
+      {
+        "passport_id": "MCA-BAC-000041",
+        "preferred_name": "Dorea",
+        "action": "CREATE",
+        "date_applied": "2026-04-02"
+      },
+      {
+        "passport_id": "MCA-BAC-000047",
+        "preferred_name": "Roseburia",
+        "action": "CREATE",
+        "date_applied": "2026-04-02"
+      },
+      {
+        "passport_id": "MCA-BAC-000015",
+        "preferred_name": "Akkermansia muciniphila",
+        "action": "UPDATE",
+        "date_applied": "2026-04-02"
+      },
+      {
+        "passport_id": "MCA-BAC-000006",
+        "preferred_name": "Clostridioides difficile",
+        "action": "UPDATE",
+        "date_applied": "2026-04-02"
+      },
+      {
+        "passport_id": "MCA-BAC-000027",
+        "preferred_name": "Faecalibacterium prausnitzii",
+        "action": "UPDATE",
+        "date_applied": "2026-04-02"
+      },
+      {
+        "passport_id": "MCA-BAC-000028",
+        "preferred_name": "Faecalibacterium",
+        "action": "UPDATE",
+        "date_applied": "2026-04-02"
+      },
+      {
+        "passport_id": "MCA-BAC-000003",
+        "preferred_name": "Ruminococcaceae",
+        "action": "UPDATE",
+        "date_applied": "2026-04-02"
+      }
+    ]
+  },
+  {
+    "pmid": 32758418,
+    "status": "curated",
+    "pdf_available": true,
+    "in_papers_block": true,
+    "title": "The Intermucosal Connection between the Mouth and Gut in Commensal Pathobiont-Driven Colitis",
+    "journal": "Cell",
+    "year": 2020,
+    "passports": [
+      {
+        "passport_id": "MCA-BAC-000042",
+        "preferred_name": "Enterobacter cloacae",
+        "action": "CREATE",
+        "date_applied": "2026-04-02"
+      },
+      {
+        "passport_id": "MCA-BAC-000044",
+        "preferred_name": "Klebsiella aerogenes",
+        "action": "CREATE",
+        "date_applied": "2026-04-02"
+      }
+    ]
+  },
+  {
+    "pmid": 33303685,
+    "status": "curated",
+    "pdf_available": true,
+    "in_papers_block": true,
+    "title": "Fecal microbiota transplant promotes response in immunotherapy-refractory melanoma patients",
+    "journal": "Science",
+    "year": 2021,
+    "passports": [
+      {
+        "passport_id": "MCA-BAC-000049",
+        "preferred_name": "Veillonellaceae",
+        "action": "CREATE",
+        "date_applied": "2026-04-02"
+      },
+      {
+        "passport_id": "MCA-BAC-000038",
+        "preferred_name": "Bifidobacterium bifidum",
+        "action": "UPDATE",
+        "date_applied": "2026-04-02"
+      },
+      {
+        "passport_id": "MCA-BAC-000004",
+        "preferred_name": "Lachnospiraceae",
+        "action": "UPDATE",
+        "date_applied": "2026-04-02"
+      },
+      {
+        "passport_id": "MCA-BAC-000003",
+        "preferred_name": "Ruminococcaceae",
+        "action": "UPDATE",
+        "date_applied": "2026-04-02"
+      }
+    ]
+  },
+  {
+    "pmid": 33432149,
+    "status": "curated",
+    "pdf_available": true,
+    "in_papers_block": true,
+    "title": "Bifidobacterium bifidum strains synergize with immune checkpoint inhibitors to reduce tumour burden in mice",
+    "journal": "Nature Microbiology",
+    "year": 2021,
+    "passports": [
+      {
+        "passport_id": "MCA-BAC-000038",
+        "preferred_name": "Bifidobacterium bifidum",
+        "action": "CREATE",
+        "date_applied": "2026-04-02"
+      },
+      {
+        "passport_id": "MCA-BAC-000046",
+        "preferred_name": "Prevotella copri",
+        "action": "CREATE",
+        "date_applied": "2026-04-02"
+      },
+      {
+        "passport_id": "MCA-BAC-000015",
+        "preferred_name": "Akkermansia muciniphila",
+        "action": "UPDATE",
+        "date_applied": "2026-04-02"
+      }
+    ]
+  },
+  {
+    "pmid": 33542131,
+    "status": "curated",
+    "pdf_available": true,
+    "in_papers_block": true,
+    "title": "Fecal microbiota transplant overcomes resistance to anti-PD-1 therapy in melanoma patients",
+    "journal": "Science",
+    "year": 2021,
+    "passports": [
+      {
+        "passport_id": "MCA-BAC-000035",
+        "preferred_name": "Bacteroides nordii",
+        "action": "CREATE",
+        "date_applied": "2026-04-02"
+      },
+      {
+        "passport_id": "MCA-BAC-000037",
+        "preferred_name": "Bacteroides uniformis",
+        "action": "CREATE",
+        "date_applied": "2026-04-02"
+      },
+      {
+        "passport_id": "MCA-BAC-000040",
+        "preferred_name": "Collinsella aerofaciens",
+        "action": "CREATE",
+        "date_applied": "2026-04-02"
+      },
+      {
+        "passport_id": "MCA-BAC-000043",
+        "preferred_name": "Enterocloster clostridioformis",
+        "action": "CREATE",
+        "date_applied": "2026-04-02"
+      },
+      {
+        "passport_id": "MCA-BAC-000045",
+        "preferred_name": "Phascolarctobacterium faecium",
+        "action": "CREATE",
+        "date_applied": "2026-04-02"
+      },
+      {
+        "passport_id": "MCA-BAC-000048",
+        "preferred_name": "Ruminococcus flavefaciens",
+        "action": "CREATE",
+        "date_applied": "2026-04-02"
+      },
+      {
+        "passport_id": "MCA-BAC-000015",
+        "preferred_name": "Akkermansia muciniphila",
+        "action": "UPDATE",
+        "date_applied": "2026-04-02"
+      },
+      {
+        "passport_id": "MCA-BAC-000025",
+        "preferred_name": "Bifidobacterium longum",
+        "action": "UPDATE",
+        "date_applied": "2026-04-02"
+      },
+      {
+        "passport_id": "MCA-BAC-000027",
+        "preferred_name": "Faecalibacterium prausnitzii",
+        "action": "UPDATE",
+        "date_applied": "2026-04-02"
+      }
+    ]
+  },
+  {
+    "pmid": 33766858,
+    "status": "curated",
+    "pdf_available": true,
+    "in_papers_block": true,
+    "title": "The microbiome and human cancer",
+    "journal": "Science",
+    "year": 2021,
+    "passports": [
+      {
+        "passport_id": "MCA-BAC-000060",
+        "preferred_name": "Helicobacter pylori",
+        "action": "CREATE",
+        "date_applied": "2026-04-03"
+      },
+      {
+        "passport_id": "MCA-BAC-000061",
+        "preferred_name": "Streptococcus gallolyticus",
+        "action": "CREATE",
+        "date_applied": "2026-04-03"
+      },
+      {
+        "passport_id": "MCA-BAC-000062",
+        "preferred_name": "Mycobacterium bovis",
+        "action": "CREATE",
+        "date_applied": "2026-04-03"
+      }
+    ]
+  },
+  {
+    "pmid": 34941392,
+    "status": "curated",
+    "pdf_available": true,
+    "in_papers_block": true,
+    "title": "Dietary fiber and probiotics influence the gut microbiome and melanoma immunotherapy response",
+    "journal": "Science",
+    "year": 2021,
+    "passports": [
+      {
+        "passport_id": "MCA-BAC-000025",
+        "preferred_name": "Bifidobacterium longum",
+        "action": "CREATE",
+        "date_applied": "2026-04-01"
+      },
+      {
+        "passport_id": "MCA-BAC-000027",
+        "preferred_name": "Faecalibacterium prausnitzii",
+        "action": "CREATE",
+        "date_applied": "2026-04-01"
+      },
+      {
+        "passport_id": "MCA-BAC-000028",
+        "preferred_name": "Faecalibacterium",
+        "action": "CREATE",
+        "date_applied": "2026-04-01"
+      },
+      {
+        "passport_id": "MCA-BAC-000020",
+        "preferred_name": "Lacticaseibacillus rhamnosus",
+        "action": "UPDATE",
+        "date_applied": "2026-04-01"
+      },
+      {
+        "passport_id": "MCA-BAC-000003",
+        "preferred_name": "Ruminococcaceae",
+        "action": "UPDATE",
+        "date_applied": "2026-04-01"
+      }
+    ]
+  },
+  {
+    "pmid": 35831502,
+    "status": "curated",
+    "pdf_available": true,
+    "in_papers_block": true,
+    "title": "Within-host evolution of a gut pathobiont facilitates liver translocation",
+    "journal": "Nature",
+    "year": 2022,
+    "passports": [
+      {
+        "passport_id": "MCA-BAC-000026",
+        "preferred_name": "Enterococcus gallinarum",
+        "action": "CREATE",
+        "date_applied": "2026-04-01"
+      },
+      {
+        "passport_id": "MCA-BAC-000032",
+        "preferred_name": "Limosilactobacillus reuteri",
+        "action": "CREATE",
+        "date_applied": "2026-04-01"
+      },
+      {
+        "passport_id": "MCA-BAC-000033",
+        "preferred_name": "Bacteroides fragilis",
+        "action": "CREATE",
+        "date_applied": "2026-04-01"
+      }
+    ]
+  },
+  {
+    "pmid": 36894652,
+    "status": "curated",
+    "pdf_available": true,
+    "in_papers_block": true,
+    "title": "Dysbiosis of a microbiota\u2013immune metasystem in critical illness is associated with nosocomial infections",
+    "journal": "Nature Medicine",
+    "year": 2023,
+    "passports": [
+      {
+        "passport_id": "MCA-BAC-000001",
+        "preferred_name": "Enterobacteriaceae",
+        "action": "CREATE",
+        "date_applied": "2026-04-01"
+      },
+      {
+        "passport_id": "MCA-BAC-000002",
+        "preferred_name": "Enterococcaceae",
+        "action": "CREATE",
+        "date_applied": "2026-04-01"
+      },
+      {
+        "passport_id": "MCA-BAC-000003",
+        "preferred_name": "Ruminococcaceae",
+        "action": "CREATE",
+        "date_applied": "2026-04-01"
+      },
+      {
+        "passport_id": "MCA-BAC-000004",
+        "preferred_name": "Lachnospiraceae",
+        "action": "CREATE",
+        "date_applied": "2026-04-01"
+      },
+      {
+        "passport_id": "MCA-BAC-000005",
+        "preferred_name": "Bifidobacteriaceae",
+        "action": "CREATE",
+        "date_applied": "2026-04-01"
+      },
+      {
+        "passport_id": "MCA-BAC-000006",
+        "preferred_name": "Clostridioides difficile",
+        "action": "CREATE",
+        "date_applied": "2026-04-01"
+      }
+    ]
+  },
+  {
+    "pmid": 38584858,
+    "status": "curated",
+    "pdf_available": true,
+    "in_papers_block": true,
+    "title": "Microbiota-Based Therapeutics as New Standard-of-Care Treatment for Recurrent Clostridioides difficile Infection",
+    "journal": "Visceral Medicine",
+    "year": 2024,
+    "passports": [
+      {
+        "passport_id": "MCA-BAC-000024",
+        "preferred_name": "Bifidobacterium animalis subsp. lactis",
+        "action": "CREATE",
+        "date_applied": "2026-04-01"
+      },
+      {
+        "passport_id": "MCA-BAC-000029",
+        "preferred_name": "Lacticaseibacillus paracasei",
+        "action": "CREATE",
+        "date_applied": "2026-04-01"
+      },
+      {
+        "passport_id": "MCA-BAC-000030",
+        "preferred_name": "Lactiplantibacillus plantarum",
+        "action": "CREATE",
+        "date_applied": "2026-04-01"
+      },
+      {
+        "passport_id": "MCA-BAC-000031",
+        "preferred_name": "Lactobacillus acidophilus",
+        "action": "CREATE",
+        "date_applied": "2026-04-01"
+      },
+      {
+        "passport_id": "MCA-FUN-000002",
+        "preferred_name": "Saccharomyces boulardii",
+        "action": "CREATE",
+        "date_applied": "2026-04-01"
+      },
+      {
+        "passport_id": "MCA-BAC-000006",
+        "preferred_name": "Clostridioides difficile",
+        "action": "UPDATE",
+        "date_applied": "2026-04-01"
+      },
+      {
+        "passport_id": "MCA-BAC-000006",
+        "preferred_name": "Clostridioides difficile",
+        "action": "UPDATE",
+        "date_applied": "2026-04-02"
+      }
+    ]
+  },
+  {
+    "pmid": 38786164,
+    "status": "curated",
+    "pdf_available": true,
+    "in_papers_block": true,
+    "title": "A Comparison of Currently Available and Investigational Fecal Microbiota Transplant Products for Recurrent Clostridioides difficile Infection",
+    "journal": "Antibiotics",
+    "year": 2024,
+    "passports": [
+      {
+        "passport_id": "MCA-BAC-000006",
+        "preferred_name": "Clostridioides difficile",
+        "action": "UPDATE",
+        "date_applied": "2026-04-01"
+      },
+      {
+        "passport_id": "MCA-BAC-000006",
+        "preferred_name": "Clostridioides difficile",
+        "action": "UPDATE",
+        "date_applied": "2026-04-02"
+      }
+    ]
+  },
+  {
+    "pmid": 39456922,
+    "status": "curated",
+    "pdf_available": true,
+    "in_papers_block": true,
+    "title": "Oral Pathobiont-Derived Outer Membrane Vesicles in the Oral\u2013Gut Axis",
+    "journal": "International Journal of Molecular Sciences",
+    "year": 2024,
+    "passports": [
+      {
+        "passport_id": "MCA-BAC-000015",
+        "preferred_name": "Akkermansia muciniphila",
+        "action": "UPDATE",
+        "date_applied": "2026-04-01"
+      },
+      {
+        "passport_id": "MCA-BAC-000019",
+        "preferred_name": "Fusobacterium nucleatum",
+        "action": "CREATE",
+        "date_applied": "2026-04-01"
+      },
+      {
+        "passport_id": "MCA-BAC-000022",
+        "preferred_name": "Porphyromonas gingivalis",
+        "action": "CREATE",
+        "date_applied": "2026-04-01"
+      }
+    ]
+  },
+  {
+    "pmid": 40544256,
+    "status": "curated",
+    "pdf_available": true,
+    "in_papers_block": true,
+    "title": "Bloodstream infection by Lactobacillus rhamnosus in a haematology patient: why metagenomics can make the difference",
+    "journal": "Gut Pathogens",
+    "year": 2025,
+    "passports": [
+      {
+        "passport_id": "MCA-BAC-000015",
+        "preferred_name": "Akkermansia muciniphila",
+        "action": "CREATE",
+        "date_applied": "2026-04-01"
+      },
+      {
+        "passport_id": "MCA-FUN-000001",
+        "preferred_name": "Aspergillus terreus",
+        "action": "CREATE",
+        "date_applied": "2026-04-01"
+      },
+      {
+        "passport_id": "MCA-BAC-000016",
+        "preferred_name": "Bifidobacterium",
+        "action": "CREATE",
+        "date_applied": "2026-04-01"
+      },
+      {
+        "passport_id": "MCA-BAC-000018",
+        "preferred_name": "Enterococcus faecalis",
+        "action": "CREATE",
+        "date_applied": "2026-04-01"
+      },
+      {
+        "passport_id": "MCA-BAC-000020",
+        "preferred_name": "Lacticaseibacillus rhamnosus",
+        "action": "CREATE",
+        "date_applied": "2026-04-01"
+      },
+      {
+        "passport_id": "MCA-BAC-000021",
+        "preferred_name": "Pediococcus acidilactici",
+        "action": "CREATE",
+        "date_applied": "2026-04-01"
+      },
+      {
+        "passport_id": "MCA-BAC-000023",
+        "preferred_name": "Staphylococcus epidermidis",
+        "action": "CREATE",
+        "date_applied": "2026-04-01"
+      }
+    ]
+  },
+  {
+    "pmid": 41039149,
+    "status": "curated",
+    "pdf_available": true,
+    "in_papers_block": true,
+    "title": "Clostridioides difficile pathogenesis and control",
+    "journal": "Nature Reviews Microbiology",
+    "year": 2026,
+    "passports": [
+      {
+        "passport_id": "MCA-BAC-000017",
+        "preferred_name": "Clostridium scindens",
+        "action": "CREATE",
+        "date_applied": "2026-04-01"
+      },
+      {
+        "passport_id": "MCA-BAC-000006",
+        "preferred_name": "Clostridioides difficile",
+        "action": "UPDATE",
+        "date_applied": "2026-04-01"
+      }
+    ]
+  },
+  {
+    "pmid": 41641127,
+    "status": "curated",
+    "pdf_available": true,
+    "in_papers_block": true,
+    "title": "Clostridioides difficile infection in pediatric inflammatory bowel disease: current understanding and clinical challenges",
+    "journal": "Frontiers in Pediatrics",
+    "year": 2026,
+    "passports": [
+      {
+        "passport_id": "MCA-BAC-000006",
+        "preferred_name": "Clostridioides difficile",
+        "action": "UPDATE",
+        "date_applied": "2026-04-01"
+      },
+      {
+        "passport_id": "MCA-BAC-000014",
+        "preferred_name": "Clostridium butyricum",
+        "action": "CREATE",
+        "date_applied": "2026-04-01"
+      }
+    ]
+  },
+  {
+    "pmid": 41814006,
+    "status": "curated",
+    "pdf_available": false,
+    "in_papers_block": true,
+    "title": "Antibiotic use and gut microbiome composition links from individual-level prescription data of 14,979 individuals",
+    "journal": "Nature Medicine",
+    "year": 2026
+  }
+]

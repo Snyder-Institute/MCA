@@ -1,7 +1,7 @@
 # Microbial Clinical Atlas (MCA)
 > A curated clinical knowledge base for the human microbiome
 
-![Version](https://img.shields.io/badge/version-v1.0-blue) ![License](https://img.shields.io/badge/license-MIT-green)
+![Version](https://img.shields.io/badge/version-v1.10-blue) ![License](https://img.shields.io/badge/license-MIT-green)
 
 ## Introduction
 
@@ -78,12 +78,13 @@ MCA entries are produced by a two-skill, human-in-the-loop curation pipeline:
 
 ### Skill 1 — mca-paper-curator
 
-Reads a research paper (PDF; filename must be its PMID, e.g. `38123456.pdf`) and writes one staging JSON file per identified taxon. The pipeline runs in four phases using an 8-agent team:
+Reads one or more research papers (PDFs; each filename must be its PMID, e.g. `38123456.pdf`) and writes one staging JSON file per identified taxon. Multiple PDFs run as fully independent parallel pipelines. The pipeline runs in five phases using a 12-agent team:
 
 - **Phase 0** — A paper analyst agent reads the full PDF, identifies all taxa, and extracts study metadata (title, design, population, sample size).
 - **Phase 1** — Four agents run in parallel: a database fetch agent pulls biology and ecology fields from NCBI Taxonomy and BacDive by TaxID; a clinical extractor agent pulls the clinical layer (pathobiont status, roles, bloom triggers, AMR, metabolites, associations) directly from the paper text; a routing agent checks whether each taxon is a CREATE or UPDATE against the existing XML; and a grading agent assigns a single E1/E2/E3 evidence grade to the paper.
-- **Phase 2** — Three ontology enrichment agents run in parallel: a MeSH agent assigns NLM MeSH terms and anatomy IDs; a KEGG agent maps conditions, drugs, and metabolites to KEGG Disease, Drug, and Compound IDs; and an ARO agent maps resistance phenotypes to CARD ARO identifiers.
-- **Phase 3** — One staging JSON file per taxon is written to `staging/`. The XML database is never modified here.
+- **Phase 2** — Four ontology enrichment agents run in parallel: a MeSH agent assigns NLM MeSH terms and anatomy IDs; a KEGG agent maps conditions, drugs, and metabolites to KEGG Disease, Drug, and Compound IDs; an ARO agent maps resistance phenotypes to CARD ARO identifiers; and a VFDB agent maps virulence factor names to VFDB identifiers.
+- **Phase 3** — A null-review agent re-attempts all unresolved ontology IDs using local indexes and web fallbacks, classifying each null as confirmed, filled, or needs-review. One staging JSON file per taxon is then written to `staging/`. The XML database is never modified here.
+- **Phase 4** — A sanity-check agent validates all fields for format, controlled-vocabulary compliance, and logical consistency; a QC report agent aggregates null-field root causes and writes a human-readable Markdown QC report alongside the staging JSON.
 
 ### Skill 2 — mca-xml-update
 

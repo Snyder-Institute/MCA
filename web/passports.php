@@ -121,6 +121,14 @@ include 'header.php';
     .view-toggle-btn.active { background: #404f7c; color: #fff; border-color: #404f7c; }
     #card-grid { display: none; grid-template-columns: repeat(3, 1fr); gap: 16px; margin-top: 16px; }
     #card-grid.visible { display: grid; }
+    @media (max-width: 900px) {
+        #card-grid { grid-template-columns: repeat(2, 1fr); }
+    }
+    @media (max-width: 700px) {
+        #table-view { display: none !important; }
+        #card-grid { display: grid !important; grid-template-columns: 1fr; }
+        .view-toggle-wrap { display: none !important; }
+    }
     .passport-card { display: flex; flex-direction: column; gap: 8px; padding: 16px; border-radius: 6px; background: #fff; border: 1px solid #e5e7eb; text-decoration: none; color: #222; transition: box-shadow 0.15s, border-color 0.15s; cursor: pointer; }
     .passport-card:hover { box-shadow: 0 2px 10px rgba(64,79,124,0.12); border-color: #b0b8d0; }
     .pc-row1 { font-family: monospace; font-size: 11px; color: #aaa; }
@@ -134,7 +142,7 @@ include 'header.php';
     .pc-role-pill { display: inline-block; padding: 2px 7px; border-radius: 3px; font-size: 10px; background: #f0f4ff; color: #404f7c; border: 1px solid #d0d8f0; }
     .pc-divider { color: #ddd; font-size: 10px; }
     .ev-badge { display: inline-block; padding: 2px 8px; border-radius: 4px; font-size: 11px; font-weight: 700; }
-    .ev-E3 { background: #dcfce7; color: #166534; }
+    .ev-E3 { background: #dbeafe; color: #1e40af; }
     .ev-E2 { background: #fef9c3; color: #854d0e; }
     .ev-E1 { background: #f3f4f6; color: #6b7280; }
     #table-view { }
@@ -156,7 +164,7 @@ include 'header.php';
 <div class="page-content">
     <div style="display: flex; justify-content: space-between; align-items: baseline; margin-bottom: 16px;">
         <h2 style="margin: 0;">Taxon Passports</h2>
-        <div style="display: flex; gap: 6px; align-items: center;">
+        <div class="view-toggle-wrap" style="display: flex; gap: 6px; align-items: center;">
             <button class="view-toggle-btn active" id="btn-table" onclick="setView('table')">Table</button>
             <button class="view-toggle-btn" id="btn-cards" onclick="setView('cards')">Cards</button>
         </div>
@@ -214,8 +222,8 @@ include 'header.php';
     </div>
 
     <div id="table-view">
-        <div class="card" style="padding: 0; overflow: hidden;">
-            <table style="width: 100%; border-collapse: collapse; font-size: 15px;">
+        <div class="card" style="padding: 0; overflow-x: auto;">
+            <table style="width: 100%; border-collapse: collapse; font-size: 15px; min-width: 600px;">
                 <thead>
                     <tr style="background-color: #f8f9fa; border-bottom: 2px solid #eee; text-align: left;">
                         <th style="padding: 12px 15px;">ID</th>
@@ -252,7 +260,7 @@ include 'header.php';
                             $ev = $taxon['top_evidence'] ?? null;
                             $ev_class = $ev ? 'ev-' . htmlspecialchars($ev) : '';
                         ?>
-                        <tr class="table-row-link" onclick="window.location.href='<?php echo $taxon['passport_id']; ?>'">
+                        <tr class="table-row-link" onclick="window.location.href='passport.php?id=<?php echo urlencode($taxon['passport_id']); ?>'">
                             <td style="padding: 12px 15px; font-family: monospace; font-size: 11px; color: #555; white-space: nowrap;">
                                 <?php echo htmlspecialchars($taxon['passport_id']); ?>
                             </td>
@@ -296,7 +304,7 @@ include 'header.php';
     <div id="card-grid">
         <?php foreach ($all_taxa as $taxon): ?>
             <?php $ev_c = $taxon['top_evidence'] ?? null; ?>
-            <div class="passport-card" onclick="window.location.href='<?php echo $taxon['passport_id']; ?>'">
+            <div class="passport-card" onclick="window.location.href='passport.php?id=<?php echo urlencode($taxon['passport_id']); ?>'">
                 <!-- Row 1: ID -->
                 <div class="pc-row1"><?php echo htmlspecialchars($taxon['passport_id']); ?></div>
 

@@ -33,6 +33,7 @@ MCA stores VFDB IDs on `virulence_factor` taxon tags to make virulence factor an
 |-------|-------------|
 | `entity_extractor output` | `clinical_profile.virulence_factors[]` — list of `{value, vfdb_id: null}` objects |
 | `taxon preferred_name` | Used to look up the organism in the local VFDB JSON |
+| `vfdb_path` | Absolute path to the local VFDB JSON mirror — resolved by the orchestrator from project memory (`reference_vfdb_path.md`) before this agent is called. The orchestrator must pass this path explicitly; the agent does not access memory directly. |
 
 ---
 
@@ -40,9 +41,7 @@ MCA stores VFDB IDs on `virulence_factor` taxon tags to make virulence factor an
 
 **Local VFDB JSON mirror (required):**
 
-```
-/Users/heewon.seo/Library/CloudStorage/Dropbox-BioinformaticsHub/Projects/mca/vfdb/vfdb.json
-```
+Path is passed by the orchestrator as `vfdb_path` (resolved from project memory `reference_vfdb_path.md`).
 
 This file was generated from `VFs.xls` (VFDB Set A — 711 curated prototype VFs, downloaded 2026-03-27). It is a JSON object keyed by **lowercase organism name**, where each value is an array of VF entries:
 
@@ -70,7 +69,7 @@ This file was generated from `VFs.xls` (VFDB Set A — 711 curated prototype VFs
 
 ### Task 1 — Load local VFDB index
 
-1. Read the file at the path above using the Read tool.
+1. Read the file at `vfdb_path` (passed by orchestrator) using the Read tool.
 2. Parse the JSON and build a lookup keyed by lowercase organism name.
 3. Find the entry for the taxon being processed:
    - Normalise the taxon's `preferred_name` to lowercase (e.g., `"Staphylococcus aureus"` → `"staphylococcus aureus"`)

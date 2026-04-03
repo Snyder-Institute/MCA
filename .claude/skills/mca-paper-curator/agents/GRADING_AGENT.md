@@ -43,8 +43,12 @@ Full criteria in `references/GRADING_CRITERIA.md`.
 |-------|-------------------------------|
 | `E3` | Systematic review, meta-analysis, clinical guideline, multiple independent human cohorts in one paper |
 | `E2` | Single cohort (prospective/retrospective), single RCT, case-control, cross-sectional (human) |
-| `E1` | Animal model, in vitro, case report/series, mechanistic, pilot/exploratory |
-| `UNCERTAIN` | Study design ambiguous, not reported, or does not fit any tier |
+| `E1` | Animal model, in vitro, case report/series (<5 subjects), mechanistic, pilot/exploratory |
+| `UNCERTAIN` | Study design ambiguous, not reported, or does not fit any tier — **including narrative reviews, scoping reviews, and perspective/opinion papers that contain no original data** |
+
+**Narrative/scoping/perspective reviews → always UNCERTAIN.** These paper types synthesise existing literature without generating original data. Even if the paper cites strong primary studies, the synthesis itself cannot be graded on the E1–E3 scale. Assign `UNCERTAIN` with `uncertain_reason: "Narrative/scoping/perspective review — no original data; evidence grade applies to the cited primary studies, not this synthesis."` Do not assign E1 to these papers.
+
+**Systematic review / meta-analysis → E3.** These differ from narrative reviews by having a defined search strategy, inclusion/exclusion criteria, and quantitative synthesis. If a paper calls itself a "systematic review" or "meta-analysis", grade E3 regardless of the underlying study designs reviewed.
 
 For mixed-design papers (e.g., human cohort + mouse validation): grade on the primary human data component; note the mixed design in the rationale.
 

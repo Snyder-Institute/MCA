@@ -126,7 +126,7 @@ include 'header.php';
 
 /* ── Pathobiont key ──────────────────────────────────────────────── */
 .pb-key-row { display: flex; flex-wrap: wrap; gap: 16px; margin-top: 4px; }
-.pb-key-item { display: flex; align-items: center; gap: 8px; }
+.pb-key-item { display: flex; align-items: flex-start; gap: 8px; }
 .pb-key-badge { padding: 4px 12px; border-radius: 4px; font-weight: 800; font-size: 11px; text-transform: uppercase; letter-spacing: 0.04em; border: 1px solid; }
 .pb-key-yes { background: #007bff; color: #fff; border-color: #0056b3; }
 .pb-key-ctx { background: #4b5563; color: #fff; border-color: #374151; }
@@ -145,7 +145,7 @@ include 'header.php';
     white-space: nowrap;
     flex-shrink: 0;
 }
-.ev-badge-e3 { background: #dcfce7; color: #166534; border-color: #4ade80; }
+.ev-badge-e3 { background: #dbeafe; color: #1e40af; border-color: #93c5fd; }
 .ev-badge-e2 { background: #fef3c7; color: #92400e; border-color: #fbbf24; }
 .ev-badge-e1 { background: #f3f4f6; color: #6b7280; border-color: #d1d5db; }
 .ev-bar-desc { font-size: 13px; color: #555; }
@@ -180,7 +180,8 @@ include 'header.php';
 .btn-download:hover { background: #2e3a5e; color: #fff !important; text-decoration: none !important; }
 
 /* ── Data model table ────────────────────────────────────────────── */
-.dm-table { width: 100%; border-collapse: collapse; font-size: 13px; margin-top: 8px; }
+.table-scroll { overflow-x: auto; -webkit-overflow-scrolling: touch; }
+.dm-table { width: 100%; border-collapse: collapse; font-size: 13px; margin-top: 8px; min-width: 480px; }
 .dm-table th { text-align: left; padding: 6px 10px; background: #f7f7f7; border: 1px solid #e6e6e6; color: #333; font-weight: 700; }
 .dm-table td { padding: 6px 10px; border: 1px solid #e6e6e6; color: #444; vertical-align: top; }
 .dm-table tr:nth-child(even) td { background: #fafafa; }
@@ -200,7 +201,11 @@ include 'header.php';
     </p>
 
     <!-- ── Live stats ─────────────────────────────────────────────── -->
-    <div class="stat-strip">
+    <div class="stat-strip">        
+        <div class="stat-card">
+            <div class="stat-number"><?php echo (int)$n_papers; ?></div>
+            <div class="stat-label">Papers Curated</div>
+        </div>
         <div class="stat-card">
             <div class="stat-number"><?php echo (int)$n_passports; ?></div>
             <div class="stat-label">Taxon Passports</div>
@@ -210,57 +215,92 @@ include 'header.php';
             <div class="stat-label">Clinical Associations</div>
         </div>
         <div class="stat-card">
-            <div class="stat-number"><?php echo (int)$n_papers; ?></div>
-            <div class="stat-label">Papers Curated</div>
-        </div>
-        <div class="stat-card">
             <div class="stat-number"><?php echo (int)$n_refs; ?></div>
             <div class="stat-label">Ontology References</div>
         </div>
     </div>
 
-    <!-- ── Pathobiont key ────────────────────────────────────────── -->
+    <!-- ── MCA Features ──────────────────────────────────────────── -->
     <div class="about-section">
-        <h2>Pathobiont Status</h2>
-        <p style="font-size: 14px; color: #555; margin: 0 0 14px;">
-            Each Taxon Passport records whether the organism is considered a pathobiont — a commensal microorganism capable of causing disease under specific conditions such as immunosuppression, antibiotic disruption, or barrier dysfunction.
-        </p>
-        <div style="display: flex; flex-direction: column; gap: 10px;">
-            <div class="pb-key-item">
-                <span class="pb-key-badge pb-key-yes">Yes</span>
-                <span class="pb-key-desc">Recognised pathobiont</span>
-            </div>
-            <div class="pb-key-item">
-                <span class="pb-key-badge pb-key-ctx">Context dependent</span>
-                <span class="pb-key-desc">Pathobiont status depends on host factors or clinical setting</span>
-            </div>
-            <div class="pb-key-item">
-                <span class="pb-key-badge pb-key-no">Unknown / No</span>
-                <span class="pb-key-desc">Insufficient evidence or not considered a pathobiont</span>
-            </div>
-        </div>
-    </div>
+        <h2>MCA Features</h2>
+        <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)); gap: 20px; margin-top: 16px;">
 
-    <!-- ── Evidence distribution ──────────────────────────────────── -->
-    <div class="about-section">
-        <h2>Evidence Distribution</h2>
-        <p style="font-size: 14px; color: #555; margin: 0 0 12px;">
-            Clinical associations are graded by study design. Each grade reflects the strongest design reported for that finding.
-        </p>
-        <?php
-        $grades = [
-            ['E3', 'ev-badge-e3', 'Strong — systematic review, meta-analysis, or multiple independent human cohorts'],
-            ['E2', 'ev-badge-e2', 'Moderate — single human cohort, RCT, case-control, or cross-sectional'],
-            ['E1', 'ev-badge-e1', 'Limited — animal model, in vitro, case report, or mechanistic work only'],
-        ];
-        ?>
-        <div style="display: flex; flex-direction: column; gap: 10px; margin-top: 4px;">
-            <?php foreach ($grades as [$label, $cls, $desc]): ?>
-            <div style="display: flex; align-items: center; gap: 12px;">
-                <span class="ev-grade-badge <?php echo $cls; ?>"><?php echo $label; ?></span>
-                <span class="ev-bar-desc"><?php echo $desc; ?></span>
+            <!-- Pathobiont Status -->
+            <div style="background: #fafafa; border: 1px solid #eee; border-radius: 10px; padding: 20px;">
+                <h3 style="font-size: 15px; color: #222; margin: 0 0 10px;">Pathobiont Status</h3>
+                <p style="font-size: 13px; color: #555; margin: 0 0 14px;">
+                    Each Taxon Passport records whether the organism is considered a pathobiont — a commensal capable of causing disease under conditions such as immunosuppression, antibiotic disruption, or barrier dysfunction.
+                </p>
+                <div style="display: flex; flex-direction: column; gap: 8px;">
+                    <div class="pb-key-item">
+                        <span class="pb-key-badge pb-key-yes">Yes</span>
+                        <span class="pb-key-desc">Recognised pathobiont</span>
+                    </div>
+                    <div class="pb-key-item">
+                        <span class="pb-key-badge pb-key-ctx">CD</span>
+                        <span class="pb-key-desc"><strong>Context dependent</strong> — pathobiont status depends on host factors or clinical setting</span>
+                    </div>
+                    <div class="pb-key-item">
+                        <span class="pb-key-badge pb-key-no">No</span>
+                        <span class="pb-key-desc">Not considered a pathobiont</span>
+                    </div>
+                    <div class="pb-key-item">
+                        <span class="pb-key-badge pb-key-no">UK</span>
+                        <span class="pb-key-desc"><strong>Unknown</strong> — insufficient evidence to classify</span>
+                    </div>
+                </div>
             </div>
-            <?php endforeach; ?>
+
+            <!-- Evidence Grading -->
+            <div style="background: #fafafa; border: 1px solid #eee; border-radius: 10px; padding: 20px;">
+                <h3 style="font-size: 15px; color: #222; margin: 0 0 10px;">Evidence Grading</h3>
+                <p style="font-size: 13px; color: #555; margin: 0 0 14px;">
+                    Every clinical association is graded by study design. Each grade reflects the strongest design reported for that finding.
+                </p>
+                <?php
+                $grades = [
+                    ['E3', 'ev-badge-e3', 'Strong — systematic review, meta-analysis, or multiple independent human cohorts'],
+                    ['E2', 'ev-badge-e2', 'Moderate — single human cohort, RCT, case-control, or cross-sectional'],
+                    ['E1', 'ev-badge-e1', 'Limited — animal model, in vitro, case report, or mechanistic work only'],
+                ];
+                ?>
+                <div style="display: flex; flex-direction: column; gap: 8px;">
+                    <?php foreach ($grades as [$label, $cls, $desc]): ?>
+                    <div style="display: flex; align-items: flex-start; gap: 10px;">
+                        <span class="ev-grade-badge <?php echo $cls; ?>" style="flex-shrink:0;"><?php echo $label; ?></span>
+                        <span class="ev-bar-desc"><?php echo $desc; ?></span>
+                    </div>
+                    <?php endforeach; ?>
+                </div>
+            </div>
+
+            <!-- Cross-Database Linkage -->
+            <div style="background: #fafafa; border: 1px solid #eee; border-radius: 10px; padding: 20px;">
+                <h3 style="font-size: 15px; color: #222; margin: 0 0 10px;">Cross-Database Linkage</h3>
+                <p style="font-size: 13px; color: #555; margin: 0 0 14px;">
+                    Every passport field is anchored to a standard ontology or external database, making MCA entries interoperable with other bioinformatics resources.
+                </p>
+                <div style="display: flex; flex-direction: column; gap: 8px; font-size: 13px; color: #444;">
+                    <?php
+                    $db_links = [
+                        ['NCBI',   '#eef0f8','#404f7c','#c8cde8', 'Taxon lineage, rank, preferred name, and stable TaxID'],
+                        ['MeSH',   '#d1fae5','#065f46','#6ee7b7', 'Disease terms and anatomy on associations and body-site fields'],
+                        ['KEGG',   '#ffedd5','#9a3412','#fdba74', 'Disease, Drug, and Compound IDs on clinical conditions, bloom triggers, and metabolites'],
+                        ['ARO',    '#fee2e2','#991b1b','#fca5a5', 'Antimicrobial resistance gene ontology on AMR highlights'],
+                        ['VFDB',   '#fce7f3','#9d174d','#f9a8d4', 'Virulence factor database on virulence annotations'],
+                        ['ChEBI',  '#e0f2fe','#0369a1','#7dd3fc', 'Chemical entity identifiers on metabolites'],
+                        ['BacDive','#eef0f8','#404f7c','#c8cde8', 'Morphology, physiology, and ecological niche reference data'],
+                    ];
+                    foreach ($db_links as [$label, $bg, $fg, $br, $desc]):
+                    ?>
+                    <div style="display: flex; align-items: flex-start; gap: 10px;">
+                        <span style="display:inline-block; padding:2px 8px; border-radius:4px; font-size:11px; font-weight:700; background:<?php echo $bg; ?>; color:<?php echo $fg; ?>; border:1px solid <?php echo $br; ?>; white-space:nowrap; flex-shrink:0;"><?php echo $label; ?></span>
+                        <span><?php echo $desc; ?></span>
+                    </div>
+                    <?php endforeach; ?>
+                </div>
+            </div>
+
         </div>
     </div>
 
@@ -268,7 +308,7 @@ include 'header.php';
     <div class="about-section">
         <h2>Curation Process</h2>
         <p style="font-size: 14px; color: #555; margin: 0 0 20px;">
-            Each Taxon Passport is assembled by a two-skill AI-assisted curation pipeline. A human curator reviews every staging file before any changes are committed to the database.
+            Each Taxon Passport is assembled by a two-skill AI-assisted curation pipeline. An expert curator reviews every staging file before any changes are committed to the database.
         </p>
 
         <div class="pipeline">
@@ -316,8 +356,8 @@ include 'header.php';
             <div class="pipeline-step">
                 <div class="step-badge">4</div>
                 <div class="step-body">
-                    <strong>Staging File &amp; Human Review</strong>
-                    <p>A structured JSON staging file is written per taxon (<code>staging/YYYY-MM-DD_taxon-name.json</code>). A human curator reviews every field — proposed additions, evidence rationale, and ontology IDs — before approving.</p>
+                    <strong>Staging File &amp; Expert Review</strong>
+                    <p>A structured JSON staging file is written per taxon (<code>staging/PMID_YYYY-MM-DD_taxon-name.json</code>). An expert curator reviews every field — proposed additions, evidence rationale, and ontology IDs — before approving.</p>
                 </div>
             </div>
 
@@ -344,7 +384,7 @@ include 'header.php';
         <p style="font-size: 14px; color: #555; margin: 0 0 12px;">
             Each Taxon Passport is the central record, linked to satellite tables via a surrogate integer primary key. The canonical export format is versioned XML; the MySQL schema is derived from it via <code>xml2sql.py</code>.
         </p>
-        <table class="dm-table">
+        <div class="table-scroll"><table class="dm-table">
             <thead>
                 <tr><th>Layer</th><th>Fields</th><th>Source</th></tr>
             </thead>
@@ -380,7 +420,32 @@ include 'header.php';
                     <td>Curated literature; NLM MeSH; KEGG MEDICUS</td>
                 </tr>
             </tbody>
-        </table>
+        </table></div>
+    </div>
+
+    <!-- ── Roadmap ───────────────────────────────────────────────── -->
+    <div class="about-section">
+        <h2>Roadmap</h2>
+        <p style="font-size: 14px; color: #555; margin: 0 0 14px;">
+            Planned extensions to MCA under active development or under consideration.
+        </p>
+        <div class="table-scroll"><table class="dm-table">
+            <thead>
+                <tr><th>Feature</th><th>Description</th><th>Status</th></tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td><strong>Pathway-level search</strong></td>
+                    <td>Search passports by KEGG Pathway name (e.g. "butanoate metabolism"). Pathway annotations are derived computationally from existing KEGG Compound links — not manually curated — and are used for search indexing only.</td>
+                    <td>In development</td>
+                </tr>
+                <tr>
+                    <td><strong>Gene-level annotation (KEGG Orthology)</strong></td>
+                    <td>Link taxa to KEGG Ortholog (KO) numbers representing key functional genes (e.g. bile salt hydrolase <em>bsh</em>, butyrate kinase <em>buk</em>). Will enable searches such as "which taxa carry the bile salt hydrolase gene?" and connect MCA directly to nucleotide-sequence-based functional profiling (16S rRNA, shotgun metagenomics, metatranscriptomics). Requires integration of strain-level genomic data and KO assignment pipelines.</td>
+                    <td>Planned</td>
+                </tr>
+            </tbody>
+        </table></div>
     </div>
 
     <!-- ── Acknowledgements ──────────────────────────────────────── -->
@@ -389,7 +454,7 @@ include 'header.php';
         <p style="font-size: 14px; color: #555; margin: 0 0 14px;">
             MCA integrates data from the following publicly available resources. We gratefully acknowledge the teams that build and maintain them.
         </p>
-        <table class="dm-table">
+        <div class="table-scroll"><table class="dm-table">
             <thead>
                 <tr><th>Resource</th><th>Used For</th><th>Reference</th></tr>
             </thead>
@@ -420,7 +485,7 @@ include 'header.php';
                     <td>Comprehensive Antibiotic Resistance Database, McMaster University</td>
                 </tr>
             </tbody>
-        </table>
+        </table></div>
     </div>
 
     <!-- ── Local data mirrors ───────────────────────────────────── -->
@@ -429,48 +494,55 @@ include 'header.php';
         <p style="font-size: 14px; color: #555; margin: 0 0 12px;">
             For curation speed and reproducibility, the pipeline maintains local snapshots of all reference databases used during enrichment. These mirrors are updated periodically and are not served publicly.
         </p>
-        <table class="dm-table">
+        <div class="table-scroll"><table class="dm-table">
             <thead>
-                <tr><th>Database</th><th>Snapshot date</th><th>Used by</th></tr>
+                <tr><th>Database</th><th>Used by</th><th>Source</th><th>Snapshot date</th></tr>
             </thead>
             <tbody>
                 <tr>
                     <td><strong>NCBI Taxonomy</strong></td>
-                    <td>2026-04-02</td>
                     <td>TaxID lookup, name resolution</td>
+                    <td><a href="https://www.ncbi.nlm.nih.gov/taxonomy" target="_blank" rel="noopener" style="color:#404f7c;">ncbi.nlm.nih.gov/taxonomy</a></td>
+                    <td>2026-04-02</td>
                 </tr>
                 <tr>
                     <td><strong>BacDive</strong></td>
-                    <td>2026-04-02</td>
                     <td>Gram status, oxygen tolerance, morphology, isolation sources</td>
+                    <td><a href="https://bacdive.dsmz.de" target="_blank" rel="noopener" style="color:#404f7c;">bacdive.dsmz.de</a></td>
+                    <td>2026-04-02</td>
                 </tr>
                 <tr>
                     <td><strong>KEGG</strong></td>
-                    <td>2025-10-26</td>
                     <td>Disease, drug, and compound ID enrichment</td>
+                    <td><a href="https://www.kegg.jp" target="_blank" rel="noopener" style="color:#404f7c;">kegg.jp</a></td>
+                    <td>2025-10-26</td>
                 </tr>
                 <tr>
                     <td><strong>CARD / ARO</strong></td>
-                    <td>2026-04-02</td>
                     <td>AMR resistance ontology IDs</td>
+                    <td><a href="https://card.mcmaster.ca" target="_blank" rel="noopener" style="color:#404f7c;">card.mcmaster.ca</a></td>
+                    <td>2026-04-02</td>
                 </tr>
                 <tr>
                     <td><strong>ChEBI</strong></td>
-                    <td>2026-04-02</td>
                     <td>Metabolite ID enrichment</td>
+                    <td><a href="https://www.ebi.ac.uk/chebi" target="_blank" rel="noopener" style="color:#404f7c;">ebi.ac.uk/chebi</a></td>
+                    <td>2026-04-02</td>
                 </tr>
                 <tr>
                     <td><strong>VFDB</strong></td>
-                    <td>2026-03-27</td>
                     <td>Virulence factor annotations</td>
+                    <td><a href="https://www.mgc.ac.cn/VFs" target="_blank" rel="noopener" style="color:#404f7c;">mgc.ac.cn/VFs</a></td>
+                    <td>2026-03-27</td>
                 </tr>
                 <tr>
-                    <td><strong>DOID</strong></td>
-                    <td>2026-04-02</td>
+                    <td><strong>DO</strong></td>
                     <td>Disease ontology cross-referencing</td>
+                    <td><a href="https://disease-ontology.org" target="_blank" rel="noopener" style="color:#404f7c;">disease-ontology.org</a></td>
+                    <td>2026-04-02</td>
                 </tr>
             </tbody>
-        </table>
+        </table></div>
     </div>
 
     <!-- ── Download ───────────────────────────────────────────────── -->
@@ -481,10 +553,17 @@ include 'header.php';
         </p>
         <div class="download-card" style="margin-bottom: 12px;">
             <div class="download-card-text">
-                <strong>MCA_DB_latest.xml</strong>
-                <p>Full database in structured XML — includes all passports, associations, ontology references, and metadata. Suitable for downstream tools and programmatic import.</p>
+                <strong>Curated Literature</strong>
+                <p>Full list of all <?php echo (int)$n_papers; ?> papers curated into MCA, with authors, journal, year, and PubMed links.</p>
             </div>
-            <a class="btn-download" href="data/MCA_DB_latest.xml" download>Download XML</a>
+            <a class="btn-download" href="literature.php">View Papers</a>
+        </div>
+        <div class="download-card" style="margin-bottom: 12px;">
+            <div class="download-card-text">
+                <strong>Releases</strong>
+                <p>Versioned XML and SQL snapshots for each official release. Use these for reproducible imports and downstream pipelines.</p>
+            </div>
+            <a class="btn-download" href="https://github.com/Snyder-Institute/MCA/releases" target="_blank" rel="noopener">View Releases</a>
         </div>
         <div class="download-card">
             <div class="download-card-text">
@@ -493,6 +572,16 @@ include 'header.php';
             </div>
             <a class="btn-download" href="https://github.com/Snyder-Institute/MCA" target="_blank" rel="noopener">View on GitHub</a>
         </div>
+    </div>
+
+    <!-- ── Contact ──────────────────────────────────────────────────── -->
+    <div class="about-section">
+        <h2>Contact</h2>
+        <p style="font-size: 14px; color: #555; line-height: 1.8; margin: 0;">
+            We would love to hear from you. If you would like to suggest specific papers for inclusion in MCA, or if you have spotted an error in any of the records, please reach out to us at
+            <a href="mailto:bioinformatics@ucalgary.ca" style="color: #404f7c; font-weight: 700;">bioinformatics@ucalgary.ca</a> —
+            we appreciate every contribution and will do our best to respond promptly.
+        </p>
     </div>
 
 </div>

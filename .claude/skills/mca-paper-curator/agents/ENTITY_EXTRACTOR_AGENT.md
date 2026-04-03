@@ -89,12 +89,7 @@ One object per taxon:
       "ncbi_taxid": null,
       "synonyms": []
     },
-    "biology": {
-      "gram_status": null,
-      "oxygen_tolerance": null,
-      "morphology": null,
-      "key_traits": []
-    },
+    // biology block intentionally absent — populated by db_fetch_agent and merged by orchestrator
     "ecology": {
       "primary_niches": [
         {"value": "", "mesh_anatomy_id": null}

@@ -64,23 +64,28 @@ Then fetch the top hit TaxID.
 
 | Use case | Endpoint |
 |----------|----------|
+| Search by NCBI TaxID | `GET /search?s[ncbi_tax_id]={taxid}` |
 | Fetch full strain record by BacDive ID | `GET /fetch/{bacdive_id}` |
 | Search by taxon (species) | `GET /taxon/{genus}/{species_epithet}` |
 | Search by taxon (genus only) | `GET /taxon/{genus}` |
 | Search by 16S accession | `GET /sequence_16s/{seq_acc_num}` |
 | Search by genome accession | `GET /sequence_genome/{seq_acc_num}` |
 
-**Taxon name parsing for query construction:**
+**Query strategy (3-pass — stop at first hit):**
 
-| Taxon rank | Query strategy |
-|------------|---------------|
-| species | `GET /taxon/{genus}/{species_epithet}` |
-| genus | `GET /taxon/{genus}` |
-| family or above | No direct family-level endpoint. Query by the **type genus** of the family if known; otherwise skip BacDive and log `"BacDive has no family-level endpoint; BacDive fetch skipped"` in `db_fetch_notes`. Biology/ecology fields remain `null`. |
+| Pass | Query | Notes |
+|------|-------|-------|
+| 1 | `GET /search?s[ncbi_tax_id]={ncbi_taxid}` | Unambiguous; immune to name changes and synonyms. Always try first. |
+| 2 | `GET /taxon/{genus}/{species_epithet}` or `GET /taxon/{genus}` | Parsed from `preferred_name` (split on whitespace; take first two tokens). |
+| 3 | Same name-based query for each synonym in turn | Use synonyms from the MCA XML `<Synonyms>` block; stop at first hit. |
 
-BacDive returns JSON. Each response contains an array of strain records. When multiple records are returned, aggregate as follows:
-- **Scalar fields** (`gram_status`, `oxygen_tolerance`, `morphology`): use the majority value across records. Heterogeneity is measured as: (count of records with the minority value) ÷ (total records returned by BacDive for this taxon). If this fraction exceeds 20%, set the field to `null` and log in `db_fetch_notes` (e.g., `"gram_status: 3/12 records gram-positive, 9/12 gram-negative — heterogeneous, set to null"`). If heterogeneity is exactly 20%, use the majority value.
-- **List fields** (`primary_niches`, `reservoirs`): union of all unique controlled-vocabulary values across records.
+Log which pass produced the hit in `db_fetch_notes` (e.g., `"BacDive matched via synonym 'Clostridium difficile'"`). If all three passes return zero results, log `"no_bacdive_match"` and leave biology/ecology fields null.
+
+**Family-rank taxa:** No BacDive endpoint exists for family-level lookup. Skip all three passes. Log `"family_rank_skipped"`. Only `bacdive_url` (advsearch) is written.
+
+BacDive returns JSON. Each response contains an array of strain records. The cache sorts type strains first (`is_type_strain: true`). When aggregating:
+- **Scalar fields** (`gram_status`, `oxygen_tolerance`, `morphology`): if any type strain records are present, use majority vote across type strains only. If no type strains are present, use majority vote across all fetched records. Heterogeneity threshold: if the minority fraction exceeds 20% of the records used for voting, set to `null` and log (e.g., `"gram_status heterogeneous across type strains — set to null"`).
+- **List fields** (`primary_niches`, `reservoirs`): union of all unique controlled-vocabulary values across all fetched records (type strains + others).
 
 **Field mapping:**
 
@@ -99,13 +104,23 @@ BacDive returns JSON. Each response contains an array of strain records. When mu
 
 | Taxon rank | URL strategy |
 |------------|-------------|
-| species / genus | Extract the BacDive internal strain ID from the API response (top-level `id` field on each strain record). Use the first record's ID. Construct: `https://bacdive.dsmz.de/strain/{bacdive_id}` — e.g., `https://bacdive.dsmz.de/strain/14487` for *Staphylococcus aureus*. |
-| family or above | No strain records are fetched (no family-level endpoint). Construct an advsearch URL using the family name: `https://bacdive.dsmz.de/advsearch?fg[0][gc]=OR&fg[0][fl][1][fd]=Family&fg[0][fl][1][fo]=contains&fg[0][fl][1][fv]={FamilyName}&fg[0][fl][1][fvd]=strains-family-1` — e.g., `https://bacdive.dsmz.de/advsearch?fg[0][gc]=OR&fg[0][fl][1][fd]=Family&fg[0][fl][1][fo]=contains&fg[0][fl][1][fv]=Enterobacteriaceae&fg[0][fl][1][fvd]=strains-family-1` |
+| species / subspecies | Select the best-matching strain record and construct `https://bacdive.dsmz.de/strain/{bacdive_id}`. See **Strain selection rules** below. |
+| genus | BacDive is strain-level — there is no single representative strain for a genus. Do **not** write a `bacdive_url` for genus-rank passports. Leave `bacdive_url` null and log `"genus_rank_no_url"`. |
+| family or above | Leave `bacdive_url` null and log `"family_rank_no_url"`. BacDive is available at species level and below only. |
 
-**`bacdive_url` for family-rank taxa:**
-BacDive v2 has no family-level endpoint, so no strain records are fetched. However, always populate `bacdive_url` with the advsearch URL using the family name. This is the only field written to `biology` for family-rank taxa — gram_status, oxygen_tolerance, morphology, and key_traits remain null.
+**Strain selection rules (for species / subspecies `bacdive_url`):**
 
-**`biology` block rule:** Always write a `biology` block in the staging file when a `bacdive_url` can be constructed (i.e., whenever `preferred_name` is known). Never omit the block solely because biology fields are null.
+Select a strain record using this priority order — stop at the first match:
+
+1. **TaxID match + type strain**: record whose NCBI TaxID list includes the passport's `ncbi_taxid` AND `is_type_strain: true`
+2. **TaxID match, not type strain**: record whose NCBI TaxID list includes the passport's `ncbi_taxid` (use the first such record)
+3. **No TaxID match**: if no record lists the passport's `ncbi_taxid`, log `"bacdive_taxid_mismatch: no record matches ncbi_taxid={taxid}"` and set `bacdive_url: null` — **do not link to a non-matching record**
+
+When multiple records match at the same priority level, prefer type strains; among type strains, prefer the record whose organism name most closely matches `preferred_name` (exact match > genus match).
+
+**Subspecies passports:** if the passport `taxon_rank` is `species` but BacDive only returns subspecies records, prefer the record whose organism name matches `preferred_name` most exactly (e.g., for *Lacticaseibacillus paracasei* prefer a record named exactly *L. paracasei* subsp. *paracasei*, not *L. paracasei* subsp. *tolerans*). Log the selected subspecies name in `db_fetch_notes`.
+
+**`biology` block rule:** Always write a `biology` block in the staging file even when all biology fields are null. Never omit the block solely because biology fields are null.
 
 **Transmission routes:** BacDive does not provide transmission route data. Leave `ecology.transmission_routes: []` — this field remains for `entity_extractor_agent` to populate from the paper if reported.
 
@@ -124,7 +139,7 @@ All fetched values **must** be mapped to `references/CONTROLLED_VOCABULARY.md` b
 | `anaerobic` | `obligate anaerobe` |
 | `facultatively anaerobic` | `facultative anaerobe` |
 | `microaerophilic` | `microaerophile` |
-| `rod` / `bacillus` | `rod` |
+| `rod` / `bacillus` | `bacillus (rod)` |
 | `coccus` / `sphere` | `coccus` |
 | `gastrointestinal tract` | `gut` |
 | `feces` / `stool` | `gut` |

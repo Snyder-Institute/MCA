@@ -4,7 +4,12 @@
 -- Engine:   InnoDB
 -- Charset:  utf8mb4 / utf8mb4_unicode_ci
 -- Tables:   11
+-- Sections: 0 meta/migrations  1 passport      2 biology
+--           3 taxon_tag         4 metabolite    5 paper
+--           6 passport_pmid     7 association group
 -- ============================================================
+
+DROP DATABASE IF EXISTS MCA;
 
 CREATE DATABASE IF NOT EXISTS MCA
   CHARACTER SET utf8mb4
@@ -177,7 +182,12 @@ CREATE TABLE paper (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 -- ============================================================
--- 7) Taxon-level evidence PMIDs (0..N per passport)
+-- 6) Taxon-level evidence PMIDs (0..N per passport)
+--
+-- Note: pmid here is a bare citation reference — no FK to the
+-- paper table by design. Paper metadata is optional; PMID
+-- citations are not. The paper table is populated separately
+-- from the XML <Papers> block and may lag behind citations.
 -- ============================================================
 
 CREATE TABLE passport_pmid (
@@ -196,7 +206,7 @@ CREATE TABLE passport_pmid (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 -- ============================================================
--- 8) Clinical associations
+-- 7) Clinical associations
 -- ============================================================
 
 CREATE TABLE association (
@@ -205,7 +215,7 @@ CREATE TABLE association (
   association_text TEXT         NOT NULL,
   content_hash     CHAR(64)     NOT NULL,                       -- SHA-256 of normalised association_text
   evidence_level   ENUM('E1','E2','E3') NOT NULL,
-  evidence_type    VARCHAR(255) NOT NULL,
+  evidence_type    VARCHAR(255) NULL,              -- null when study design not reported in paper
 
   created_at       TIMESTAMP    NOT NULL DEFAULT CURRENT_TIMESTAMP,
   updated_at       TIMESTAMP    NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
@@ -241,6 +251,8 @@ CREATE TABLE assoc_ref (
 -- ----
 
 -- PMIDs per association
+-- Note: pmid here carries no FK to the paper table (same loose-coupling
+-- rationale as passport_pmid — citation reference, not a paper record join).
 CREATE TABLE assoc_pmid (
   id             INT UNSIGNED NOT NULL AUTO_INCREMENT,
   association_id INT UNSIGNED NOT NULL,

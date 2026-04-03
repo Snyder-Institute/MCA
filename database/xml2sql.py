@@ -105,7 +105,7 @@ def main():
         db_version = get_text(meta_el, 'version', 'unknown')
         w('-- meta')
         w(f"INSERT INTO meta (key_name, key_value) VALUES ('db_version', {esc(db_version)})")
-        w(f"  ON DUPLICATE KEY UPDATE key_value = VALUES(key_value);")
+        w(f"  ON DUPLICATE KEY UPDATE key_value = {esc(db_version)};")
         w()
 
     # ── papers ──────────────────────────────────────────────────────────────
@@ -126,11 +126,11 @@ def main():
                     f'INSERT INTO paper '
                     f'(pmid, title, authors, journal, year, study_design, population, sample_size) '
                     f'VALUES ({pmid}, {title}, {authors}, {journal}, {year}, '
-                    f'{study_design}, {population}, {sample_size}) '
-                    f'ON DUPLICATE KEY UPDATE title=VALUES(title), authors=VALUES(authors), '
-                    f'journal=VALUES(journal), year=VALUES(year), '
-                    f'study_design=VALUES(study_design), population=VALUES(population), '
-                    f'sample_size=VALUES(sample_size);'
+                    f'{study_design}, {population}, {sample_size}) AS _new '
+                    f'ON DUPLICATE KEY UPDATE title=_new.title, authors=_new.authors, '
+                    f'journal=_new.journal, year=_new.year, '
+                    f'study_design=_new.study_design, population=_new.population, '
+                    f'sample_size=_new.sample_size;'
                 )
         w()
 
@@ -238,8 +238,26 @@ def main():
         for ca in assocs:
             assoc_text   = get_text(ca, 'association_text')
             content_hash = get_text(ca, 'content_hash')
-            ev_grade     = get_text(ca, 'evidence_level', 'E2')
-            ev_type      = get_text(ca, 'evidence_type', '')
+            ev_grade     = get_text(ca, 'evidence_level')
+            ev_type      = get_text(ca, 'evidence_type')
+
+            if content_hash is None:
+                print(
+                    f'  WARNING: skipped association on {pid_str} — missing content_hash: '
+                    f'{(assoc_text or "")[:70]}...',
+                    file=sys.stderr,
+                )
+                skipped_assocs += 1
+                continue
+
+            if ev_grade is None:
+                print(
+                    f'  WARNING: missing evidence_level on {pid_str}, association: '
+                    f'{(assoc_text or "")[:70]}... — skipping',
+                    file=sys.stderr,
+                )
+                skipped_assocs += 1
+                continue
 
             if ev_grade == 'UNCERTAIN':
                 w(f'-- SKIPPED association (UNCERTAIN grade): {content_hash}')

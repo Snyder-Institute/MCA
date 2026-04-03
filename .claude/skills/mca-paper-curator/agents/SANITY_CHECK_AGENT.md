@@ -56,7 +56,7 @@ Verify that every closed-vocabulary field contains only allowed values from `ref
 | `morphology` | coccus, bacillus (rod), coccobacillus, spirochete, vibrio, filamentous, yeast, mold, dimorphic fungus, not applicable, unknown | ERROR |
 | `is_pathobiont` | yes, no, context dependent, unknown | ERROR |
 | `clinical_roles[]` each | opportunistic pathogen, primary pathogen, protective commensal, commensal, probiotic candidate, biofilm former, coloniser, unknown | ERROR |
-| `typical_specimens[]` each | stool, blood, urine, sputum, bronchoalveolar lavage (BAL), wound swab, vaginal swab, skin swab, cerebrospinal fluid (CSF), biopsy, nasopharyngeal swab, unknown | WARNING |
+| `typical_specimens[]` each | stool, blood, urine, sputum, bronchoalveolar lavage (BAL), wound swab, vaginal swab, skin swab, cerebrospinal fluid (CSF), biopsy, nasopharyngeal swab, saliva, oral swab, unknown | WARNING |
 | `reservoirs[]` each | human, animal, environment, food, unknown | WARNING |
 | `evidence_grade` (per association) | E1, E2, E3, UNCERTAIN | ERROR |
 | `action` | CREATE, UPDATE, AMBIGUOUS | ERROR |
@@ -76,10 +76,15 @@ Checks here are **structural only** — they flag format mismatches and internal
 | Domain–gram coherence | `domain` is Fungi/Virus/Archaea AND `gram_status` is not `not applicable` → inconsistent | WARNING |
 | Grade–study design coherence | `evidence_grade = E3` AND `evidence_type` matches any of: "mouse model", "in vitro", "animal model", "cell line", "mechanistic" → mismatch | WARNING |
 | Grade–study design coherence | `evidence_grade = E1` AND `evidence_type` matches "meta-analysis", "systematic review", "guidelines" → mismatch | WARNING |
+| Grade–study design coherence | `evidence_grade = E1` OR `evidence_grade = E2` AND `evidence_type` matches "narrative review", "scoping review", "perspective", "opinion" → should be UNCERTAIN | WARNING |
+| Pathobiont–role coherence | `is_pathobiont = yes` AND `clinical_roles[]` contains `probiotic candidate` → contradictory (probiotic candidates are not unconditional pathogens; consider `context dependent`) | WARNING |
+| Pathobiont–role coherence | `is_pathobiont = yes` AND `clinical_roles[]` contains only non-pathogenic roles (i.e., every role is one of: `protective commensal`, `commensal`, `probiotic candidate`) with no `opportunistic pathogen` or `primary pathogen` → contradictory | WARNING |
+| Pathobiont–role coherence | `is_pathobiont = context dependent` AND `clinical_roles[]` contains no pathogenic role (`opportunistic pathogen` or `primary pathogen`) → `context dependent` requires evidence of harm in some contexts; consider `no` if only protective roles are documented | WARNING |
+| Pathobiont–role coherence | `is_pathobiont = no` AND `clinical_roles[]` contains `opportunistic pathogen` or `primary pathogen` → contradictory | WARNING |
 | UPDATE integrity | `action = UPDATE` AND `passport_id` is null → missing required field | ERROR |
 | UPDATE integrity | `action = UPDATE` AND proposed fields include `preferred_name` (changing the canonical name) → flag for review | WARNING |
 | CREATE integrity | `action = CREATE` AND `passport_id` is not null → unexpected pre-set ID | WARNING |
-| Association PMIDs | Each `clinical_association` must have at least one PMID in `pmids[]` | ERROR |
+| Association PMIDs | Each `clinical_association` should have at least one PMID in `pmids[]`; warn only if `source_paper.pmid` is null (PMID pending confirmation is a valid state) | WARNING |
 | Rank–name coherence | `taxon_rank = genus` AND `preferred_name` contains a species epithet (two words) → possible rank mismatch | WARNING |
 
 ---
@@ -95,7 +100,7 @@ Fields that must not be null for a staging file to be processable by the XML upd
 | `taxon_rank` | ERROR |
 | `action` | ERROR |
 | `evidence_grade` on every association | ERROR |
-| `pmids[]` non-empty on every association | ERROR |
+| `pmids[]` non-empty on every association (warn only if source PMID is null) | WARNING |
 | `passport_id` when `action = UPDATE` | ERROR |
 | `association_text` on every association | ERROR |
 

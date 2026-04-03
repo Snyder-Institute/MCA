@@ -391,5 +391,509 @@
     "xml_file": "MCA_DB_v1_7_20260402.xml",
     "source": "manual patch",
     "date": "2026-04-02"
+  },
+  {
+    "date_applied": "2026-04-02",
+    "passport_id": "MCA-BAC-000034",
+    "preferred_name": "Alistipes",
+    "action": "CREATE",
+    "source_pmid": 32129694,
+    "xml_file": "database/MCA_DB_v1_8_20260402.xml",
+    "staging_file": "staging/applied/2026-04-02_alistipes.json"
+  },
+  {
+    "date_applied": "2026-04-02",
+    "passport_id": "MCA-BAC-000035",
+    "preferred_name": "Bacteroides nordii",
+    "action": "CREATE",
+    "source_pmid": 33542131,
+    "xml_file": "database/MCA_DB_v1_8_20260402.xml",
+    "staging_file": "staging/applied/2026-04-02_bacteroides-nordii-33542131.json"
+  },
+  {
+    "date_applied": "2026-04-02",
+    "passport_id": "MCA-BAC-000036",
+    "preferred_name": "Bacteroides thetaiotaomicron",
+    "action": "CREATE",
+    "source_pmid": 29590047,
+    "xml_file": "database/MCA_DB_v1_8_20260402.xml",
+    "staging_file": "staging/applied/2026-04-02_bacteroides-thetaiotaomicron.json"
+  },
+  {
+    "date_applied": "2026-04-02",
+    "passport_id": "MCA-BAC-000037",
+    "preferred_name": "Bacteroides uniformis",
+    "action": "CREATE",
+    "source_pmid": 33542131,
+    "xml_file": "database/MCA_DB_v1_8_20260402.xml",
+    "staging_file": "staging/applied/2026-04-02_bacteroides-uniformis-33542131.json"
+  },
+  {
+    "date_applied": "2026-04-02",
+    "passport_id": "MCA-BAC-000038",
+    "preferred_name": "Bifidobacterium bifidum",
+    "action": "CREATE",
+    "source_pmid": 33432149,
+    "xml_file": "database/MCA_DB_v1_8_20260402.xml",
+    "staging_file": "staging/applied/2026-04-02_bifidobacterium-bifidum.json"
+  },
+  {
+    "date_applied": "2026-04-02",
+    "passport_id": "MCA-BAC-000039",
+    "preferred_name": "Blautia",
+    "action": "CREATE",
+    "source_pmid": 32129694,
+    "xml_file": "database/MCA_DB_v1_8_20260402.xml",
+    "staging_file": "staging/applied/2026-04-02_blautia.json"
+  },
+  {
+    "date_applied": "2026-04-02",
+    "passport_id": "MCA-BAC-000040",
+    "preferred_name": "Collinsella aerofaciens",
+    "action": "CREATE",
+    "source_pmid": 33542131,
+    "xml_file": "database/MCA_DB_v1_8_20260402.xml",
+    "staging_file": "staging/applied/2026-04-02_collinsella-aerofaciens-33542131.json"
+  },
+  {
+    "date_applied": "2026-04-02",
+    "passport_id": "MCA-BAC-000041",
+    "preferred_name": "Dorea",
+    "action": "CREATE",
+    "source_pmid": 32129694,
+    "xml_file": "database/MCA_DB_v1_8_20260402.xml",
+    "staging_file": "staging/applied/2026-04-02_dorea.json"
+  },
+  {
+    "date_applied": "2026-04-02",
+    "passport_id": "MCA-BAC-000042",
+    "preferred_name": "Enterobacter cloacae",
+    "action": "CREATE",
+    "source_pmid": 32758418,
+    "xml_file": "database/MCA_DB_v1_8_20260402.xml",
+    "staging_file": "staging/applied/2026-04-02_enterobacter-cloacae.json"
+  },
+  {
+    "date_applied": "2026-04-02",
+    "passport_id": "MCA-BAC-000043",
+    "preferred_name": "Enterocloster clostridioformis",
+    "action": "CREATE",
+    "source_pmid": 33542131,
+    "xml_file": "database/MCA_DB_v1_8_20260402.xml",
+    "staging_file": "staging/applied/2026-04-02_enterocloster-clostridioformis-33542131.json"
+  },
+  {
+    "date_applied": "2026-04-02",
+    "passport_id": "MCA-BAC-000044",
+    "preferred_name": "Klebsiella aerogenes",
+    "action": "CREATE",
+    "source_pmid": 32758418,
+    "xml_file": "database/MCA_DB_v1_8_20260402.xml",
+    "staging_file": "staging/applied/2026-04-02_klebsiella-aerogenes.json"
+  },
+  {
+    "date_applied": "2026-04-02",
+    "passport_id": "MCA-BAC-000045",
+    "preferred_name": "Phascolarctobacterium faecium",
+    "action": "CREATE",
+    "source_pmid": 33542131,
+    "xml_file": "database/MCA_DB_v1_8_20260402.xml",
+    "staging_file": "staging/applied/2026-04-02_phascolarctobacterium-faecium-33542131.json"
+  },
+  {
+    "date_applied": "2026-04-02",
+    "passport_id": "MCA-BAC-000046",
+    "preferred_name": "Prevotella copri",
+    "action": "CREATE",
+    "source_pmid": 33432149,
+    "xml_file": "database/MCA_DB_v1_8_20260402.xml",
+    "staging_file": "staging/applied/2026-04-02_prevotella-copri.json"
+  },
+  {
+    "date_applied": "2026-04-02",
+    "passport_id": "MCA-BAC-000047",
+    "preferred_name": "Roseburia",
+    "action": "CREATE",
+    "source_pmid": 32129694,
+    "xml_file": "database/MCA_DB_v1_8_20260402.xml",
+    "staging_file": "staging/applied/2026-04-02_roseburia.json"
+  },
+  {
+    "date_applied": "2026-04-02",
+    "passport_id": "MCA-BAC-000048",
+    "preferred_name": "Ruminococcus flavefaciens",
+    "action": "CREATE",
+    "source_pmid": 33542131,
+    "xml_file": "database/MCA_DB_v1_8_20260402.xml",
+    "staging_file": "staging/applied/2026-04-02_ruminococcus-flavefaciens-33542131.json"
+  },
+  {
+    "date_applied": "2026-04-02",
+    "passport_id": "MCA-BAC-000049",
+    "preferred_name": "Veillonellaceae",
+    "action": "CREATE",
+    "source_pmid": 33303685,
+    "xml_file": "database/MCA_DB_v1_8_20260402.xml",
+    "staging_file": "staging/applied/2026-04-02_veillonellaceae.json"
+  },
+  {
+    "date_applied": "2026-04-02",
+    "passport_id": "MCA-BAC-000038",
+    "preferred_name": "Bifidobacterium bifidum",
+    "action": "UPDATE",
+    "source_pmid": 33303685,
+    "xml_file": "database/MCA_DB_v1_8_20260402.xml",
+    "staging_file": "staging/applied/2026-04-02_bifidobacterium-bifidum_33303685.json"
+  },
+  {
+    "date_applied": "2026-04-02",
+    "passport_id": "MCA-BAC-000015",
+    "preferred_name": "Akkermansia muciniphila",
+    "action": "UPDATE",
+    "source_pmid": 33542131,
+    "xml_file": "database/MCA_DB_v1_8_20260402.xml",
+    "staging_file": "staging/applied/2026-04-02_akkermansia-muciniphila-33542131.json"
+  },
+  {
+    "date_applied": "2026-04-02",
+    "passport_id": "MCA-BAC-000015",
+    "preferred_name": "Akkermansia muciniphila",
+    "action": "UPDATE",
+    "source_pmid": 32129694,
+    "xml_file": "database/MCA_DB_v1_8_20260402.xml",
+    "staging_file": "staging/applied/2026-04-02_akkermansia-muciniphila_32129694.json"
+  },
+  {
+    "date_applied": "2026-04-02",
+    "passport_id": "MCA-BAC-000015",
+    "preferred_name": "Akkermansia muciniphila",
+    "action": "UPDATE",
+    "source_pmid": 33432149,
+    "xml_file": "database/MCA_DB_v1_8_20260402.xml",
+    "staging_file": "staging/applied/2026-04-02_akkermansia-muciniphila_33432149.json"
+  },
+  {
+    "date_applied": "2026-04-02",
+    "passport_id": "MCA-BAC-000025",
+    "preferred_name": "Bifidobacterium longum",
+    "action": "UPDATE",
+    "source_pmid": 33542131,
+    "xml_file": "database/MCA_DB_v1_8_20260402.xml",
+    "staging_file": "staging/applied/2026-04-02_bifidobacterium-longum-33542131.json"
+  },
+  {
+    "date_applied": "2026-04-02",
+    "passport_id": "MCA-BAC-000006",
+    "preferred_name": "Clostridioides difficile",
+    "action": "UPDATE",
+    "source_pmid": 38786164,
+    "xml_file": "database/MCA_DB_v1_8_20260402.xml",
+    "staging_file": "staging/applied/2026-04-02_clostridioides-difficile-38786164.json"
+  },
+  {
+    "date_applied": "2026-04-02",
+    "passport_id": "MCA-BAC-000006",
+    "preferred_name": "Clostridioides difficile",
+    "action": "UPDATE",
+    "source_pmid": 38584858,
+    "xml_file": "database/MCA_DB_v1_8_20260402.xml",
+    "staging_file": "staging/applied/2026-04-02_clostridioides-difficile.json"
+  },
+  {
+    "date_applied": "2026-04-02",
+    "passport_id": "MCA-BAC-000006",
+    "preferred_name": "Clostridioides difficile",
+    "action": "UPDATE",
+    "source_pmid": 32129694,
+    "xml_file": "database/MCA_DB_v1_8_20260402.xml",
+    "staging_file": "staging/applied/2026-04-02_clostridioides-difficile_32129694.json"
+  },
+  {
+    "date_applied": "2026-04-02",
+    "passport_id": "MCA-BAC-000018",
+    "preferred_name": "Enterococcus faecalis",
+    "action": "UPDATE",
+    "source_pmid": 29590047,
+    "xml_file": "database/MCA_DB_v1_8_20260402.xml",
+    "staging_file": "staging/applied/2026-04-02_enterococcus-faecalis_29590047.json"
+  },
+  {
+    "date_applied": "2026-04-02",
+    "passport_id": "MCA-BAC-000026",
+    "preferred_name": "Enterococcus gallinarum",
+    "action": "UPDATE",
+    "source_pmid": 29590047,
+    "xml_file": "database/MCA_DB_v1_8_20260402.xml",
+    "staging_file": "staging/applied/2026-04-02_enterococcus-gallinarum_29590047.json"
+  },
+  {
+    "date_applied": "2026-04-02",
+    "passport_id": "MCA-BAC-000027",
+    "preferred_name": "Faecalibacterium prausnitzii",
+    "action": "UPDATE",
+    "source_pmid": 33542131,
+    "xml_file": "database/MCA_DB_v1_8_20260402.xml",
+    "staging_file": "staging/applied/2026-04-02_faecalibacterium-prausnitzii-33542131.json"
+  },
+  {
+    "date_applied": "2026-04-02",
+    "passport_id": "MCA-BAC-000027",
+    "preferred_name": "Faecalibacterium prausnitzii",
+    "action": "UPDATE",
+    "source_pmid": 32129694,
+    "xml_file": "database/MCA_DB_v1_8_20260402.xml",
+    "staging_file": "staging/applied/2026-04-02_faecalibacterium-prausnitzii_32129694.json"
+  },
+  {
+    "date_applied": "2026-04-02",
+    "passport_id": "MCA-BAC-000028",
+    "preferred_name": "Faecalibacterium",
+    "action": "UPDATE",
+    "source_pmid": 32129694,
+    "xml_file": "database/MCA_DB_v1_8_20260402.xml",
+    "staging_file": "staging/applied/2026-04-02_faecalibacterium_32129694.json"
+  },
+  {
+    "date_applied": "2026-04-02",
+    "passport_id": "MCA-BAC-000004",
+    "preferred_name": "Lachnospiraceae",
+    "action": "UPDATE",
+    "source_pmid": 33303685,
+    "xml_file": "database/MCA_DB_v1_8_20260402.xml",
+    "staging_file": "staging/applied/2026-04-02_lachnospiraceae_33303685.json"
+  },
+  {
+    "date_applied": "2026-04-02",
+    "passport_id": "MCA-BAC-000003",
+    "preferred_name": "Ruminococcaceae",
+    "action": "UPDATE",
+    "source_pmid": 32129694,
+    "xml_file": "database/MCA_DB_v1_8_20260402.xml",
+    "staging_file": "staging/applied/2026-04-02_ruminococcaceae_32129694.json"
+  },
+  {
+    "date_applied": "2026-04-02",
+    "passport_id": "MCA-BAC-000003",
+    "preferred_name": "Ruminococcaceae",
+    "action": "UPDATE",
+    "source_pmid": 33303685,
+    "xml_file": "database/MCA_DB_v1_8_20260402.xml",
+    "staging_file": "staging/applied/2026-04-02_ruminococcaceae_33303685.json"
+  },
+  {
+    "date_applied": "2026-04-02",
+    "passport_id": "MCA-BAC-000023",
+    "preferred_name": "Staphylococcus epidermidis",
+    "action": "UPDATE",
+    "source_pmid": 29546356,
+    "xml_file": "database/MCA_DB_v1_8_20260402.xml",
+    "staging_file": "staging/applied/2026-04-02_staphylococcus-epidermidis.json"
+  },
+  {
+    "date_applied": "2026-04-03",
+    "passport_id": "MCA-BAC-000003",
+    "preferred_name": "Ruminococcaceae",
+    "action": "UPDATE",
+    "source_pmid": 29097493,
+    "xml_file": "database/MCA_DB_v1_8_20260403.xml",
+    "staging_file": "staging/applied/2026-04-03_ruminococcaceae.json"
+  },
+  {
+    "date_applied": "2026-04-03",
+    "passport_id": "MCA-BAC-000027",
+    "preferred_name": "Faecalibacterium prausnitzii",
+    "action": "UPDATE",
+    "source_pmid": 29097493,
+    "xml_file": "database/MCA_DB_v1_8_20260403.xml",
+    "staging_file": "staging/applied/2026-04-03_faecalibacterium-prausnitzii.json"
+  },
+  {
+    "date_applied": "2026-04-03",
+    "passport_id": "MCA-BAC-000028",
+    "preferred_name": "Faecalibacterium",
+    "action": "UPDATE",
+    "source_pmid": 29097493,
+    "xml_file": "database/MCA_DB_v1_8_20260403.xml",
+    "staging_file": "staging/applied/2026-04-03_faecalibacterium.json"
+  },
+  {
+    "date_applied": "2026-04-03",
+    "passport_id": "MCA-BAC-000036",
+    "preferred_name": "Bacteroides thetaiotaomicron",
+    "action": "UPDATE",
+    "source_pmid": 29097493,
+    "xml_file": "database/MCA_DB_v1_8_20260403.xml",
+    "staging_file": "staging/applied/2026-04-03_bacteroides-thetaiotaomicron.json"
+  },
+  {
+    "date_applied": "2026-04-03",
+    "passport_id": "MCA-BAC-000015",
+    "preferred_name": "Akkermansia muciniphila",
+    "action": "UPDATE",
+    "source_pmid": 29097494,
+    "xml_file": "database/MCA_DB_v1_8_20260403.xml",
+    "staging_file": "staging/applied/2026-04-03_akkermansia-muciniphila.json"
+  },
+  {
+    "date_applied": "2026-04-03",
+    "passport_id": "MCA-BAC-000006",
+    "preferred_name": "Clostridioides difficile",
+    "action": "UPDATE",
+    "source_pmid": 24503131,
+    "xml_file": "database/MCA_DB_v1_8_20260403.xml",
+    "staging_file": "staging/applied/2026-04-03_clostridioides-difficile.json"
+  },
+  {
+    "date_applied": "2026-04-03",
+    "passport_id": "MCA-BAC-000004",
+    "preferred_name": "Lachnospiraceae",
+    "action": "UPDATE",
+    "source_pmid": 24503131,
+    "xml_file": "database/MCA_DB_v1_8_20260403.xml",
+    "staging_file": "staging/applied/2026-04-03_lachnospiraceae.json"
+  },
+  {
+    "date_applied": "2026-04-03",
+    "passport_id": "MCA-BAC-000025",
+    "preferred_name": "Bifidobacterium longum",
+    "action": "UPDATE",
+    "source_pmid": 29302014,
+    "xml_file": "database/MCA_DB_v1_8_20260403.xml",
+    "staging_file": "staging/applied/2026-04-03_bifidobacterium-longum.json"
+  },
+  {
+    "date_applied": "2026-04-03",
+    "passport_id": "MCA-BAC-000040",
+    "preferred_name": "Collinsella aerofaciens",
+    "action": "UPDATE",
+    "source_pmid": 29302014,
+    "xml_file": "database/MCA_DB_v1_8_20260403.xml",
+    "staging_file": "staging/applied/2026-04-03_collinsella-aerofaciens.json"
+  },
+  {
+    "date_applied": "2026-04-03",
+    "passport_id": "MCA-BAC-000050",
+    "preferred_name": "Alistipes indistinctus",
+    "action": "CREATE",
+    "source_pmid": 29097494,
+    "xml_file": "database/MCA_DB_v1_8_20260403.xml",
+    "staging_file": "staging/applied/2026-04-03_alistipes-indistinctus.json"
+  },
+  {
+    "date_applied": "2026-04-03",
+    "passport_id": "MCA-BAC-000051",
+    "preferred_name": "Staphylococcus aureus",
+    "action": "CREATE",
+    "source_pmid": 25385792,
+    "xml_file": "database/MCA_DB_v1_8_20260403.xml",
+    "staging_file": "staging/applied/2026-04-03_staphylococcus-aureus.json"
+  },
+  {
+    "date_applied": "2026-04-03",
+    "passport_id": "MCA-BAC-000052",
+    "preferred_name": "Enterococcus faecium",
+    "action": "CREATE",
+    "source_pmid": 29302014,
+    "xml_file": "database/MCA_DB_v1_8_20260403.xml",
+    "staging_file": "staging/applied/2026-04-03_enterococcus-faecium.json"
+  },
+  {
+    "date_applied": "2026-04-03",
+    "passport_id": "MCA-BAC-000053",
+    "preferred_name": "Bifidobacterium adolescentis",
+    "action": "CREATE",
+    "source_pmid": 29302014,
+    "xml_file": "database/MCA_DB_v1_8_20260403.xml",
+    "staging_file": "staging/applied/2026-04-03_bifidobacterium-adolescentis.json"
+  },
+  {
+    "date_applied": "2026-04-03",
+    "passport_id": "MCA-BAC-000054",
+    "preferred_name": "Klebsiella pneumoniae",
+    "action": "CREATE",
+    "source_pmid": 29302014,
+    "xml_file": "database/MCA_DB_v1_8_20260403.xml",
+    "staging_file": "staging/applied/2026-04-03_klebsiella-pneumoniae.json"
+  },
+  {
+    "date_applied": "2026-04-03",
+    "passport_id": "MCA-BAC-000055",
+    "preferred_name": "Parabacteroides merdae",
+    "action": "CREATE",
+    "source_pmid": 29302014,
+    "xml_file": "database/MCA_DB_v1_8_20260403.xml",
+    "staging_file": "staging/applied/2026-04-03_parabacteroides-merdae.json"
+  },
+  {
+    "date_applied": "2026-04-03",
+    "passport_id": "MCA-BAC-000056",
+    "preferred_name": "Blautia obeum",
+    "action": "CREATE",
+    "source_pmid": 29302014,
+    "xml_file": "database/MCA_DB_v1_8_20260403.xml",
+    "staging_file": "staging/applied/2026-04-03_blautia-obeum.json"
+  },
+  {
+    "date_applied": "2026-04-03",
+    "passport_id": "MCA-BAC-000057",
+    "preferred_name": "Roseburia intestinalis",
+    "action": "CREATE",
+    "source_pmid": 29302014,
+    "xml_file": "database/MCA_DB_v1_8_20260403.xml",
+    "staging_file": "staging/applied/2026-04-03_roseburia-intestinalis.json"
+  },
+  {
+    "date_applied": "2026-04-03",
+    "passport_id": "MCA-BAC-000058",
+    "preferred_name": "Helicobacter hepaticus",
+    "action": "CREATE",
+    "source_pmid": 29414937,
+    "xml_file": "database/MCA_DB_v1_8_20260403.xml",
+    "staging_file": "staging/applied/2026-04-03_helicobacter-hepaticus.json"
+  },
+  {
+    "date_applied": "2026-04-03",
+    "passport_id": "MCA-BAC-000059",
+    "preferred_name": "Veillonella parvula",
+    "action": "CREATE",
+    "source_pmid": 29302014,
+    "xml_file": "database/MCA_DB_v1_8_20260403.xml",
+    "staging_file": "staging/applied/2026-04-03_veillonella-parvula.json"
+  },
+  {
+    "date_applied": "2026-04-03",
+    "passport_id": "MCA-BAC-000060",
+    "preferred_name": "Helicobacter pylori",
+    "action": "CREATE",
+    "source_pmid": 33766858,
+    "xml_file": "database/MCA_DB_v1_8_20260403.xml",
+    "staging_file": "staging/applied/2026-04-03_helicobacter-pylori.json"
+  },
+  {
+    "date_applied": "2026-04-03",
+    "passport_id": "MCA-BAC-000061",
+    "preferred_name": "Streptococcus gallolyticus",
+    "action": "CREATE",
+    "source_pmid": 33766858,
+    "xml_file": "database/MCA_DB_v1_8_20260403.xml",
+    "staging_file": "staging/applied/2026-04-03_streptococcus-gallolyticus.json"
+  },
+  {
+    "date_applied": "2026-04-03",
+    "passport_id": "MCA-BAC-000062",
+    "preferred_name": "Mycobacterium bovis",
+    "action": "CREATE",
+    "source_pmid": 33766858,
+    "xml_file": "database/MCA_DB_v1_8_20260403.xml",
+    "staging_file": "staging/applied/2026-04-03_mycobacterium-bovis.json"
+  },
+  {
+    "date_applied": "2026-04-03",
+    "passport_id": "MCA-BAC-000046",
+    "preferred_name": "Prevotella copri",
+    "action": "UPDATE",
+    "source_pmid": 31548871,
+    "xml_file": "database/MCA_DB_v1_8_20260403.xml",
+    "staging_file": "staging/applied/31548871_2026-04-03_prevotella-copri.json"
   }
 ]
