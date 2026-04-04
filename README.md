@@ -60,22 +60,6 @@ MCA entries are produced by a two-skill, human-in-the-loop curation pipeline:
 
 ![MCA curation workflow](images/workflow.png)
 
-```
-[Research paper PDF]
-        |
-   Skill 1: mca-paper-curator
-   (paper analysis → entity extraction → ontology enrichment)
-        |
-   staging/YYYY-MM-DD_[taxon-name].json   ← human reviews & approves
-        |
-   Skill 2: mca-xml-update
-   (validation → XML write → SQL dump → web/data/MCA_DB_latest.xml)
-        |
-   database/MCA_DB_vX_X_YYYYMMDD.xml
-   database/MCA_DB_vX_X_YYYYMMDD.sql
-   web/data/MCA_DB_latest.xml
-```
-
 ### Skill 1 — mca-paper-curator
 
 Reads one or more research papers (PDFs; each filename must be its PMID, e.g. `38123456.pdf`) and writes one staging JSON file per identified taxon. Multiple PDFs run as fully independent parallel pipelines. The pipeline runs in five phases using a 12-agent team:
