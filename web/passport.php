@@ -130,15 +130,9 @@ try {
             $related_taxa = $rel_stmt->fetchAll(PDO::FETCH_ASSOC);
         }
 
-        $lineage_parts = array_filter(array_map('trim', preg_split('/[;|]/', $taxon['lineage'] ?? '')));
-        $lineage_crumbs = [];
-        foreach ($lineage_parts as $part) {
-            if ($part !== '') {
-                $lineage_crumbs[] = '<span class="lineage-crumb">' . htmlspecialchars($part) . '</span>';
-            }
-        }
-        $formatted_lineage = implode('<span class="lineage-sep"> › </span>', $lineage_crumbs);
-        if (empty($formatted_lineage)) $formatted_lineage = 'n/a';
+        $lineage_parts = array_filter(array_map('trim', explode(';', $taxon['lineage'] ?? '')));
+        $lineage_crumbs = array_map(fn($p) => '<span class="lineage-crumb">' . htmlspecialchars($p) . '</span>', array_values($lineage_parts));
+        $formatted_lineage = implode('<span class="lineage-sep"> › </span>', $lineage_crumbs) ?: 'n/a';
     }
 } catch (PDOException $e) {
     die("Database error: " . $e->getMessage());
@@ -342,17 +336,18 @@ include 'header.php';
                         <?php if (!empty($met_grouped[$rel])): ?>
                             <?php foreach ($met_grouped[$rel] as $i => $met): ?>
                                 <span style="display:inline-flex; align-items:center; gap:4px;">
-                                    <span><?php echo htmlspecialchars($met['metabolite_name']); ?></span>
                                     <?php if (!empty($met['kegg_compound_id'])): ?>
                                         <a href="https://www.genome.jp/entry/<?php echo urlencode($met['kegg_compound_id']); ?>" target="_blank" style="text-decoration:none;">
                                             <span style="display:inline-block; padding:1px 5px; border-radius:3px; font-size:10px; font-weight:700; background:#ffedd5; color:#9a3412; border:1px solid #fdba74; font-family:monospace;"><?php echo htmlspecialchars($met['kegg_compound_id']); ?></span>
                                         </a>
                                     <?php endif; ?>
                                     <?php if (!empty($met['chebi_id'])): ?>
+                                        <?php $chebi_num = preg_replace('/^CHEBI:/i', '', $met['chebi_id']); ?>
                                         <a href="https://www.ebi.ac.uk/chebi/searchId.do?chebiId=<?php echo urlencode($met['chebi_id']); ?>" target="_blank" style="text-decoration:none;">
-                                            <span style="display:inline-block; padding:1px 5px; border-radius:3px; font-size:10px; font-weight:700; background:#d1fae5; color:#065f46; border:1px solid #6ee7b7; font-family:monospace;"><?php echo htmlspecialchars($met['chebi_id']); ?></span>
+                                            <span style="display:inline-block; padding:1px 5px; border-radius:3px; font-size:10px; font-weight:700; background:#d1fae5; color:#065f46; border:1px solid #6ee7b7; font-family:monospace;"><?php echo htmlspecialchars($chebi_num); ?></span>
                                         </a>
                                     <?php endif; ?>
+                                    <span><?php echo htmlspecialchars($met['metabolite_name']); ?></span>
                                 </span>
                                 <?php if ($i < count($met_grouped[$rel]) - 1): ?><span style="color:#ccc;">·</span><?php endif; ?>
                             <?php endforeach; ?>
@@ -392,12 +387,12 @@ include 'header.php';
                             <span class="data-value" style="display:flex; flex-wrap:wrap; gap:6px; align-items:center;">
                                 <?php foreach ($triggers as $i => $trig): ?>
                                     <span style="display:inline-flex; align-items:center; gap:4px;">
-                                        <?php echo htmlspecialchars($trig['value']); ?>
                                         <?php if (!empty($trig['ext_id'])): ?>
                                             <a href="https://www.kegg.jp/entry/<?php echo htmlspecialchars($trig['ext_id']); ?>" target="_blank" rel="noopener" style="text-decoration:none;">
                                                 <span style="display:inline-block; padding:1px 5px; border-radius:3px; font-size:10px; font-weight:700; background:#ffedd5; color:#9a3412; border:1px solid #fdba74; font-family:monospace;"><?php echo htmlspecialchars($trig['ext_id']); ?></span>
                                             </a>
                                         <?php endif; ?>
+                                        <?php echo htmlspecialchars($trig['value']); ?>
                                     </span><?php if ($i < count($triggers) - 1): ?><span style="color:#ccc;">·</span><?php endif; ?>
                                 <?php endforeach; ?>
                             </span>
@@ -414,13 +409,13 @@ include 'header.php';
                             <span class="data-value" style="display:flex; flex-wrap:wrap; gap:6px; align-items:center;">
                                 <?php foreach ($amr_alerts as $i => $amr): ?>
                                     <span style="display:inline-flex; align-items:center; gap:4px;">
-                                        <?php echo htmlspecialchars($amr['value']); ?>
                                         <?php if (!empty($amr['ext_id'])): ?>
                                             <?php $aro_num = preg_replace('/^ARO:/', '', $amr['ext_id']); ?>
                                             <a href="https://card.mcmaster.ca/ontology/<?php echo htmlspecialchars($aro_num); ?>" target="_blank" rel="noopener" style="text-decoration:none;">
                                                 <span style="display:inline-block; padding:1px 5px; border-radius:3px; font-size:10px; font-weight:700; background:#fee2e2; color:#991b1b; border:1px solid #fca5a5; font-family:monospace;"><?php echo htmlspecialchars($aro_num); ?></span>
                                             </a>
                                         <?php endif; ?>
+                                        <?php echo htmlspecialchars($amr['value']); ?>
                                     </span><?php if ($i < count($amr_alerts) - 1): ?><span style="color:#ccc;">·</span><?php endif; ?>
                                 <?php endforeach; ?>
                             </span>
@@ -432,12 +427,12 @@ include 'header.php';
                             <span class="data-value" style="display:flex; flex-wrap:wrap; gap:6px; align-items:center;">
                                 <?php foreach ($vf_entries as $i => $vf): ?>
                                     <span style="display:inline-flex; align-items:center; gap:4px;">
-                                        <?php echo htmlspecialchars($vf['value']); ?>
                                         <?php if (!empty($vf['ext_id'])): ?>
                                             <a href="https://www.mgc.ac.cn/cgi-bin/VFs/vfs.cgi?VFID=<?php echo urlencode($vf['ext_id']); ?>" target="_blank" rel="noopener" style="text-decoration:none;">
                                                 <span style="display:inline-block; padding:1px 5px; border-radius:3px; font-size:10px; font-weight:700; background:#fce7f3; color:#9d174d; border:1px solid #f9a8d4; font-family:monospace;"><?php echo htmlspecialchars($vf['ext_id']); ?></span>
                                             </a>
                                         <?php endif; ?>
+                                        <?php echo htmlspecialchars($vf['value']); ?>
                                     </span><?php if ($i < count($vf_entries) - 1): ?><span style="color:#ccc;">·</span><?php endif; ?>
                                 <?php endforeach; ?>
                             </span>
@@ -497,18 +492,18 @@ include 'header.php';
                                     <div style="margin-top: 8px; display: flex; flex-wrap: wrap; align-items: center; gap: 8px;">
                                         <?php foreach ($mesh_refs as $ref): ?>
                                             <span style="display:inline-flex; align-items:center; gap:4px;">
+                                                <a href="https://meshb.nlm.nih.gov/record/ui?ui=<?php echo urlencode($ref['ref_id']); ?>" target="_blank" class="assoc-ref-tag assoc-ref-mesh"><?php echo htmlspecialchars($ref['ref_id']); ?></a>
                                                 <?php if (!empty($ref['ref_label'])): ?>
                                                     <span style="font-size:13px; color:#333;"><?php echo htmlspecialchars($ref['ref_label']); ?></span>
                                                 <?php endif; ?>
-                                                <a href="https://meshb.nlm.nih.gov/record/ui?ui=<?php echo urlencode($ref['ref_id']); ?>" target="_blank" class="assoc-ref-tag assoc-ref-mesh"><?php echo htmlspecialchars($ref['ref_id']); ?></a>
                                             </span>
                                         <?php endforeach; ?>
                                         <?php foreach ($kegg_refs as $ref): ?>
                                             <span style="display:inline-flex; align-items:center; gap:4px;">
+                                                <a href="https://www.genome.jp/entry/<?php echo urlencode($ref['ref_id']); ?>" target="_blank" class="assoc-ref-tag assoc-ref-kegg"><?php echo htmlspecialchars($ref['ref_id']); ?></a>
                                                 <?php if (!empty($ref['ref_label'])): ?>
                                                     <span style="font-size:13px; color:#333;"><?php echo htmlspecialchars($ref['ref_label']); ?></span>
                                                 <?php endif; ?>
-                                                <a href="https://www.genome.jp/entry/<?php echo urlencode($ref['ref_id']); ?>" target="_blank" class="assoc-ref-tag assoc-ref-kegg"><?php echo htmlspecialchars($ref['ref_id']); ?></a>
                                             </span>
                                         <?php endforeach; ?>
                                         <?php foreach ($other_refs as $ref): ?>

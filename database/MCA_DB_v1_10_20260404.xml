@@ -1,7 +1,7 @@
 <?xml version='1.0' encoding='utf-8'?>
 <MicrobialClinicalAtlas>
  <Meta>
-  <version>v1_10_20260403</version>
+  <version>v1_10_20260404</version>
   <created>2026-04-01</created>
  </Meta>
  <Papers>
@@ -2832,7 +2832,7 @@
   <preferred_name>Aspergillus terreus</preferred_name>
   <taxon_rank>species</taxon_rank>
   <domain>Fungi</domain>
-  <lineage>Eukaryota|Fungi|Ascomycota|Eurotiomycetes|Eurotiales|Aspergillaceae|Aspergillus</lineage>
+  <lineage>Eukaryota; Fungi; Ascomycota; Eurotiomycetes; Eurotiales; Aspergillaceae; Aspergillus</lineage>
   <ncbi_taxid>33178</ncbi_taxid>
   <is_pathobiont>context dependent</is_pathobiont>
   <last_reviewed>2026-04-01</last_reviewed>
@@ -4911,7 +4911,7 @@
   <preferred_name>Saccharomyces boulardii</preferred_name>
   <taxon_rank>species</taxon_rank>
   <domain>Fungi</domain>
-  <lineage>cellular organisms|Eukaryota|Opisthokonta|Fungi|Dikarya|Ascomycota|saccharomyceta|Saccharomycotina|Saccharomycetes|Saccharomycetales|Saccharomycetaceae|Saccharomyces</lineage>
+  <lineage>cellular organisms; Eukaryota; Opisthokonta; Fungi; Dikarya; Ascomycota; saccharomyceta; Saccharomycotina; Saccharomycetes; Saccharomycetales; Saccharomycetaceae; Saccharomyces</lineage>
   <ncbi_taxid>4932</ncbi_taxid>
   <is_pathobiont>no</is_pathobiont>
   <last_reviewed>2026-04-01</last_reviewed>
