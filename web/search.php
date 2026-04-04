@@ -75,7 +75,7 @@ include 'header.php';
                     <tr style="border-bottom: 1px solid #eee; cursor: pointer;" onclick="window.location.href='<?php echo $row['passport_id']; ?>'">
                         <td style="padding: 15px 10px;">
                             <div style="font-weight: bold; font-style: italic; color: #007bff;"><?php echo htmlspecialchars($row['preferred_name']); ?></div>
-                            <div style="font-size: 11px; color: #999; margin-top: 4px;"><?php echo htmlspecialchars(str_replace(';', ' |', $row['lineage'])); ?></div>
+                            <div style="font-size: 11px; color: #999; margin-top: 4px;"><?php echo htmlspecialchars(implode(' | ', array_filter(array_map('trim', preg_split('/[;|]/', $row['lineage']))))); ?></div>
                             <?php if (!empty($row['match_categories'])): ?>
                                 <div style="margin-top: 5px;">
                                     <?php foreach (array_unique($row['match_categories']) as $cat): ?>

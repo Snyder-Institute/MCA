@@ -130,7 +130,7 @@ try {
             $related_taxa = $rel_stmt->fetchAll(PDO::FETCH_ASSOC);
         }
 
-        $lineage_parts = array_filter(array_map('trim', explode(';', $taxon['lineage'] ?? '')));
+        $lineage_parts = array_filter(array_map('trim', preg_split('/[;|]/', $taxon['lineage'] ?? '')));
         $lineage_crumbs = [];
         foreach ($lineage_parts as $part) {
             if ($part !== '') {
