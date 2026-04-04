@@ -373,9 +373,9 @@ function passportCard(t) {
     }
     var roles = (t.roles && t.roles.length)
         ? '<div style="font-size:12px;color:#555;">' + t.roles.slice(0,3).map(es).join(' · ') + '</div>' : '';
-    return '<div class="pc" onclick="window.location.href=\'passport.php?id=' + es(t.passport_id) + '\'">' +
+    return '<div class="pc" onclick="window.location.href=\'' + es(t.passport_id) + '\'">' +
         '<div class="pc-head">' +
-        '<a class="pc-name" href="passport.php?id=' + es(t.passport_id) + '">' + es(t.name) + '</a>' +
+        '<a class="pc-name" href="' + es(t.passport_id) + '">' + es(t.name) + '</a>' +
         '<span class="pc-rank">' + es(t.taxon_rank) + '</span>' +
         '<span class="pb ' + pbClass + '">' + pbLabel + '</span>' +
         '<span style="font-family:monospace;font-size:11px;color:#888;margin-left:auto;">' + es(t.passport_id) + '</span>' +
@@ -434,7 +434,7 @@ function renderPathway(data) {
 function renderTaxon(data) {
     var html = '<div style="margin-bottom:16px;">' +
         '<div style="font-size:18px;font-weight:700;color:#222;">' +
-        '<a href="passport.php?id=' + es(data.passport_id) + '" style="color:#222;text-decoration:none;">' +
+        '<a href="' + es(data.passport_id) + '" style="color:#222;text-decoration:none;">' +
         es(data.name) + '</a></div>' +
         '<div style="font-size:12px;color:#888;margin-top:2px;">' + es(data.passport_id) +
         ' &nbsp;·&nbsp; ' + data.total_pathways + ' pathway' + (data.total_pathways !== 1 ? 's' : '') + ' linked</div></div>';
@@ -475,7 +475,7 @@ function renderTaxon(data) {
         html += '<div class="info-box" style="margin-top:20px;">' +
             '<strong>Q2 — Filter by pathway:</strong> Click any pathway above to view all MCA taxa in that pathway. ' +
             'To see which specific clinical associations of <em>' + es(data.name) + '</em> belong to a given pathway, ' +
-            '<a href="passport.php?id=' + es(data.passport_id) + '" style="color:#404f7c;font-weight:600;">open the passport</a> ' +
+            '<a href="' + es(data.passport_id) + '" style="color:#404f7c;font-weight:600;">open the passport</a> ' +
             'and cross-reference the KEGG Disease IDs shown on each association.</div>';
     }
 
