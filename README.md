@@ -1,5 +1,5 @@
 # Microbial Clinical Atlas (MCA)
-> A curated clinical knowledge base for the human microbiome
+> A curated clinical knowledge base turning microbiome research into actionable insights for human health
 
 ![Version](https://img.shields.io/badge/version-v1.10-blue) ![License](https://img.shields.io/badge/license-MIT-green)
 
@@ -81,10 +81,30 @@ Takes one or more approved staging JSON files and applies them to the XML knowle
 
 ---
 
+## iOS App
+
+An iPhone companion app for MCA is available on the App Store. Built with SwiftUI (iOS 17+) using only Apple frameworks — no external dependencies.
+
+### Passports
+Offline SQLite browser of all curated taxon passports. Full-text search, bookmarks, and a full passport detail view that mirrors the web layout.
+
+### Extractor
+Enter a PMID, choose abstract or full text, and the app fetches the paper from PubMed/PMC (or accepts a PDF upload), sends it to the Claude API, extracts all taxa, and cross-references results against the MCA database. Results are cached locally. Once extracted, users can share the result as a JSON file with the developer so that **community contributions can be reviewed and incorporated into future MCA releases**.
+
+### About
+Database stats, curation pipeline overview, acknowledgements.
+
+## Note on App Store availability
+Apple rejected the **Passport Extractor feature** because it uses a user-provided API key to access Claude — which Apple treats as a paid transaction that must go through their in-app purchase system, while Siri has limited capacity. The app is free, open-source, and no payment is involved — users simply bring their own API key. Apple does not offer an exception for academic or research tools. The App Store version ships without the Extractor (Passports + About only). The full app with the Extractor is available by building from source in the iOS folder.
+
+![Passport Extractor](.github/images/PassportExtractor.png)
+
+---
+
 ## Tech stack
 
 - **Backend:** PHP 7.4+ with PDO (MySQL)
-- **Database:** MySQL (InnoDB, UTF-8), star schema centered on `mca_taxon_passport`
+- **Database:** MySQL (InnoDB, UTF-8), 10-table schema centered on `passport`
 - **Frontend:** Vanilla HTML/CSS/JS; Google Fonts (Montserrat, Roboto)
 - **Deployment:** LAMP stack; web root is `/web`
 - **Export:** Versioned XML dumps in `database/`; SQL dumps generated from XML via `xml2sql.py`
