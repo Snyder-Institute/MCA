@@ -3,13 +3,12 @@
 
 ![Version](https://img.shields.io/badge/version-v1.10-blue) ![License](https://img.shields.io/badge/license-MIT-green)
 
-**Maintained by:** [Bioinformatics Hub](https://TheBioHub.ca/), Snyder Institute, Cumming School of Medicine, University of Calgary
-**Contact at:** Bioinformatics@ucalgary.ca
+**Web-version**: [https://TheBioHub.ca/MCA](https://TheBioHub.ca/MCA) <br />
+**iOS-version**: [https://apps.apple.com/app/microbial-clinical-atlas/](https://apps.apple.com/app/microbial-clinical-atlas/id6761735200)
 
 ## Introduction
 
 **Microbial Clinical Atlas (MCA)** is a curated knowledge base for translating microbiome readouts into clinically and biologically interpretable insights. MCA organizes microbial information into standardized **Taxon Passports** — structured records capturing taxonomic identity, ecological context, clinical associations, and evidence-linked references (PMIDs). The project is designed to support microbiologists, bioinformaticians, and translational researchers by providing consistent fields, stable identifiers, and structured, reproducible outputs.
-
 
 ---
 
@@ -117,3 +116,9 @@ Apple rejected the **Passport Extractor feature** because it uses a user-provide
 - **Language:** Swift (SwiftUI, iOS 17+)
 - **Database:** SQLite (generated from XML via `xml2sqlite.py`)
 - **Dependencies:** None — Apple frameworks only
+
+---
+
+**Maintained by:** [Bioinformatics Hub](https://TheBioHub.ca/), Snyder Institute, Cumming School of Medicine, University of Calgary<br />
+**Contact at:** Bioinformatics@ucalgary.ca
+
