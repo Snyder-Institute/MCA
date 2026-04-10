@@ -13,6 +13,12 @@ include 'header.php';
         <input type="text" id="microbe-search" placeholder="Search by name (e.g. Enterobacteriaceae)" autocomplete="off" autofocus>
         <div id="search-results"></div>
     </div>
+
+    <div style="margin-top: 48px; text-align: center;">
+        <a href="https://apps.apple.com/app/microbial-clinical-atlas/id6761735200" target="_blank" rel="noopener noreferrer">
+            <img src="./images/appstore_badge.png" alt="Download on the App Store" style="height: 44px;">
+        </a>
+    </div>
 </div>
 
 <script>
