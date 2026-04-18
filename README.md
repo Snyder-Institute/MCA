@@ -3,7 +3,7 @@
 
 ![Version](https://img.shields.io/badge/version-v1.10-blue) ![License](https://img.shields.io/badge/license-MIT-green)
 
-**Web-version**: [https://TheBioHub.ca/MCA](https://TheBioHub.ca/MCA) <br />
+**Web-version**: ~~https://bioinformatics.ucalgary.ca/MCA~~ as of April 16, 2026, University of Calgary IT team refused to host this web.<br />
 **iOS-version**: [https://apps.apple.com/app/microbial-clinical-atlas/](https://apps.apple.com/app/microbial-clinical-atlas/id6761735200)
 
 ## Introduction
