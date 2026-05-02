@@ -154,6 +154,59 @@ The schema uses 10 tables. `passport` is the central entity.
 
 ---
 
+## Server deployment notes
+
+Lessons from production deploy on Rocky Linux 9 (nginx + PHP-FPM + MySQL 8.4). Adjust user/group names if your distro differs (Debian/Ubuntu typically use `www-data:www-data`).
+
+### PHP-FPM file ownership
+
+On Rocky/RHEL, PHP-FPM runs as the **`apache`** user by default (legacy convention — even when serving via nginx). The web user (`nginx`) and the PHP execution user (`apache`) are distinct.
+
+`db_connect.php` must be readable by the PHP-FPM process, not by nginx:
+
+```bash
+sudo chown apache:apache web/db_connect.php
+sudo chmod 640 web/db_connect.php
+```
+
+If `db_connect.php` is owned by `nginx:nginx` or `root:root` with mode 640, PHP will fail with `Permission denied` and the page returns HTTP 500. Symptom in `/var/log/php-fpm/www-error.log`:
+
+```
+PHP Warning: require_once(.../db_connect.php): Failed to open stream: Permission denied
+```
+
+### nginx config — block direct access to credentials
+
+The vhost should explicitly deny HTTP access to credential files:
+
+```nginx
+location ~ ^/(db_connect|db_connect_template)\.php$ {
+    deny all;
+    return 404;
+}
+```
+
+### SELinux contexts (Rocky/RHEL only)
+
+After uploading files via `rsync` or `scp`, restore SELinux contexts so nginx and PHP-FPM can read them:
+
+```bash
+sudo restorecon -Rv /var/www/mca
+```
+
+Files should show context `httpd_sys_content_t` (verify with `ls -laZ`).
+
+### MySQL 8.4 password policy
+
+The default `validate_password.policy=MEDIUM` requires at least 8 chars including uppercase, lowercase, digit, and special char. Generated passwords from `openssl rand -base64` won't satisfy this without manual character class injection. Use a generator that guarantees all four classes, e.g.:
+
+```bash
+RAND=$(openssl rand -base64 24 | tr -d "/+=" | head -c 20)
+echo "A${RAND}9!a"
+```
+
+---
+
 ## Key conventions
 
 - **Never commit `web/db_connect.php`** — it contains credentials and is gitignored.
