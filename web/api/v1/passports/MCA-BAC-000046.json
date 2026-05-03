@@ -1,0 +1,147 @@
+{
+  "passport_id": "MCA-BAC-000046",
+  "preferred_name": "Prevotella copri",
+  "taxon_rank": "species",
+  "domain": "Bacteria",
+  "lineage": "Bacteria; Pseudomonadati; FCB group; Bacteroidota/Chlorobiota group; Bacteroidota; Bacteroidia; Bacteroidales; Prevotellaceae; Segatella",
+  "ncbi_taxid": 165179,
+  "is_pathobiont": "yes",
+  "last_reviewed": "2026-04-03",
+  "created_at": "2026-04-02",
+  "updated_at": "2026-04-03",
+  "synonyms": [
+    "Segatella copri"
+  ],
+  "biology": {
+    "gram_status": "gram-negative",
+    "oxygen_tolerance": "obligate anaerobe",
+    "morphology": "bacillus (rod)",
+    "key_traits": [],
+    "bacdive_url": "https://bacdive.dsmz.de/strain/12547"
+  },
+  "ecology": {
+    "primary_niches": [
+      {
+        "value": "gut",
+        "mesh_anatomy_id": "D041981"
+      }
+    ],
+    "reservoirs": [
+      "human"
+    ],
+    "transmission_routes": []
+  },
+  "clinical_profile": {
+    "clinical_roles": [
+      "biomarker organism",
+      "opportunistic pathogen"
+    ],
+    "typical_specimens": [
+      {
+        "value": "blood",
+        "mesh_anatomy_id": "D001769"
+      },
+      {
+        "value": "stool",
+        "mesh_anatomy_id": "D005243"
+      }
+    ],
+    "bloom_triggers": [],
+    "risk_contexts": [
+      "cancer patients",
+      "elderly patients",
+      "heart failure patients"
+    ],
+    "amr_highlights": [],
+    "virulence_factors": []
+  },
+  "metabolites": [],
+  "evidence_pmids": [
+    33432149,
+    31548871
+  ],
+  "associations": [
+    {
+      "association_text": "Prevotella copri is enriched in the gut microbiome of healthy controls compared to patients with non-small-cell lung cancer (NSCLC), as identified by LEfSe analysis of 16S rRNA stool sequencing from 96 NSCLC patients versus 139 healthy controls.",
+      "content_hash": "5ab1491939e3cfb6378844bb1774ff7e11cabcd662d31152b1f7e270f3e71e6b",
+      "evidence_level": "E2",
+      "evidence_type": "cohort study",
+      "refs": [
+        {
+          "type": "mesh",
+          "id": "D002289",
+          "label": "Carcinoma, Non-Small-Cell Lung"
+        },
+        {
+          "type": "kegg_disease",
+          "id": "H00014",
+          "label": "Non-small cell lung cancer"
+        }
+      ],
+      "pmids": [
+        33432149
+      ]
+    },
+    {
+      "association_text": "Prevotella copri caused a clinically significant bloodstream infection (bacteremia) in a 90-year-old male patient with acute cardiac decompensation due to heart failure, representing the first reported case of BSI attributed to this organism; blood cultures grew P. copri as the sole pathogen and the patient recovered following treatment with metronidazole and piperacillin-tazobactam.",
+      "content_hash": "3fe849921c7ee95cc9dede0241dfc584fd45ab5c3c99539742c83c4ced44d4c2",
+      "evidence_level": "E1",
+      "evidence_type": "case report",
+      "refs": [
+        {
+          "type": "mesh",
+          "id": "D001424",
+          "label": "Bacteremia"
+        },
+        {
+          "type": "mesh",
+          "id": "D006333",
+          "label": "Heart Failure"
+        },
+        {
+          "type": "kegg_disease",
+          "id": "H01410",
+          "label": "Anaerobic infection"
+        },
+        {
+          "type": "kegg_disease",
+          "id": "H01631",
+          "label": "Acute heart failure"
+        }
+      ],
+      "pmids": [
+        31548871
+      ]
+    },
+    {
+      "association_text": "Gut microbiota domination by Prevotella copri (6.1% relative abundance at species level; Prevotella genus 15.2% overall by 16S rRNA sequencing) was associated with subsequent P. copri bloodstream infection in the same patient, supporting a gut-to-blood translocation mechanism via intestinal barrier breach; the authors characterize P. copri as a pathobiont rather than a beneficial organism.",
+      "content_hash": "e4039d3f32f9d62f086c00e240b9053b48319118e8b660c1298362cd3ec51030",
+      "evidence_level": "E1",
+      "evidence_type": "case report",
+      "refs": [
+        {
+          "type": "mesh",
+          "id": "D001424",
+          "label": "Bacteremia"
+        },
+        {
+          "type": "mesh",
+          "id": "D000069196",
+          "label": "Gastrointestinal Microbiome"
+        },
+        {
+          "type": "kegg_disease",
+          "id": "H01410",
+          "label": "Anaerobic infection"
+        }
+      ],
+      "pmids": [
+        31548871
+      ]
+    }
+  ],
+  "_meta": {
+    "version": "v1_10_20260404",
+    "generated_at": "2026-05-03"
+  }
+}

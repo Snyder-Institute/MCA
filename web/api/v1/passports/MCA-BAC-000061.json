@@ -1,0 +1,48 @@
+{
+  "passport_id": "MCA-BAC-000061",
+  "preferred_name": "Streptococcus gallolyticus",
+  "taxon_rank": "species",
+  "domain": "Bacteria",
+  "lineage": "Bacteria; Bacillota; Bacilli; Lactobacillales; Streptococcaceae; Streptococcus",
+  "ncbi_taxid": 315405,
+  "is_pathobiont": "yes",
+  "last_reviewed": "2026-04-03",
+  "created_at": "2026-04-03",
+  "updated_at": "2026-04-03",
+  "synonyms": [
+    "Streptococcus bovis biotype I",
+    "Streptococcus bovis"
+  ],
+  "biology": {
+    "gram_status": "gram-positive",
+    "oxygen_tolerance": "facultative anaerobe",
+    "morphology": "coccus",
+    "key_traits": [],
+    "bacdive_url": "https://bacdive.dsmz.de/strain/14718"
+  },
+  "ecology": {
+    "primary_niches": [],
+    "reservoirs": [
+      "human",
+      "animal"
+    ],
+    "transmission_routes": []
+  },
+  "clinical_profile": {
+    "clinical_roles": [],
+    "typical_specimens": [],
+    "bloom_triggers": [],
+    "risk_contexts": [
+      "colorectal cancer patients (bacteremia as diagnostic indicator)"
+    ],
+    "amr_highlights": [],
+    "virulence_factors": []
+  },
+  "metabolites": [],
+  "evidence_pmids": [],
+  "associations": [],
+  "_meta": {
+    "version": "v1_10_20260404",
+    "generated_at": "2026-05-03"
+  }
+}

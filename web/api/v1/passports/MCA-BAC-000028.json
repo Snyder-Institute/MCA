@@ -1,0 +1,208 @@
+{
+  "passport_id": "MCA-BAC-000028",
+  "preferred_name": "Faecalibacterium",
+  "taxon_rank": "genus",
+  "domain": "Bacteria",
+  "lineage": "cellular organisms|Bacteria|Bacillati|Bacillota|Clostridia|Eubacteriales|Oscillospiraceae",
+  "ncbi_taxid": 216851,
+  "is_pathobiont": "no",
+  "last_reviewed": "2026-04-03",
+  "created_at": "2026-04-01",
+  "updated_at": "2026-04-03",
+  "synonyms": [],
+  "biology": {
+    "gram_status": null,
+    "oxygen_tolerance": "obligate anaerobe",
+    "morphology": null,
+    "key_traits": [
+      "butyrate-producing"
+    ],
+    "bacdive_url": null
+  },
+  "ecology": {
+    "primary_niches": [
+      {
+        "value": "gut",
+        "mesh_anatomy_id": "D007422"
+      }
+    ],
+    "reservoirs": [
+      "human"
+    ],
+    "transmission_routes": []
+  },
+  "clinical_profile": {
+    "clinical_roles": [
+      "protective commensal"
+    ],
+    "typical_specimens": [
+      {
+        "value": "stool",
+        "mesh_anatomy_id": "D005243"
+      }
+    ],
+    "bloom_triggers": [],
+    "risk_contexts": [
+      "melanoma patients receiving immune checkpoint inhibitor therapy (ICB)"
+    ],
+    "amr_highlights": [],
+    "virulence_factors": []
+  },
+  "metabolites": [],
+  "evidence_pmids": [
+    34941392,
+    32129694,
+    29097493
+  ],
+  "associations": [
+    {
+      "association_text": "Faecalibacterium genus relative abundance was significantly higher in anti-PD-1 responders versus non-responders in a newly recruited independent cohort of 132 metastatic melanoma patients (n=87 responders, n=45 non-responders; p=0.018 by Wilcoxon rank sum test), supporting its role as a gut microbiota marker of immunotherapy response.",
+      "content_hash": "2aefe1f783dc1eb57926b2c0eddeface72790a1680ac6b0dda5a1bb11ef4f6c9",
+      "evidence_level": "E2",
+      "evidence_type": "prospective cohort",
+      "refs": [
+        {
+          "type": "mesh",
+          "id": "D008545",
+          "label": "Melanoma"
+        },
+        {
+          "type": "mesh",
+          "id": "D000082082",
+          "label": "Immune Checkpoint Inhibitors"
+        },
+        {
+          "type": "kegg_disease",
+          "id": "H00038",
+          "label": "Melanoma"
+        }
+      ],
+      "pmids": [
+        34941392
+      ]
+    },
+    {
+      "association_text": "In melanoma patients treated with ICB (n=123), Faecalibacterium genus abundance was numerically higher in patients reporting sufficient dietary fiber intake (≥20 g/day) and no probiotic use — the subgroup with significantly longer progression-free survival (median PFS not reached versus 13 months, P=0.015 vs. all other groups) — though the Faecalibacterium difference per se did not reach statistical significance due to small group size (n=22 in optimal group).",
+      "content_hash": "402d260529584830fad673654d1631e9cd69a07f7ac6dd05213619075788cd9b",
+      "evidence_level": "E2",
+      "evidence_type": "prospective cohort",
+      "refs": [
+        {
+          "type": "mesh",
+          "id": "D008545",
+          "label": "Melanoma"
+        },
+        {
+          "type": "mesh",
+          "id": "D000082082",
+          "label": "Immune Checkpoint Inhibitors"
+        },
+        {
+          "type": "mesh",
+          "id": "D004043",
+          "label": "Dietary Fiber"
+        },
+        {
+          "type": "kegg_disease",
+          "id": "H00038",
+          "label": "Melanoma"
+        }
+      ],
+      "pmids": [
+        34941392
+      ]
+    },
+    {
+      "association_text": "Faecalibacterium genus was significantly enriched in anti-PD-1 responders versus non-responders in the gut microbiome of 43 metastatic melanoma patients (30R, 13NR; FDR-adjusted pairwise comparisons and LEfSe; p<0.01), establishing the original human evidence for genus-level enrichment as a marker of immunotherapy response.",
+      "content_hash": "0238bafccb3fa8b8dd11fbbbed5a9eea82201f23fe2459a12b37df333e9c0412",
+      "evidence_level": "E2",
+      "evidence_type": "prospective cohort",
+      "refs": [
+        {
+          "type": "mesh",
+          "id": "D008545",
+          "label": "Melanoma"
+        },
+        {
+          "type": "mesh",
+          "id": "D000082082",
+          "label": "Immune Checkpoint Inhibitors"
+        },
+        {
+          "type": "kegg_disease",
+          "id": "H00038",
+          "label": "Melanoma"
+        }
+      ],
+      "pmids": [
+        29097493
+      ]
+    },
+    {
+      "association_text": "High Faecalibacterium abundance (above median) was associated with significantly prolonged progression-free survival compared to low abundance in 39 anti-PD-1-treated metastatic melanoma patients (p=0.03; multivariate Cox HR=2.95, 95% CI 1.31–7.29), identifying it as an independent gut microbiome predictor of immunotherapy outcome.",
+      "content_hash": "e9d136857cc66a5a471dc07c325f9ba0c8b9384136926a1fa7b7035191809c91",
+      "evidence_level": "E2",
+      "evidence_type": "prospective cohort",
+      "refs": [
+        {
+          "type": "mesh",
+          "id": "D008545",
+          "label": "Melanoma"
+        },
+        {
+          "type": "mesh",
+          "id": "D000082082",
+          "label": "Immune Checkpoint Inhibitors"
+        },
+        {
+          "type": "mesh",
+          "id": "D000077982",
+          "label": "Progression-Free Survival"
+        },
+        {
+          "type": "kegg_disease",
+          "id": "H00038",
+          "label": "Melanoma"
+        }
+      ],
+      "pmids": [
+        29097493
+      ]
+    },
+    {
+      "association_text": "Faecalibacterium genus abundance was significantly positively correlated with CD8+ T cell density in pre-treatment tumors of melanoma patients on anti-PD-1 therapy (r²=0.42, p<0.01; n=15 matched tumor-microbiome samples), linking gut microbiome composition to intratumoral anti-tumor immunity.",
+      "content_hash": "3b749e0ccba8c27a7a3896e9d30e40b3646db60156cb47516ac751e713046115",
+      "evidence_level": "E2",
+      "evidence_type": "prospective cohort",
+      "refs": [
+        {
+          "type": "mesh",
+          "id": "D008545",
+          "label": "Melanoma"
+        },
+        {
+          "type": "mesh",
+          "id": "D000082082",
+          "label": "Immune Checkpoint Inhibitors"
+        },
+        {
+          "type": "mesh",
+          "id": "D000069196",
+          "label": "Gastrointestinal Microbiome"
+        },
+        {
+          "type": "kegg_disease",
+          "id": "H00038",
+          "label": "Melanoma"
+        }
+      ],
+      "pmids": [
+        29097493
+      ]
+    }
+  ],
+  "_meta": {
+    "version": "v1_10_20260404",
+    "generated_at": "2026-05-03"
+  }
+}

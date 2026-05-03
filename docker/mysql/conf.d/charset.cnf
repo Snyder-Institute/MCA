@@ -1,0 +1,10 @@
+# Force the MySQL client (used during /docker-entrypoint-initdb.d/ imports)
+# to send/receive UTF-8 multi-byte characters correctly. Without this the
+# default client charset is latin1 and any en-dash, em-dash, or non-ASCII
+# character in a .sql dump gets stored as mojibake.
+
+[client]
+default-character-set = utf8mb4
+
+[mysql]
+default-character-set = utf8mb4

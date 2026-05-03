@@ -1,0 +1,176 @@
+{
+  "passport_id": "MCA-BAC-000025",
+  "preferred_name": "Bifidobacterium longum",
+  "taxon_rank": "species",
+  "domain": "Bacteria",
+  "lineage": "cellular organisms|Bacteria|Bacillati|Actinomycetota|Actinomycetes|Bifidobacteriales|Bifidobacteriaceae|Bifidobacterium",
+  "ncbi_taxid": 216816,
+  "is_pathobiont": "no",
+  "last_reviewed": "2026-04-03",
+  "created_at": "2026-04-01",
+  "updated_at": "2026-04-03",
+  "synonyms": [],
+  "biology": {
+    "gram_status": null,
+    "oxygen_tolerance": "obligate anaerobe",
+    "morphology": null,
+    "key_traits": [],
+    "bacdive_url": "https://bacdive.dsmz.de/strain/1709"
+  },
+  "ecology": {
+    "primary_niches": [
+      {
+        "value": "gut",
+        "mesh_anatomy_id": "D007422"
+      }
+    ],
+    "reservoirs": [
+      "human",
+      "food"
+    ],
+    "transmission_routes": []
+  },
+  "clinical_profile": {
+    "clinical_roles": [
+      "commensal",
+      "probiotic candidate"
+    ],
+    "typical_specimens": [
+      {
+        "value": "stool",
+        "mesh_anatomy_id": "D005243"
+      }
+    ],
+    "bloom_triggers": [],
+    "risk_contexts": [
+      "melanoma patients receiving immune checkpoint inhibitor therapy (ICB)"
+    ],
+    "amr_highlights": [],
+    "virulence_factors": []
+  },
+  "metabolites": [],
+  "evidence_pmids": [
+    34941392,
+    33542131
+  ],
+  "associations": [
+    {
+      "association_text": "Bifidobacterium longum 35624–based probiotic administration to germ-free mice colonized with an ICB complete responder's microbiota significantly impaired antitumor response to anti-PD-L1 therapy, resulting in significantly larger tumors compared to sterile water control (P=0.04 by likelihood ratio test in linear mixed model; n=4–5 per group), with concomitant reduction in gut microbiome alpha diversity (inverse Simpson index).",
+      "content_hash": "bae3fcbb9f0752c33974e4c8be2ca391b5fd2f419a2feaa579fc5ba1a8674337",
+      "evidence_level": "E1",
+      "evidence_type": "preclinical murine model",
+      "refs": [
+        {
+          "type": "mesh",
+          "id": "D008546",
+          "label": "Melanoma, Experimental"
+        },
+        {
+          "type": "mesh",
+          "id": "D019936",
+          "label": "Probiotics"
+        },
+        {
+          "type": "mesh",
+          "id": "D000082082",
+          "label": "Immune Checkpoint Inhibitors"
+        },
+        {
+          "type": "kegg_disease",
+          "id": "H00038",
+          "label": "Melanoma"
+        }
+      ],
+      "pmids": [
+        34941392
+      ]
+    },
+    {
+      "association_text": "B. longum 35624–based probiotic administration significantly reduced the frequency of IFN-γ–positive CD8+ cytotoxic T cells in the tumor microenvironment of anti-PD-L1–treated melanoma-bearing germ-free mice (P=0.03 by supervised flow cytometry analysis; n=6 per group), indicating suppression of intratumoral cytotoxic T cell responses as a mechanism of impaired ICB efficacy.",
+      "content_hash": "d723d75d48041374df92b26d9995be224f8247d82441728070304daad45d69e5",
+      "evidence_level": "E1",
+      "evidence_type": "preclinical murine model",
+      "refs": [
+        {
+          "type": "mesh",
+          "id": "D008546",
+          "label": "Melanoma, Experimental"
+        },
+        {
+          "type": "mesh",
+          "id": "D013601",
+          "label": "T-Lymphocytes"
+        },
+        {
+          "type": "mesh",
+          "id": "D019936",
+          "label": "Probiotics"
+        },
+        {
+          "type": "kegg_disease",
+          "id": "H00038",
+          "label": "Melanoma"
+        }
+      ],
+      "pmids": [
+        34941392
+      ]
+    },
+    {
+      "association_text": "Bifidobacterium longum was among bacterial species enriched in responders (objective response or stable disease >12 months) to FMT plus pembrolizumab in a Phase 2 trial of 15 PD-1-refractory advanced melanoma patients (NCT03341143), confirming its previously reported association with favorable anti-PD-1 response in human melanoma.",
+      "content_hash": "dadec1b1d3d2533851659bbed679bfafd97b182586322ae78ce5a65fa81579a3",
+      "evidence_level": "E2",
+      "evidence_type": "phase 2 clinical trial",
+      "refs": [
+        {
+          "type": "mesh",
+          "id": "D008545",
+          "label": "Melanoma"
+        },
+        {
+          "type": "kegg_disease",
+          "id": "H00038",
+          "label": "Melanoma"
+        }
+      ],
+      "pmids": [
+        33542131
+      ]
+    },
+    {
+      "association_text": "Bifidobacterium longum was among 8 commensal species significantly enriched in pre-treatment stool of metastatic melanoma anti-PD-1 responders (n=16) versus non-responders (n=26) by integrated 16S rRNA, shotgun metagenomic, and qPCR analysis (P<0.05, permutation test); fecal microbiota from responding patients conveyed improved tumor control and augmented CD8+ T cell infiltration in germ-free mouse recipients.",
+      "content_hash": "0dee0ec734a6efb678192830b1a1e5def18c532dab9c2f5d0e861150076f0d0d",
+      "evidence_level": "E2",
+      "evidence_type": "prospective observational cohort",
+      "refs": [
+        {
+          "type": "mesh",
+          "id": "D008545",
+          "label": "Melanoma"
+        },
+        {
+          "type": "mesh",
+          "id": "D007167",
+          "label": "Immunotherapy"
+        },
+        {
+          "type": "mesh",
+          "id": "D061026",
+          "label": "Programmed Cell Death 1 Receptor"
+        },
+        {
+          "type": "kegg_disease",
+          "id": "H00038",
+          "label": "Melanoma"
+        }
+      ],
+      "pmids": [
+        29302014
+      ]
+    }
+  ],
+  "_meta": {
+    "version": "v1_10_20260404",
+    "generated_at": "2026-05-03"
+  }
+}

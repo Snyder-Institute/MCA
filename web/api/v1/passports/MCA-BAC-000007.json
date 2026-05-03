@@ -1,0 +1,115 @@
+{
+  "passport_id": "MCA-BAC-000007",
+  "preferred_name": "Eggerthella lenta",
+  "taxon_rank": "species",
+  "domain": "Bacteria",
+  "lineage": "Bacteria; Actinomycetota; Coriobacteriia; Eggerthellales; Eggerthellaceae; Eggerthella",
+  "ncbi_taxid": 84112,
+  "is_pathobiont": "unknown",
+  "last_reviewed": "2026-04-01",
+  "created_at": "2026-04-01",
+  "updated_at": "2026-04-01",
+  "synonyms": [],
+  "biology": {
+    "gram_status": null,
+    "oxygen_tolerance": "obligate anaerobe",
+    "morphology": null,
+    "key_traits": [],
+    "bacdive_url": null
+  },
+  "ecology": {
+    "primary_niches": [
+      {
+        "value": "gut",
+        "mesh_anatomy_id": "D007422"
+      }
+    ],
+    "reservoirs": [
+      "human"
+    ],
+    "transmission_routes": []
+  },
+  "clinical_profile": {
+    "clinical_roles": [
+      "commensal"
+    ],
+    "typical_specimens": [
+      {
+        "value": "stool",
+        "mesh_anatomy_id": "D005243"
+      }
+    ],
+    "bloom_triggers": [
+      {
+        "value": "antibiotic exposure"
+      }
+    ],
+    "risk_contexts": [
+      "post-antibiotic"
+    ],
+    "amr_highlights": [],
+    "virulence_factors": []
+  },
+  "metabolites": [],
+  "evidence_pmids": [
+    41814006
+  ],
+  "associations": [
+    {
+      "association_text": "Eggerthella lenta relative abundance was significantly higher in individuals with prior exposure to clindamycin, fluoroquinolones, or flucloxacillin, with disruptions persisting for 4–8 years post-prescription, in a multi-cohort observational study of 14,979 Swedish adults (SCAPIS, SIMPLER, MOS cohorts).",
+      "content_hash": "8fb737ee5a6a62e506735928c0fa0ad2fc6a9ce30ece09e24cdc5f7cb3d11e55",
+      "evidence_level": "E3",
+      "evidence_type": "multi-cohort observational study",
+      "refs": [
+        {
+          "type": "mesh",
+          "id": "D016638",
+          "label": "Critical Illness"
+        },
+        {
+          "type": "mesh",
+          "id": "D064806",
+          "label": "Dysbiosis"
+        },
+        {
+          "type": "mesh",
+          "id": "D064307",
+          "label": "Microbiota"
+        },
+        {
+          "type": "mesh",
+          "id": "D004755",
+          "label": "Enterobacteriaceae"
+        }
+      ],
+      "pmids": [
+        41814006
+      ]
+    },
+    {
+      "association_text": "Higher Eggerthella lenta relative abundance was positively associated with elevated BMI, waist-hip ratio, serum triglycerides, and C-reactive protein in the SCAPIS cohort (n≈10,456), consistent with a cardiometabolic risk profile.",
+      "content_hash": "47333f0b5e33bd680e405af85421acd0ea70f7248fbf29619a2569b2fb70c0cd",
+      "evidence_level": "E3",
+      "evidence_type": "cross-sectional cohort study",
+      "refs": [
+        {
+          "type": "kegg_disease",
+          "id": "H01637",
+          "label": "Hypertriglyceridemia"
+        },
+        {
+          "type": "kegg_disease",
+          "id": "H01742",
+          "label": "Coronary artery disease"
+        }
+      ],
+      "pmids": [
+        41814006
+      ]
+    }
+  ],
+  "_meta": {
+    "version": "v1_10_20260404",
+    "generated_at": "2026-05-03"
+  }
+}

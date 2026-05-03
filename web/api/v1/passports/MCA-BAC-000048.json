@@ -1,0 +1,90 @@
+{
+  "passport_id": "MCA-BAC-000048",
+  "preferred_name": "Ruminococcus flavefaciens",
+  "taxon_rank": "species",
+  "domain": "Bacteria",
+  "lineage": "cellular organisms|Bacteria|Bacillati|Bacillota|Clostridia|Eubacteriales|Oscillospiraceae|Ruminococcus",
+  "ncbi_taxid": 1265,
+  "is_pathobiont": "no",
+  "last_reviewed": "2026-04-02",
+  "created_at": "2026-04-02",
+  "updated_at": "2026-04-02",
+  "synonyms": [],
+  "biology": {
+    "gram_status": "gram-positive",
+    "oxygen_tolerance": "obligate anaerobe",
+    "morphology": "coccus",
+    "key_traits": [
+      "cellulose-degrading"
+    ],
+    "bacdive_url": "https://bacdive.dsmz.de/strain/166624"
+  },
+  "ecology": {
+    "primary_niches": [
+      {
+        "value": "gut",
+        "mesh_anatomy_id": "D007422"
+      }
+    ],
+    "reservoirs": [
+      "human",
+      "animal"
+    ],
+    "transmission_routes": []
+  },
+  "clinical_profile": {
+    "clinical_roles": [
+      "protective commensal"
+    ],
+    "typical_specimens": [
+      {
+        "value": "stool"
+      }
+    ],
+    "bloom_triggers": [],
+    "risk_contexts": [
+      "melanoma patients receiving immune checkpoint inhibitor therapy (ICB)"
+    ],
+    "amr_highlights": [
+      {
+        "value": "none documented"
+      }
+    ],
+    "virulence_factors": [
+      {
+        "value": "none documented"
+      }
+    ]
+  },
+  "metabolites": [],
+  "evidence_pmids": [
+    33542131
+  ],
+  "associations": [
+    {
+      "association_text": "Ruminococcus flavefaciens was identified in transkingdom multi-omic network analysis as enriched in responders (objective response or stable disease >12 months) to FMT plus pembrolizumab in a Phase 2 trial of 15 PD-1-refractory advanced melanoma patients, and negatively correlated with circulating CXCL8 (IL-8), an immunosuppressive cytokine elevated in non-responders.",
+      "content_hash": "97395dc6b6fea905bb357b31c23d1fb52d863cfc1c7d574739090b47c42ddb7b",
+      "evidence_level": "E2",
+      "evidence_type": "phase 2 clinical trial",
+      "refs": [
+        {
+          "type": "mesh",
+          "id": "D008545",
+          "label": "Melanoma"
+        },
+        {
+          "type": "kegg_disease",
+          "id": "H00038",
+          "label": "Melanoma"
+        }
+      ],
+      "pmids": [
+        33542131
+      ]
+    }
+  ],
+  "_meta": {
+    "version": "v1_10_20260404",
+    "generated_at": "2026-05-03"
+  }
+}

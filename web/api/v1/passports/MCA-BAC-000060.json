@@ -1,0 +1,68 @@
+{
+  "passport_id": "MCA-BAC-000060",
+  "preferred_name": "Helicobacter pylori",
+  "taxon_rank": "species",
+  "domain": "Bacteria",
+  "lineage": "Bacteria; Campylobacterota; Epsilonproteobacteria; Campylobacterales; Helicobacteraceae; Helicobacter",
+  "ncbi_taxid": 210,
+  "is_pathobiont": "yes",
+  "last_reviewed": "2026-04-03",
+  "created_at": "2026-04-03",
+  "updated_at": "2026-04-03",
+  "synonyms": [
+    "Campylobacter pylori",
+    "Campylobacter pyloridis"
+  ],
+  "biology": {
+    "gram_status": "gram-negative",
+    "oxygen_tolerance": "microaerophile",
+    "morphology": "bacillus (rod)",
+    "key_traits": [
+      "toxin-producing"
+    ],
+    "bacdive_url": "https://bacdive.dsmz.de/strain/6102"
+  },
+  "ecology": {
+    "primary_niches": [
+      {
+        "value": "stomach",
+        "mesh_anatomy_id": "D013270"
+      }
+    ],
+    "reservoirs": [
+      "human"
+    ],
+    "transmission_routes": [
+      "fecal-oral",
+      "oral-oral"
+    ]
+  },
+  "clinical_profile": {
+    "clinical_roles": [
+      "primary pathogen"
+    ],
+    "typical_specimens": [
+      {
+        "value": "biopsy"
+      },
+      {
+        "value": "stool"
+      }
+    ],
+    "bloom_triggers": [],
+    "risk_contexts": [
+      "chronic H. pylori infection in gastric mucosa"
+    ],
+    "amr_highlights": [],
+    "virulence_factors": []
+  },
+  "metabolites": [],
+  "evidence_pmids": [
+    33766858
+  ],
+  "associations": [],
+  "_meta": {
+    "version": "v1_10_20260404",
+    "generated_at": "2026-05-03"
+  }
+}

@@ -1,27 +1,33 @@
 #!/usr/bin/env python3
 """
-xml2sql.py — Convert an MCA XML database snapshot to MySQL INSERT statements.
+xml2sql.py — Convert an MCA XML database snapshot to MySQL INSERT statements
+            and the public read-only API's static JSON files.
 
 Usage:
     python3 xml2sql.py database/MCA_DB_v1_0_20260401.xml
 
 Output:
-    database/MCA_DB_v1_0_20260401.sql.gz  (same directory, same stem, .sql.gz extension)
+    database/MCA_DB_v1_0_20260401.sql.gz  (MySQL dump — same dir/stem)
+    web/api/v1/passports/MCA-*.json       (one per taxon — public API)
+    web/api/v1/meta.json                  (DB version + counts — public API)
 
 Import into MySQL:
     gunzip -c database/MCA_DB_v1_0_20260401.sql.gz | mysql MCA
 
 Notes:
-    - Associations with evidence_grade UNCERTAIN are skipped (not in the SQL ENUM)
-      and a warning is printed to stderr.
+    - Associations with evidence_grade UNCERTAIN are skipped from BOTH the SQL
+      dump (not in the ENUM) and the JSON output (consistent semantics).
     - Surrogate integer PKs are assigned sequentially starting from 1.
       They are stable within a single run but will differ across runs if the
       XML changes — the canonical stable identifier is passport_id (e.g. MCA-BAC-000001).
+    - The JSON shape is the public API contract. Treat changes as breaking
+      changes for /api/v1/.
 """
 
 import sys
 import os
 import gzip
+import json
 import xml.etree.ElementTree as ET
 from datetime import date
 
@@ -49,6 +55,158 @@ def get_text(el, tag, default=None):
     if child is None or not child.text:
         return default
     return child.text.strip()
+
+
+def get_int(el, tag):
+    """Return int value of a direct child element, or None."""
+    txt = get_text(el, tag)
+    if txt is None:
+        return None
+    try:
+        return int(txt)
+    except (ValueError, TypeError):
+        return None
+
+
+def _list_text(parent, xpath):
+    """Return [text, ...] for matching children, skipping empty."""
+    if parent is None:
+        return []
+    out = []
+    for el in parent.findall(xpath):
+        if el.text and el.text.strip():
+            out.append(el.text.strip())
+    return out
+
+
+def _list_with_attr(parent, xpath, attr):
+    """Return [{"value": text, "<attr>": ...}] for matching children."""
+    if parent is None:
+        return []
+    out = []
+    for el in parent.findall(xpath):
+        if not (el.text and el.text.strip()):
+            continue
+        d = {"value": el.text.strip()}
+        v = el.get(attr)
+        if v:
+            d[attr] = v
+        out.append(d)
+    return out
+
+
+def build_passport_dict(tp, db_version, generated_at):
+    """Convert a <TaxonPassport> element into the public API JSON shape."""
+    bio = tp.find('Biology')
+    eco = tp.find('Ecology')
+    cp  = tp.find('ClinicalProfile')
+
+    biology = None
+    if bio is not None:
+        biology = {
+            "gram_status":      get_text(bio, 'gram_status'),
+            "oxygen_tolerance": get_text(bio, 'oxygen_tolerance'),
+            "morphology":       get_text(bio, 'morphology'),
+            "key_traits":       _list_text(bio.find('KeyTraits'), 'key_trait'),
+            "bacdive_url":      get_text(bio, 'bacdive_url'),
+        }
+
+    ecology = None
+    if eco is not None:
+        ecology = {
+            "primary_niches":      _list_with_attr(eco.find('PrimaryNiches'),      'primary_niche',      'mesh_anatomy_id'),
+            "reservoirs":          _list_text(eco.find('Reservoirs'),              'reservoir'),
+            "transmission_routes": _list_text(eco.find('TransmissionRoutes'),      'transmission_route'),
+        }
+
+    clinical = None
+    if cp is not None:
+        clinical = {
+            "clinical_roles":     _list_text(cp.find('ClinicalRoles'),       'clinical_role'),
+            "typical_specimens":  _list_with_attr(cp.find('TypicalSpecimens'), 'typical_specimen', 'mesh_anatomy_id'),
+            "bloom_triggers":     _list_with_attr(cp.find('BloomTriggers'),    'bloom_trigger',    'kegg_drug_id'),
+            "risk_contexts":      _list_text(cp.find('RiskContexts'),        'risk_context'),
+            "amr_highlights":     _list_with_attr(cp.find('AmrHighlights'),    'amr_highlight',    'aro_id'),
+            "virulence_factors":  _list_with_attr(cp.find('VirulenceFactors'), 'virulence_factor', 'vfdb_id'),
+        }
+
+    metabolites = []
+    for met in tp.findall('Metabolites/Metabolite'):
+        name = get_text(met, 'metabolite_name')
+        if not name:
+            continue
+        metabolites.append({
+            "name":             name,
+            "relationship":     get_text(met, 'relationship'),
+            "kegg_compound_id": get_text(met, 'kegg_compound_id'),
+            "chebi_id":         get_text(met, 'chebi_id'),
+        })
+
+    evidence_pmids = []
+    for pmid_el in tp.findall('TaxonEvidencePmids/pmid'):
+        if pmid_el.text:
+            try:
+                evidence_pmids.append(int(pmid_el.text.strip()))
+            except ValueError:
+                pass
+
+    associations = []
+    for ca in tp.findall('ClinicalAssociations/ClinicalAssociation'):
+        ev = get_text(ca, 'evidence_level')
+        # Match xml2sql.py: skip UNCERTAIN and missing-grade rows.
+        if ev is None or ev == 'UNCERTAIN':
+            continue
+        if get_text(ca, 'content_hash') is None:
+            continue
+
+        refs = []
+        for ref in ca.findall('AssocRefs/ref') + ca.findall('AssocRefs/assoc_ref'):
+            r_type  = ref.get('type')  or get_text(ref, 'ref_type')
+            r_id    = ref.get('id')    or get_text(ref, 'ref_id')
+            r_label = ref.get('label') or get_text(ref, 'ref_label')
+            if r_type and r_id:
+                refs.append({"type": r_type, "id": r_id, "label": r_label})
+
+        pmids = []
+        for pmid_el in ca.findall('Pmids/pmid'):
+            if pmid_el.text:
+                try:
+                    pmids.append(int(pmid_el.text.strip()))
+                except ValueError:
+                    pass
+
+        associations.append({
+            "association_text": get_text(ca, 'association_text'),
+            "content_hash":     get_text(ca, 'content_hash'),
+            "evidence_level":   ev,
+            "evidence_type":    get_text(ca, 'evidence_type'),
+            "refs":             refs,
+            "pmids":            pmids,
+        })
+
+    return {
+        "passport_id":    get_text(tp, 'passport_id'),
+        "preferred_name": get_text(tp, 'preferred_name'),
+        "taxon_rank":     get_text(tp, 'taxon_rank'),
+        "domain":         get_text(tp, 'domain'),
+        "lineage":        get_text(tp, 'lineage'),
+        "ncbi_taxid":     get_int(tp, 'ncbi_taxid'),
+        "is_pathobiont":  get_text(tp, 'is_pathobiont'),
+        "last_reviewed":  get_text(tp, 'last_reviewed'),
+        "created_at":     get_text(tp, 'created_at'),
+        "updated_at":     get_text(tp, 'updated_at'),
+        "synonyms":       _list_text(tp.find('Synonyms'), 'synonym'),
+        "biology":        biology,
+        "ecology":        ecology,
+        "clinical_profile": clinical,
+        "metabolites":    metabolites,
+        "evidence_pmids": evidence_pmids,
+        "associations":   associations,
+        "_meta": {
+            "version":      db_version,
+            "generated_at": generated_at,
+        },
+    }
 
 
 # Tag list specs: (XPath relative to TaxonPassport, SQL category value, ext_id attribute name or None)
@@ -321,6 +479,53 @@ def main():
     print(f'  Associations : {n_assocs}')
     if skipped_assocs:
         print(f'  Skipped      : {skipped_assocs} (UNCERTAIN grade)')
+
+    # ── Static JSON for /api/v1/ ────────────────────────────────────────────
+    # web/api/v1/passports/MCA-*.json + web/api/v1/meta.json
+    # Served as plain static files by nginx — no PHP, no DB hit.
+    repo_root = os.path.dirname(os.path.dirname(os.path.abspath(xml_path)))
+    api_dir   = os.path.join(repo_root, 'web', 'api', 'v1')
+    pass_dir  = os.path.join(api_dir, 'passports')
+    os.makedirs(pass_dir, exist_ok=True)
+
+    db_version = 'unknown'
+    if meta_el is not None:
+        db_version = get_text(meta_el, 'version', 'unknown')
+
+    # Wipe previous passport JSONs so deletions in the XML propagate.
+    for fname in os.listdir(pass_dir):
+        if fname.startswith('MCA-') and fname.endswith('.json'):
+            os.remove(os.path.join(pass_dir, fname))
+
+    n_assoc_in_json = 0
+    written_passports = []
+    for tp in passports:
+        d = build_passport_dict(tp, db_version, today)
+        if not d.get('passport_id'):
+            continue
+        out_file = os.path.join(pass_dir, f"{d['passport_id']}.json")
+        with open(out_file, 'w', encoding='utf-8') as f:
+            json.dump(d, f, indent=2, ensure_ascii=False, sort_keys=False)
+            f.write('\n')
+        written_passports.append(d['passport_id'])
+        n_assoc_in_json += len(d['associations'])
+
+    meta_out = {
+        "version":      db_version,
+        "last_updated": today,
+        "counts": {
+            "passports":    len(written_passports),
+            "associations": n_assoc_in_json,
+        },
+    }
+    with open(os.path.join(api_dir, 'meta.json'), 'w', encoding='utf-8') as f:
+        json.dump(meta_out, f, indent=2, ensure_ascii=False)
+        f.write('\n')
+
+    print(f'Written : {api_dir}/')
+    print(f'  Passport JSONs : {len(written_passports)}')
+    print(f'  Associations   : {n_assoc_in_json} (UNCERTAIN excluded)')
+    print(f'  meta.json      : {meta_out["version"]} ({meta_out["last_updated"]})')
 
 
 if __name__ == '__main__':

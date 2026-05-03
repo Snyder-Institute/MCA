@@ -1,0 +1,65 @@
+# MCA local dev stack — mirrors production (nginx + PHP-FPM + MySQL on Rocky 9).
+#
+# Versions are pinned to match prod so behavior matches what users hit.
+# All credentials below are dev-only and confined to localhost.
+#
+# Usage from repo root:
+#   docker compose -f docker/docker-compose.yml up -d
+#   open http://localhost:8080
+#
+# To wipe and start fresh:
+#   docker compose -f docker/docker-compose.yml down -v
+
+services:
+  nginx:
+    image: nginx:1.20
+    ports:
+      - "8080:80"
+    volumes:
+      - ../web:/var/www/mca:ro
+      - ./nginx/mca.conf:/etc/nginx/conf.d/default.conf:ro
+    depends_on:
+      - php
+
+  php:
+    build:
+      context: .
+      dockerfile: Dockerfile.php
+    volumes:
+      - ../web:/var/www/mca
+      - ./web/db_connect.php:/var/www/mca/db_connect.php:ro
+      - ./web/db_review_connect.php:/var/www/mca/db_review_connect.php:ro
+      - ../review_data:/var/www/review_data:ro
+    depends_on:
+      mysql:
+        condition: service_healthy
+
+  mysql:
+    image: mysql:8.4
+    environment:
+      MYSQL_ROOT_PASSWORD: root
+    ports:
+      # 13306 (not 3306) to avoid conflict with a host MySQL.
+      - "13306:3306"
+    volumes:
+      - mysql_data:/var/lib/mysql
+      # Force the import client to use utf8mb4 — without this, dumps with
+      # multi-byte chars (en-dash, em-dash, accented letters) get stored as
+      # mojibake on first start.
+      - ./mysql/conf.d/charset.cnf:/etc/mysql/conf.d/charset.cnf:ro
+      # MySQL auto-imports anything in /docker-entrypoint-initdb.d on first start
+      # (alphabetical order). The schema dump creates the MCA database; the
+      # data dump fills it; the review init creates MCA_review; users.sql
+      # creates the two app users last.
+      - ../database/MCA_create_database.sql.gz:/docker-entrypoint-initdb.d/01_mca_schema.sql.gz:ro
+      - ../database/MCA_DB_v1_10_20260404.sql.gz:/docker-entrypoint-initdb.d/02_mca_data.sql.gz:ro
+      - ../database/migrations/MCA_review/001_init.sql:/docker-entrypoint-initdb.d/03_mca_review.sql:ro
+      - ./mysql/init/04_users.sql:/docker-entrypoint-initdb.d/04_users.sql:ro
+    healthcheck:
+      test: ["CMD", "mysqladmin", "ping", "-h", "localhost", "-uroot", "-proot"]
+      interval: 5s
+      timeout: 3s
+      retries: 20
+
+volumes:
+  mysql_data:

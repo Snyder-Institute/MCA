@@ -1,0 +1,450 @@
+{
+  "passport_id": "MCA-BAC-000026",
+  "preferred_name": "Enterococcus gallinarum",
+  "taxon_rank": "species",
+  "domain": "Bacteria",
+  "lineage": "cellular organisms|Bacteria|Bacillati|Bacillota|Bacilli|Lactobacillales|Enterococcaceae|Enterococcus",
+  "ncbi_taxid": 1353,
+  "is_pathobiont": "yes",
+  "last_reviewed": "2026-04-02",
+  "created_at": "2026-04-01",
+  "updated_at": "2026-04-02",
+  "synonyms": [],
+  "biology": {
+    "gram_status": null,
+    "oxygen_tolerance": "microaerophile",
+    "morphology": null,
+    "key_traits": [],
+    "bacdive_url": "https://bacdive.dsmz.de/strain/5310"
+  },
+  "ecology": {
+    "primary_niches": [
+      {
+        "value": "gut",
+        "mesh_anatomy_id": "D041981"
+      }
+    ],
+    "reservoirs": [
+      "animal",
+      "human"
+    ],
+    "transmission_routes": []
+  },
+  "clinical_profile": {
+    "clinical_roles": [
+      "opportunistic pathogen",
+      "coloniser"
+    ],
+    "typical_specimens": [
+      {
+        "value": "stool",
+        "mesh_anatomy_id": "D005243"
+      },
+      {
+        "value": "biopsy"
+      }
+    ],
+    "bloom_triggers": [
+      {
+        "value": "inflammation"
+      }
+    ],
+    "risk_contexts": [
+      "immunocompromised patients",
+      "systemic lupus erythematosus (SLE)",
+      "autoimmune hepatitis (AIH)",
+      "genetic predisposition to autoimmunity",
+      "impaired gut barrier function"
+    ],
+    "amr_highlights": [],
+    "virulence_factors": []
+  },
+  "metabolites": [
+    {
+      "name": "tryptophan-derived AhR ligands (indoles)",
+      "relationship": "produces",
+      "kegg_compound_id": "C00463",
+      "chebi_id": null
+    }
+  ],
+  "evidence_pmids": [
+    35831502,
+    29590047
+  ],
+  "associations": [
+    {
+      "association_text": "Enterococcus gallinarum undergoes within-host evolution into mucosally-adapted lineages that exhibit significantly increased translocation to the mesenteric lymph nodes and liver compared to luminal lineages in germ-free monocolonised mice.",
+      "content_hash": "35492a317f412c60dd6fdda302b45bbae35aa94bb6a184caa8ad31fbc10f00e3",
+      "evidence_level": "E1",
+      "evidence_type": "animal model",
+      "refs": [
+        {
+          "type": "mesh",
+          "id": "D018988",
+          "label": "Bacterial Translocation"
+        },
+        {
+          "type": "mesh",
+          "id": "D008099",
+          "label": "Liver"
+        }
+      ],
+      "pmids": [
+        35831502
+      ]
+    },
+    {
+      "association_text": "Enterococcus gallinarum mucosally-adapted liver isolates exhibit significantly increased resistance to lysozyme-mediated growth inhibition, cathelicidin-related antimicrobial peptide (mCRAMP) killing, and macrophage phagocytosis compared to luminal faecal isolates in vitro.",
+      "content_hash": "ec5001724ce58cdd42ee76ecfda34d67ded1fc57347279af966801de42321a7d",
+      "evidence_level": "E1",
+      "evidence_type": "in vitro",
+      "refs": [
+        {
+          "type": "mesh",
+          "id": "D054884",
+          "label": "Host-Pathogen Interactions"
+        }
+      ],
+      "pmids": [
+        35831502
+      ]
+    },
+    {
+      "association_text": "Enterococcus gallinarum liver-adapted isolates induce increased intestinal permeability and reduced epithelial barrier defences, including decreased mucus production, reduced intraepithelial lymphocyte recruitment, and altered tight junction protein expression, in germ-free monocolonised mice.",
+      "content_hash": "5e4026c1143d665f8a6259c4c771c4f96ae890e9b8e9a51379a60a9a13f63d7c",
+      "evidence_level": "E1",
+      "evidence_type": "animal model",
+      "refs": [
+        {
+          "type": "mesh",
+          "id": "D007413",
+          "label": "Intestinal Mucosa"
+        }
+      ],
+      "pmids": [
+        35831502
+      ]
+    },
+    {
+      "association_text": "Enterococcus gallinarum liver-adapted isolates induce increased hepatic inflammatory gene expression, including upregulation of pro-inflammatory cytokines, interferon-stimulated genes, serum amyloid A proteins, and collagen, compared to faecal isolates in germ-free monocolonised mice.",
+      "content_hash": "4ca1c31461ae33d3c8bd80eea059bfcde66a4f11aa1a8a971766a8d1dc6a3f09",
+      "evidence_level": "E1",
+      "evidence_type": "animal model",
+      "refs": [
+        {
+          "type": "mesh",
+          "id": "D008099",
+          "label": "Liver"
+        },
+        {
+          "type": "mesh",
+          "id": "D007249",
+          "label": "Inflammation"
+        }
+      ],
+      "pmids": [
+        35831502
+      ]
+    },
+    {
+      "association_text": "Enterococcus gallinarum translocation to the liver exacerbates lupus-like autoimmune manifestations including hepatosplenomegaly, proteinuria, and elevated anti-dsDNA autoantibodies in a TLR7 agonist (imiquimod)-induced autoimmunity mouse model.",
+      "content_hash": "cf365abb895359749a8faf70725c4ef8318f4380dce2926687767e964ccf3bce",
+      "evidence_level": "E1",
+      "evidence_type": "animal model",
+      "refs": [
+        {
+          "type": "mesh",
+          "id": "D008180",
+          "label": "Lupus Erythematosus, Systemic"
+        },
+        {
+          "type": "kegg_disease",
+          "id": "H00080",
+          "label": "Systemic lupus erythematosus"
+        }
+      ],
+      "pmids": [
+        35831502
+      ]
+    },
+    {
+      "association_text": "Enterococcus gallinarum mucosally-adapted isolates produce an enhanced capsular polysaccharide layer that facilitates evasion of innate immune recognition and is associated with increased liver translocation in germ-free monocolonised mice.",
+      "content_hash": "739b3002124cc77d311f38fcced3e3ea15e5072d05853c19cf11fc0e962e59a2",
+      "evidence_level": "E1",
+      "evidence_type": "animal model",
+      "refs": [
+        {
+          "type": "mesh",
+          "id": "D054884",
+          "label": "Host-Pathogen Interactions"
+        }
+      ],
+      "pmids": [
+        35831502
+      ]
+    },
+    {
+      "association_text": "Enterococcus gallinarum has been detected in liver biopsies from patients with autoimmune hepatitis and primary sclerosing cholangitis, as reported in prior studies cited by the authors; this finding motivated the in vivo translocation experiments in this paper.",
+      "content_hash": "47ee33231a2bd563309b16ad68ad03953c2aa72e058ca53e86f39431ef2a6acc",
+      "evidence_level": "E1",
+      "evidence_type": "cited clinical observation",
+      "refs": [
+        {
+          "type": "mesh",
+          "id": "D019693",
+          "label": "Hepatitis, Autoimmune"
+        },
+        {
+          "type": "mesh",
+          "id": "D015209",
+          "label": "Cholangitis, Sclerosing"
+        },
+        {
+          "type": "kegg_disease",
+          "id": "H01685",
+          "label": "Autoimmune hepatitis"
+        },
+        {
+          "type": "kegg_disease",
+          "id": "H01684",
+          "label": "Primary sclerosing cholangitis"
+        }
+      ],
+      "pmids": [
+        35831502
+      ]
+    },
+    {
+      "association_text": "E. gallinarum was detected by species-specific PCR and immunostaining in liver biopsies of 3/3 tested SLE patients and 5/6 tested AIH patients but in 0/6 healthy cadaveric liver donor controls; 16S rDNA sequencing showed Enterococcus spp. predominance in AIH and cirrhosis liver tissues relative to healthy controls (human case-control).",
+      "content_hash": "32f0ba800580e679ab84e6d210c364f185e07f89e1a37a95c5a95041ef6d6ca7",
+      "evidence_level": "E2",
+      "evidence_type": "case-control",
+      "refs": [
+        {
+          "type": "mesh",
+          "id": "D008180",
+          "label": "Lupus Erythematosus, Systemic"
+        },
+        {
+          "type": "mesh",
+          "id": "D019693",
+          "label": "Hepatitis, Autoimmune"
+        },
+        {
+          "type": "mesh",
+          "id": "D018988",
+          "label": "Bacterial Translocation"
+        },
+        {
+          "type": "mesh",
+          "id": "D008099",
+          "label": "Liver"
+        },
+        {
+          "type": "kegg_disease",
+          "id": "H00080",
+          "label": "Systemic lupus erythematosus"
+        },
+        {
+          "type": "kegg_disease",
+          "id": "H01685",
+          "label": "Autoimmune hepatitis"
+        }
+      ],
+      "pmids": [
+        29590047
+      ]
+    },
+    {
+      "association_text": "Serum IgG antibody titers against E. gallinarum whole bacteria and its RNA were significantly elevated in the majority of SLE (n=15) and AIH (n=17) patients versus healthy controls (n=9); anti-E. gallinarum RNA IgG correlated with anti-human RNA autoantibody titers in SLE (R²=0.5132, p=0.0027) and AIH (R²=0.8245, p<0.0001) patients (human case-control).",
+      "content_hash": "bff86fbb8a48c67c6fd71e4821c0f9f9602a377fb705e60aa01fe625253f0ded",
+      "evidence_level": "E2",
+      "evidence_type": "case-control",
+      "refs": [
+        {
+          "type": "mesh",
+          "id": "D008180",
+          "label": "Lupus Erythematosus, Systemic"
+        },
+        {
+          "type": "mesh",
+          "id": "D019693",
+          "label": "Hepatitis, Autoimmune"
+        },
+        {
+          "type": "mesh",
+          "id": "D001323",
+          "label": "Autoantibodies"
+        },
+        {
+          "type": "kegg_disease",
+          "id": "H00080",
+          "label": "Systemic lupus erythematosus"
+        },
+        {
+          "type": "kegg_disease",
+          "id": "H01685",
+          "label": "Autoimmune hepatitis"
+        }
+      ],
+      "pmids": [
+        29590047
+      ]
+    },
+    {
+      "association_text": "Monocolonization of germ-free C57BL/6 mice with E. gallinarum (n=4–10) induced gut barrier leakage, translocation to mesenteric veins, MLNs, and liver, and elevated anti-RNA IgG and anti-dsDNA IgG autoantibodies at 8 weeks (p<0.05 to p<0.001 vs. GF); neither E. faecalis nor B. thetaiotaomicron monocolonization induced autoantibodies under the same conditions.",
+      "content_hash": "6f0476e9feb85f0cb7608939134b53ff7046ccf504f356ca878ef482f1f58b13",
+      "evidence_level": "E2",
+      "evidence_type": "animal model",
+      "refs": [
+        {
+          "type": "mesh",
+          "id": "D018988",
+          "label": "Bacterial Translocation"
+        },
+        {
+          "type": "mesh",
+          "id": "D001323",
+          "label": "Autoantibodies"
+        },
+        {
+          "type": "mesh",
+          "id": "D015551",
+          "label": "Autoimmunity"
+        }
+      ],
+      "pmids": [
+        29590047
+      ]
+    },
+    {
+      "association_text": "E. gallinarum monocolonization of GF C57BL/6 mice induced marked Th17 expansion in the small intestinal lamina propria (20.1% IL-17A+ vs. 0.50% GF, p<0.0001) and mesenteric lymph nodes (15.1% vs. 0.035%, p<0.001); Th17 expansion was absent in E. faecalis- and B. thetaiotaomicron-monocolonized mice (n=5 per group).",
+      "content_hash": "8bb77d4f65110fa0146be1b34c2f4a2a54faf40acf708300324594ab492ad511",
+      "evidence_level": "E2",
+      "evidence_type": "animal model",
+      "refs": [
+        {
+          "type": "mesh",
+          "id": "D058504",
+          "label": "Th17 Cells"
+        },
+        {
+          "type": "mesh",
+          "id": "D015551",
+          "label": "Autoimmunity"
+        }
+      ],
+      "pmids": [
+        29590047
+      ]
+    },
+    {
+      "association_text": "E. gallinarum lysate or RNA co-cultured with autoimmune-prone (NZW×BXSB)F1 hepatocytes induced expression of autoantigens ERV gp70 (~15-fold) and β2-glycoprotein I (~3-fold), type I IFN-α (~30-fold), and the AhR/CYP1A1 pathway significantly above induction by E. faecalis or B. thetaiotaomicron (ANOVA, p<0.05 to p<0.0001, n=3 each); the same pattern was replicated in primary human hepatocytes.",
+      "content_hash": "aed62d6006cab956110913bceead638a9436e7518fc61f88ab8ce531adf97c46",
+      "evidence_level": "E2",
+      "evidence_type": "in vitro",
+      "refs": [
+        {
+          "type": "mesh",
+          "id": "D022781",
+          "label": "Hepatocytes"
+        },
+        {
+          "type": "mesh",
+          "id": "D018336",
+          "label": "Receptors, Aryl Hydrocarbon"
+        },
+        {
+          "type": "mesh",
+          "id": "D015551",
+          "label": "Autoimmunity"
+        }
+      ],
+      "pmids": [
+        29590047
+      ]
+    },
+    {
+      "association_text": "Administration of the AhR antagonist CH223191 to autoimmune-prone (NZW×BXSB)F1 mice gavaged with E. gallinarum significantly reduced serum anti-RNA IgG (p<0.001) and anti-dsDNA IgG (p<0.001) vs. untreated E. gallinarum-gavaged mice (n=4 per group), confirming that the AhR pathway mediates E. gallinarum-driven autoantibody induction.",
+      "content_hash": "c15258c70680c9ad3a8162b1df0c40fb8c899b237e445024c284f5075700b675",
+      "evidence_level": "E2",
+      "evidence_type": "animal model",
+      "refs": [
+        {
+          "type": "mesh",
+          "id": "D018336",
+          "label": "Receptors, Aryl Hydrocarbon"
+        },
+        {
+          "type": "mesh",
+          "id": "D001323",
+          "label": "Autoantibodies"
+        },
+        {
+          "type": "mesh",
+          "id": "D015551",
+          "label": "Autoimmunity"
+        }
+      ],
+      "pmids": [
+        29590047
+      ]
+    },
+    {
+      "association_text": "Oral vancomycin or ampicillin treatment of autoimmune-prone (NZW×BXSB)F1 mice (n=15 per group) prevented mortality, suppressed E. gallinarum translocation to mesenteric veins, MLNs, and liver, and eliminated anti-dsDNA IgG, anti-RNA IgG, anti-β2GPI IgG autoantibodies and Th17/Tfh cell expansion vs. untreated controls (p<0.05 to p<0.0001); neomycin was less effective and metronidazole had no significant effect on survival.",
+      "content_hash": "84cc51eb2edaf2e366150c82bb168d3d528f31d4bc4fe430074efe4ea9800661",
+      "evidence_level": "E2",
+      "evidence_type": "animal model",
+      "refs": [
+        {
+          "type": "mesh",
+          "id": "D018988",
+          "label": "Bacterial Translocation"
+        },
+        {
+          "type": "mesh",
+          "id": "D001323",
+          "label": "Autoantibodies"
+        },
+        {
+          "type": "mesh",
+          "id": "D000900",
+          "label": "Anti-Bacterial Agents"
+        }
+      ],
+      "pmids": [
+        29590047
+      ]
+    },
+    {
+      "association_text": "Intramuscular vaccination with heat-killed E. gallinarum in autoimmune-prone (NZW×BXSB)F1 mice reduced serum autoantibody levels, prolonged survival, and prevented translocation to internal organs; vaccination against E. faecalis or B. thetaiotaomicron had no protective effect, indicating specificity of the E. gallinarum-driven autoimmune response.",
+      "content_hash": "2ee7713c70737b4f2ecdeba6dd46a752d19cf4ca1df07a0aa0550750ef472711",
+      "evidence_level": "E2",
+      "evidence_type": "animal model",
+      "refs": [
+        {
+          "type": "mesh",
+          "id": "D001428",
+          "label": "Bacterial Vaccines"
+        },
+        {
+          "type": "mesh",
+          "id": "D015551",
+          "label": "Autoimmunity"
+        },
+        {
+          "type": "mesh",
+          "id": "D001327",
+          "label": "Autoimmune Diseases"
+        }
+      ],
+      "pmids": [
+        29590047
+      ]
+    }
+  ],
+  "_meta": {
+    "version": "v1_10_20260404",
+    "generated_at": "2026-05-03"
+  }
+}

@@ -1,0 +1,5 @@
+User-agent: *
+Disallow: /review.php
+Disallow: /review_paper.php
+Disallow: /review_pdf.php
+Disallow: /api/

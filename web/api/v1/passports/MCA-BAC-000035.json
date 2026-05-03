@@ -1,0 +1,79 @@
+{
+  "passport_id": "MCA-BAC-000035",
+  "preferred_name": "Bacteroides nordii",
+  "taxon_rank": "species",
+  "domain": "Bacteria",
+  "lineage": "cellular organisms|Bacteria|Pseudomonadati|FCB group|Bacteroidota|Bacteroidia|Bacteroidales|Bacteroidaceae|Bacteroides",
+  "ncbi_taxid": 291645,
+  "is_pathobiont": "unknown",
+  "last_reviewed": "2026-04-02",
+  "created_at": "2026-04-02",
+  "updated_at": "2026-04-02",
+  "synonyms": [],
+  "biology": {
+    "gram_status": "gram-negative",
+    "oxygen_tolerance": "obligate anaerobe",
+    "morphology": "bacillus (rod)",
+    "key_traits": [],
+    "bacdive_url": "https://bacdive.dsmz.de/strain/139989"
+  },
+  "ecology": {
+    "primary_niches": [
+      {
+        "value": "gut",
+        "mesh_anatomy_id": "D007422"
+      }
+    ],
+    "reservoirs": [
+      "human"
+    ],
+    "transmission_routes": []
+  },
+  "clinical_profile": {
+    "clinical_roles": [
+      "commensal"
+    ],
+    "typical_specimens": [
+      {
+        "value": "stool"
+      }
+    ],
+    "bloom_triggers": [],
+    "risk_contexts": [
+      "melanoma patients receiving immune checkpoint inhibitor therapy (ICB)"
+    ],
+    "amr_highlights": [],
+    "virulence_factors": []
+  },
+  "metabolites": [],
+  "evidence_pmids": [
+    33542131
+  ],
+  "associations": [
+    {
+      "association_text": "Bacteroides nordii was enriched in non-responders before FMT in a Phase 2 trial of FMT plus pembrolizumab in 15 PD-1-refractory advanced melanoma patients; transkingdom network analysis identified it as positively correlated with circulating CXCL8 (IL-8), IL-10, and CCL3 — immunosuppressive cytokines associated with poor anti-PD-1 clinical outcomes.",
+      "content_hash": "99c745ff7f4f0402cd2376c55378a81baba8ab0bffc401a190661bd2c080086b",
+      "evidence_level": "E2",
+      "evidence_type": "phase 2 clinical trial",
+      "refs": [
+        {
+          "type": "mesh",
+          "id": "D008545",
+          "label": "Melanoma"
+        },
+        {
+          "type": "kegg_disease",
+          "id": "H00038",
+          "label": "Melanoma"
+        }
+      ],
+      "pmids": [
+        33542131
+      ]
+    }
+  ],
+  "_meta": {
+    "version": "v1_10_20260404",
+    "generated_at": "2026-05-03"
+  }
+}

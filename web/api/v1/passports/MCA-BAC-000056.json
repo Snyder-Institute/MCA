@@ -1,0 +1,92 @@
+{
+  "passport_id": "MCA-BAC-000056",
+  "preferred_name": "Blautia obeum",
+  "taxon_rank": "species",
+  "domain": "Bacteria",
+  "lineage": "cellular organisms|Bacteria|Bacillati|Bacillota|Clostridia|Lachnospirales|Lachnospiraceae|Blautia",
+  "ncbi_taxid": 40520,
+  "is_pathobiont": "unknown",
+  "last_reviewed": "2026-04-03",
+  "created_at": "2026-04-03",
+  "updated_at": "2026-04-03",
+  "synonyms": [
+    "Ruminococcus obeum"
+  ],
+  "biology": {
+    "gram_status": "gram-positive",
+    "oxygen_tolerance": "obligate anaerobe",
+    "morphology": "unknown",
+    "key_traits": [],
+    "bacdive_url": "https://bacdive.dsmz.de/strain/17684"
+  },
+  "ecology": {
+    "primary_niches": [
+      {
+        "value": "gut",
+        "mesh_anatomy_id": "D041981"
+      }
+    ],
+    "reservoirs": [
+      "human"
+    ],
+    "transmission_routes": []
+  },
+  "clinical_profile": {
+    "clinical_roles": [
+      "commensal"
+    ],
+    "typical_specimens": [
+      {
+        "value": "stool",
+        "mesh_anatomy_id": "D005243"
+      }
+    ],
+    "bloom_triggers": [],
+    "risk_contexts": [
+      "melanoma patients receiving immune checkpoint inhibitor therapy (ICB)"
+    ],
+    "amr_highlights": [],
+    "virulence_factors": []
+  },
+  "metabolites": [],
+  "evidence_pmids": [
+    29302014
+  ],
+  "associations": [
+    {
+      "association_text": "Blautia obeum (syn. Ruminococcus obeum) was among 2 commensal species significantly enriched in pre-treatment stool of metastatic melanoma anti-PD-1 non-responders (n=26) versus responders (n=16) by integrated 16S rRNA, shotgun metagenomic, and qPCR analysis (P<0.05, permutation test); higher abundance was part of a 'non-beneficial' OTU signature inversely correlated with anti-PD-1 response.",
+      "content_hash": "bdcdb1c8fc0ae3bc9f922276144728fc72a0f6e83358f270419b3a5b7605023a",
+      "evidence_level": "E2",
+      "evidence_type": "prospective observational cohort",
+      "refs": [
+        {
+          "type": "mesh",
+          "id": "D008545",
+          "label": "Melanoma"
+        },
+        {
+          "type": "mesh",
+          "id": "D007167",
+          "label": "Immunotherapy"
+        },
+        {
+          "type": "mesh",
+          "id": "D061026",
+          "label": "Programmed Cell Death 1 Receptor"
+        },
+        {
+          "type": "kegg_disease",
+          "id": "H00038",
+          "label": "Melanoma"
+        }
+      ],
+      "pmids": [
+        29302014
+      ]
+    }
+  ],
+  "_meta": {
+    "version": "v1_10_20260404",
+    "generated_at": "2026-05-03"
+  }
+}

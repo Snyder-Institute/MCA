@@ -1,0 +1,159 @@
+{
+  "passport_id": "MCA-BAC-000036",
+  "preferred_name": "Bacteroides thetaiotaomicron",
+  "taxon_rank": "species",
+  "domain": "Bacteria",
+  "lineage": "Bacteria; Pseudomonadati; Bacteroidota; Bacteroidia; Bacteroidales; Bacteroidaceae; Bacteroides; Bacteroides thetaiotaomicron",
+  "ncbi_taxid": 818,
+  "is_pathobiont": "no",
+  "last_reviewed": "2026-04-03",
+  "created_at": "2026-04-02",
+  "updated_at": "2026-04-03",
+  "synonyms": [
+    "Bacillus thetaiotaomicron",
+    "Bacteroides fragilis subsp. thetaiotaomicron",
+    "Pseudobacterium thetaiotaomicron",
+    "Sphaerocillus thetaiotaomicron"
+  ],
+  "biology": {
+    "gram_status": "gram-negative",
+    "oxygen_tolerance": "obligate anaerobe",
+    "morphology": "bacillus (rod)",
+    "key_traits": [
+      "mucin-degrading"
+    ],
+    "bacdive_url": "https://bacdive.dsmz.de/strain/1599"
+  },
+  "ecology": {
+    "primary_niches": [
+      {
+        "value": "gut",
+        "mesh_anatomy_id": "D007422"
+      }
+    ],
+    "reservoirs": [
+      "human"
+    ],
+    "transmission_routes": []
+  },
+  "clinical_profile": {
+    "clinical_roles": [
+      "commensal"
+    ],
+    "typical_specimens": [
+      {
+        "value": "stool",
+        "mesh_anatomy_id": "D005243"
+      }
+    ],
+    "bloom_triggers": [],
+    "risk_contexts": [],
+    "amr_highlights": [],
+    "virulence_factors": []
+  },
+  "metabolites": [],
+  "evidence_pmids": [
+    29590047,
+    29097493
+  ],
+  "associations": [
+    {
+      "association_text": "GF C57BL/6 mice monocolonized with B. thetaiotaomicron (n=6–10) showed no detectable translocation to mesenteric veins, MLNs, or liver (CFU=0 at all extra-intestinal sites), no gut barrier leakage, and no induction of anti-RNA IgG or anti-dsDNA IgG autoantibodies at 8 weeks post-colonization; Th17 cells were not expanded in small intestinal lamina propria or MLNs (n=5 per group), in contrast to E. gallinarum monocolonization.",
+      "content_hash": "c01f35b67b531c09ff6fd23084446d3db8b7afdc68c6d834e4f83b7b34ca5459",
+      "evidence_level": "E2",
+      "evidence_type": "animal model",
+      "refs": [
+        {
+          "type": "mesh",
+          "id": "D018988",
+          "label": "Bacterial Translocation"
+        },
+        {
+          "type": "mesh",
+          "id": "D000069196",
+          "label": "Gastrointestinal Microbiome"
+        }
+      ],
+      "pmids": [
+        29590047
+      ]
+    },
+    {
+      "association_text": "B. thetaiotaomicron lysate or RNA co-cultured with murine and human hepatocytes did not significantly induce ERV gp70, β2-glycoprotein I, type I IFN-α, or AhR/CYP1A1 expression above medium control (n=3 each); serum anti-B. thetaiotaomicron RNA IgG was not elevated in SLE (n=15) or AIH (n=17) patients versus healthy controls (n=9), confirming immunological quiescence relative to E. gallinarum.",
+      "content_hash": "113238486fbb5eefbcbf21011b53f80be459228cb1e19cf7326947f2610a3ddb",
+      "evidence_level": "E2",
+      "evidence_type": "mixed: in vitro + case-control",
+      "refs": [
+        {
+          "type": "mesh",
+          "id": "D022781",
+          "label": "Hepatocytes"
+        },
+        {
+          "type": "mesh",
+          "id": "D008180",
+          "label": "Lupus Erythematosus, Systemic"
+        },
+        {
+          "type": "mesh",
+          "id": "D019693",
+          "label": "Hepatitis, Autoimmune"
+        }
+      ],
+      "pmids": [
+        29590047
+      ]
+    },
+    {
+      "association_text": "Intramuscular vaccination against B. thetaiotaomicron in autoimmune-prone (NZW×BXSB)F1 mice had no effect on serum autoantibody levels or survival, confirming that B. thetaiotaomicron does not drive autoimmune pathology and that the autoimmune response is specific to E. gallinarum.",
+      "content_hash": "482590da43f0fc88918224f459edb0b362edb6802874fdaa57fb3134ed146a4d",
+      "evidence_level": "E2",
+      "evidence_type": "animal model",
+      "refs": [
+        {
+          "type": "mesh",
+          "id": "D001428",
+          "label": "Bacterial Vaccines"
+        },
+        {
+          "type": "mesh",
+          "id": "D015551",
+          "label": "Autoimmunity"
+        }
+      ],
+      "pmids": [
+        29590047
+      ]
+    },
+    {
+      "association_text": "Bacteroides thetaiotaomicron was significantly enriched in anti-PD-1 non-responders versus responders by metagenomic WGS in fecal samples from 25 metastatic melanoma patients (14R, 11NR), identifying it as part of a gut microbiome signature associated with immunotherapy non-response (Fig. 2F).",
+      "content_hash": "abe853f3ec079d2085df1bef11e3d48c540c65e86c34e6f4b83591c39c117619",
+      "evidence_level": "E2",
+      "evidence_type": "prospective cohort",
+      "refs": [
+        {
+          "type": "mesh",
+          "id": "D008545",
+          "label": "Melanoma"
+        },
+        {
+          "type": "mesh",
+          "id": "D000082082",
+          "label": "Immune Checkpoint Inhibitors"
+        },
+        {
+          "type": "kegg_disease",
+          "id": "H00038",
+          "label": "Melanoma"
+        }
+      ],
+      "pmids": [
+        29097493
+      ]
+    }
+  ],
+  "_meta": {
+    "version": "v1_10_20260404",
+    "generated_at": "2026-05-03"
+  }
+}

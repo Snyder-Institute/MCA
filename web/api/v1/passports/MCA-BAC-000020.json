@@ -1,0 +1,187 @@
+{
+  "passport_id": "MCA-BAC-000020",
+  "preferred_name": "Lacticaseibacillus rhamnosus",
+  "taxon_rank": "species",
+  "domain": "Bacteria",
+  "lineage": "Bacteria|Bacillota|Bacilli|Lactobacillales|Lactobacillaceae|Lacticaseibacillus",
+  "ncbi_taxid": 47715,
+  "is_pathobiont": "context dependent",
+  "last_reviewed": "2026-04-01",
+  "created_at": "2026-04-01",
+  "updated_at": "2026-04-03",
+  "synonyms": [
+    "Lactobacillus rhamnosus",
+    "Lactobacillus casei subsp. rhamnosus",
+    "Lactobacillus casei rhamnosus"
+  ],
+  "biology": {
+    "gram_status": "gram-positive",
+    "oxygen_tolerance": "facultative anaerobe",
+    "morphology": "bacillus (rod)",
+    "key_traits": [],
+    "bacdive_url": "https://bacdive.dsmz.de/strain/6423"
+  },
+  "ecology": {
+    "primary_niches": [
+      {
+        "value": "gut",
+        "mesh_anatomy_id": "D007422"
+      },
+      {
+        "value": "oral cavity",
+        "mesh_anatomy_id": "D009055"
+      },
+      {
+        "value": "vagina",
+        "mesh_anatomy_id": "D014621"
+      }
+    ],
+    "reservoirs": [
+      "human",
+      "food"
+    ],
+    "transmission_routes": []
+  },
+  "clinical_profile": {
+    "clinical_roles": [
+      "opportunistic pathogen",
+      "probiotic candidate",
+      "commensal"
+    ],
+    "typical_specimens": [
+      {
+        "value": "blood",
+        "mesh_anatomy_id": "D001769"
+      },
+      {
+        "value": "stool",
+        "mesh_anatomy_id": "D005243"
+      }
+    ],
+    "bloom_triggers": [
+      {
+        "value": "antibiotic exposure"
+      },
+      {
+        "value": "immunosuppression"
+      },
+      {
+        "value": "chemotherapy"
+      }
+    ],
+    "risk_contexts": [
+      "immunocompromised patients",
+      "hematopoietic cell transplant recipients",
+      "melanoma patients receiving immune checkpoint inhibitor therapy (ICB)"
+    ],
+    "amr_highlights": [
+      {
+        "value": "intrinsic glycopeptide resistance (teicoplanin and vancomycin)"
+      }
+    ],
+    "virulence_factors": []
+  },
+  "metabolites": [],
+  "evidence_pmids": [
+    40544256,
+    34941392
+  ],
+  "associations": [
+    {
+      "association_text": "Gut intestinal domination by Lacticaseibacillus rhamnosus (71.6% relative abundance by shotgun metagenomics) was temporally associated with bloodstream infection in a post-allogeneic HSCT patient with B-cell ALL; genomic comparison between the gut-dominant strain and the blood culture isolate revealed only 18 SNP differences, supporting direct gut-to-bloodstream translocation as the mechanism of bacteremia.",
+      "content_hash": "a9d5b9c30cd4078445d42d3ac1c40636921257f830a97781518f6c48f5e04419",
+      "evidence_level": "E1",
+      "evidence_type": "case report",
+      "refs": [],
+      "pmids": [
+        40544256
+      ]
+    },
+    {
+      "association_text": "Lacticaseibacillus rhamnosus was isolated from multiple concurrent blood culture sites (PICC, CVC, peripheral vein) in a severely immunocompromised post-HSCT patient during the final week of life, with markedly elevated sepsis markers (procalcitonin 2.4 ± 1.87 ng/L; D-dimer 7518 ± 2801.7 ng/mL), contributing to a fatal multi-organ toxicity outcome.",
+      "content_hash": "adb6a07e58e8cd545e160263ee29c3569e87f3215383e88af41cb87b6e20e56c",
+      "evidence_level": "E1",
+      "evidence_type": "case report",
+      "refs": [],
+      "pmids": [
+        40544256
+      ]
+    },
+    {
+      "association_text": "Lacticaseibacillus rhamnosus demonstrates intrinsic resistance to glycopeptides (teicoplanin and vancomycin) with no established EUCAST breakpoints, complicating antimicrobial management of Lactobacillus bloodstream infections in immunocompromised patients.",
+      "content_hash": "eb347ce8f63e7ca7d40f75d8e98502e5b4c597229d0dbfbad5ef67e558b23f46",
+      "evidence_level": "E1",
+      "evidence_type": "case report",
+      "refs": [],
+      "pmids": [
+        40544256
+      ]
+    },
+    {
+      "association_text": "Lactobacillus rhamnosus GG (LGG)–based probiotic administration to germ-free mice colonized with an ICB complete responder's microbiota significantly impaired antitumor response to anti-PD-L1 therapy, resulting in significantly larger tumors compared to sterile water control (P=0.01 by likelihood ratio test in linear mixed model; n=4–5 per group), with concomitant reduction in gut microbiome alpha diversity (inverse Simpson index, P=0.38 vs. control — non-significant trend).",
+      "content_hash": "edb0361ca93b768811890b7a3f68b878d1fdbb32a730ce274fa451b179f1867e",
+      "evidence_level": "E1",
+      "evidence_type": "preclinical murine model",
+      "refs": [
+        {
+          "type": "mesh",
+          "id": "D008546",
+          "label": "Melanoma, Experimental"
+        },
+        {
+          "type": "mesh",
+          "id": "D019936",
+          "label": "Probiotics"
+        },
+        {
+          "type": "mesh",
+          "id": "D000082082",
+          "label": "Immune Checkpoint Inhibitors"
+        },
+        {
+          "type": "kegg_disease",
+          "id": "H00038",
+          "label": "Melanoma"
+        }
+      ],
+      "pmids": [
+        34941392
+      ]
+    },
+    {
+      "association_text": "LGG-based probiotic administration significantly reduced the frequency of IFN-γ–positive CD8+ cytotoxic T cells in the tumor microenvironment of anti-PD-L1–treated melanoma-bearing germ-free mice (P=0.03 by supervised flow cytometry analysis; n=6 per group), indicating suppression of intratumoral cytotoxic T cell responses as a mechanism of impaired ICB efficacy.",
+      "content_hash": "7df76d823b1b9a0eeeb9720641044c821966ab1c9479e365e7b68643124bd27e",
+      "evidence_level": "E1",
+      "evidence_type": "preclinical murine model",
+      "refs": [
+        {
+          "type": "mesh",
+          "id": "D008546",
+          "label": "Melanoma, Experimental"
+        },
+        {
+          "type": "mesh",
+          "id": "D013601",
+          "label": "T-Lymphocytes"
+        },
+        {
+          "type": "mesh",
+          "id": "D019936",
+          "label": "Probiotics"
+        },
+        {
+          "type": "kegg_disease",
+          "id": "H00038",
+          "label": "Melanoma"
+        }
+      ],
+      "pmids": [
+        34941392
+      ]
+    }
+  ],
+  "_meta": {
+    "version": "v1_10_20260404",
+    "generated_at": "2026-05-03"
+  }
+}

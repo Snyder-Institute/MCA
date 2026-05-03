@@ -1,0 +1,156 @@
+{
+  "passport_id": "MCA-BAC-000023",
+  "preferred_name": "Staphylococcus epidermidis",
+  "taxon_rank": "species",
+  "domain": "Bacteria",
+  "lineage": "Bacteria|Bacillota|Bacilli|Bacillales|Staphylococcaceae|Staphylococcus",
+  "ncbi_taxid": 1282,
+  "is_pathobiont": "context dependent",
+  "last_reviewed": "2026-04-02",
+  "created_at": "2026-04-01",
+  "updated_at": "2026-04-02",
+  "synonyms": [
+    "Albococcus epidermidis",
+    "Micrococcus epidermidis",
+    "Staphylococcus epidermidis albus"
+  ],
+  "biology": {
+    "gram_status": "gram-positive",
+    "oxygen_tolerance": "facultative anaerobe",
+    "morphology": "coccus",
+    "key_traits": [],
+    "bacdive_url": "https://bacdive.dsmz.de/strain/14522"
+  },
+  "ecology": {
+    "primary_niches": [
+      {
+        "value": "skin",
+        "mesh_anatomy_id": "D012867"
+      }
+    ],
+    "reservoirs": [
+      "human"
+    ],
+    "transmission_routes": []
+  },
+  "clinical_profile": {
+    "clinical_roles": [
+      "opportunistic pathogen",
+      "commensal"
+    ],
+    "typical_specimens": [
+      {
+        "value": "blood",
+        "mesh_anatomy_id": "D001769"
+      }
+    ],
+    "bloom_triggers": [],
+    "risk_contexts": [
+      "immunocompromised patients"
+    ],
+    "amr_highlights": [],
+    "virulence_factors": []
+  },
+  "metabolites": [],
+  "evidence_pmids": [
+    40544256
+  ],
+  "associations": [
+    {
+      "association_text": "Staphylococcus epidermidis caused a catheter-related bloodstream infection during conditioning chemotherapy in a 20-year-old immunocompromised patient undergoing allogeneic HSCT for B-cell ALL, treated empirically with meropenem, vancomycin, and liposomal amphotericin B.",
+      "content_hash": "743fed55fc4a5263dc1329822925c55eba2f48e5706a17642404589be5bdb4eb",
+      "evidence_level": "E1",
+      "evidence_type": "case report",
+      "refs": [],
+      "pmids": [
+        40544256
+      ]
+    },
+    {
+      "association_text": "A multidrug-resistant S. epidermidis clone (ST5R, cfr on plasmid pMB151a, also resistant to methicillin, levofloxacin, trimethoprim-sulfamethoxazole, and gentamicin) caused 31 of 39 (79%) linezolid-resistant bloodstream infections in leukemia patients at a major cancer center; prior linezolid use in the preceding 90 days was significantly more common in patients with linezolid-resistant vs linezolid-susceptible ST5 infections (79% vs 19%; P<0.001), and cumulative linezolid exposure was significantly higher (median 12 vs 0 days; P<0.001), indicating that both nosocomial clonal transmission and antibiotic selection pressure drove invasive multidrug-resistant S. epidermidis emergence.",
+      "content_hash": "1de6313d5c8378226816ac8f2c65f602ca2b7f772fb4f120d65dacd3a06a6aec",
+      "evidence_level": "E2",
+      "evidence_type": "retrospective single-center cohort (WGS phylogenomics + pharmacy records, MD Anderson Cancer Center, 2013–2016, N=176 bloodstream isolates)",
+      "refs": [
+        {
+          "type": "mesh",
+          "id": "D024901",
+          "label": "Drug Resistance, Multiple, Bacterial"
+        },
+        {
+          "type": "mesh",
+          "id": "D013203",
+          "label": "Staphylococcal Infections"
+        },
+        {
+          "type": "mesh",
+          "id": "D000069349",
+          "label": "Linezolid"
+        },
+        {
+          "type": "mesh",
+          "id": "D013212",
+          "label": "Staphylococcus epidermidis"
+        },
+        {
+          "type": "mesh",
+          "id": "D000073602",
+          "label": "Antimicrobial Stewardship"
+        },
+        {
+          "type": "kegg_disease",
+          "id": "H01401",
+          "label": "Methicillin-resistant Staphylococcus epidermidis (MRSE) infection"
+        }
+      ],
+      "pmids": [
+        29546356
+      ]
+    },
+    {
+      "association_text": "Prolonged linezolid use was associated with progressive domination of the gastrointestinal microbiome by cfr-containing S. epidermidis in leukemia patients undergoing induction chemotherapy: 10 of 98 patients developed staphylococcal GI emergence (≥30% consecutive 16S rRNA reads mapping to Staphylococcus from a ≤10% baseline), all 10 had received linezolid before staphylococcal proliferation (P<0.001 Mann-Whitney for linezolid duration in emergence vs non-emergence patients), and marked increases in cfr abundance in stool were confirmed by RT-qPCR during or following linezolid therapy in 5 of 6 confirmed S. epidermidis cases.",
+      "content_hash": "48c56027c182e866e30e15b307ba81e1856bb97c31972167ddd74ea95f64c0d6",
+      "evidence_level": "E2",
+      "evidence_type": "retrospective cohort with serial 16S rRNA microbiome analysis and RT-qPCR (MD Anderson Cancer Center; N=98 acute myelogenous leukemia patients)",
+      "refs": [
+        {
+          "type": "mesh",
+          "id": "D064307",
+          "label": "Microbiota"
+        },
+        {
+          "type": "mesh",
+          "id": "D005243",
+          "label": "Feces"
+        },
+        {
+          "type": "mesh",
+          "id": "D000069349",
+          "label": "Linezolid"
+        },
+        {
+          "type": "mesh",
+          "id": "D013212",
+          "label": "Staphylococcus epidermidis"
+        },
+        {
+          "type": "mesh",
+          "id": "D024901",
+          "label": "Drug Resistance, Multiple, Bacterial"
+        },
+        {
+          "type": "kegg_disease",
+          "id": "H01401",
+          "label": "Methicillin-resistant Staphylococcus epidermidis (MRSE) infection"
+        }
+      ],
+      "pmids": [
+        29546356
+      ]
+    }
+  ],
+  "_meta": {
+    "version": "v1_10_20260404",
+    "generated_at": "2026-05-03"
+  }
+}

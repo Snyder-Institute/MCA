@@ -1,0 +1,224 @@
+{
+  "passport_id": "MCA-BAC-000003",
+  "preferred_name": "Ruminococcaceae",
+  "taxon_rank": "family",
+  "domain": "Bacteria",
+  "lineage": "Bacteria; Bacillota; Clostridia; Eubacteriales; Ruminococcaceae",
+  "ncbi_taxid": 541000,
+  "is_pathobiont": "no",
+  "last_reviewed": "2026-04-03",
+  "created_at": "2026-04-01",
+  "updated_at": "2026-04-03",
+  "synonyms": [],
+  "biology": {
+    "gram_status": "gram-positive",
+    "oxygen_tolerance": "obligate anaerobe",
+    "morphology": null,
+    "key_traits": [],
+    "bacdive_url": null
+  },
+  "ecology": {
+    "primary_niches": [
+      {
+        "value": "gut",
+        "mesh_anatomy_id": "D007422"
+      }
+    ],
+    "reservoirs": [
+      "human"
+    ],
+    "transmission_routes": []
+  },
+  "clinical_profile": {
+    "clinical_roles": [
+      "protective commensal"
+    ],
+    "typical_specimens": [
+      {
+        "value": "stool",
+        "mesh_anatomy_id": "D005243"
+      }
+    ],
+    "bloom_triggers": [],
+    "risk_contexts": [
+      "melanoma patients receiving immune checkpoint inhibitor therapy (ICB)"
+    ],
+    "amr_highlights": [],
+    "virulence_factors": []
+  },
+  "metabolites": [],
+  "evidence_pmids": [
+    36894652,
+    34941392,
+    32129694,
+    33303685,
+    29097493
+  ],
+  "associations": [
+    {
+      "association_text": "Ruminococcaceae relative abundance was significantly reduced in critically ill ICU patients compared to healthy controls (ANCOM-II p-adj<0.1), representing a key anaerobic fermenter family lost during critical illness-associated gut dysbiosis in a prospective cohort of 51 patients.",
+      "content_hash": "703c7994e7ed2337ac5f6f6de5b7f611f8e32aa4b936f9d01f12e4f2de6fe409",
+      "evidence_level": "E2",
+      "evidence_type": "prospective cohort",
+      "refs": [
+        {
+          "type": "mesh",
+          "id": "D016638",
+          "label": "Critical Illness"
+        },
+        {
+          "type": "mesh",
+          "id": "D064806",
+          "label": "Dysbiosis"
+        }
+      ],
+      "pmids": [
+        36894652
+      ]
+    },
+    {
+      "association_text": "Ruminococcaceae depletion preceded Enterobacteriaceae expansion in critically ill ICU patients, consistent with its role in colonization resistance against pathobiont expansion during critical illness-associated gut dysbiosis.",
+      "content_hash": "d17c19491203bf1ededd2c64d5710175a5604bf6f4adf8d6298813a64ab316ef",
+      "evidence_level": "E2",
+      "evidence_type": "prospective cohort",
+      "refs": [
+        {
+          "type": "mesh",
+          "id": "D016638",
+          "label": "Critical Illness"
+        },
+        {
+          "type": "mesh",
+          "id": "D064806",
+          "label": "Dysbiosis"
+        }
+      ],
+      "pmids": [
+        36894652
+      ]
+    },
+    {
+      "association_text": "In an independent newly recruited cohort of 132 anti-PD-1–treated metastatic melanoma patients (n=87 responders, n=45 non-responders), Ruminococcaceae relative abundance was significantly higher in responders versus non-responders (p=0.036 by Wilcoxon rank sum test), replicating the response-associated enrichment pattern identified in a prior cohort.",
+      "content_hash": "d414dedc7dae1f6907bd12be514c8ae32047ef5d28a2ab52599b57197f95a7c9",
+      "evidence_level": "E2",
+      "evidence_type": "prospective cohort",
+      "refs": [
+        {
+          "type": "mesh",
+          "id": "D008545",
+          "label": "Melanoma"
+        },
+        {
+          "type": "mesh",
+          "id": "D000082082",
+          "label": "Immune Checkpoint Inhibitors"
+        },
+        {
+          "type": "kegg_disease",
+          "id": "H00038",
+          "label": "Melanoma"
+        }
+      ],
+      "pmids": [
+        34941392
+      ]
+    },
+    {
+      "association_text": "Across an expanded cohort of 293 metastatic melanoma patients treated with anti-PD-1 or other systemic therapies, Ruminococcaceae was the most significantly enriched taxon in gut microbiota of responders versus non-responders (FDR q<0.1 by Wilcoxon rank sum test), with enrichment persisting after multivariable adjustment for age, sex, BMI, prior treatment, and antibiotic use.",
+      "content_hash": "fbd0a2cf1741f92d211b2dc975fb8ff4d8a0357ebf0f90d4ed423a217bfa9b03",
+      "evidence_level": "E2",
+      "evidence_type": "prospective cohort",
+      "refs": [
+        {
+          "type": "mesh",
+          "id": "D008545",
+          "label": "Melanoma"
+        },
+        {
+          "type": "mesh",
+          "id": "D000082082",
+          "label": "Immune Checkpoint Inhibitors"
+        },
+        {
+          "type": "mesh",
+          "id": "D000077982",
+          "label": "Progression-Free Survival"
+        },
+        {
+          "type": "kegg_disease",
+          "id": "H00038",
+          "label": "Melanoma"
+        }
+      ],
+      "pmids": [
+        34941392
+      ]
+    },
+    {
+      "association_text": "In a phase 1 FMT trial (n=10 anti-PD-1-refractory metastatic melanoma patients), FMT Donor 2 (a melanoma complete responder) was characterized by high Ruminococcaceae relative abundance in stool microbiota; the paper explicitly characterizes this as a previously reported 'immunotherapy-favorable feature' associated with anti-PD-1 response, though Donor 2 recipients produced no clinical responses in this trial.",
+      "content_hash": "943ac9e4e9e89cdd6262c1a1f9f0e719c0a9b2489b63f5ddad308d3ddfe3a554",
+      "evidence_level": "E1",
+      "evidence_type": "phase 1 clinical trial",
+      "refs": [
+        {
+          "type": "mesh",
+          "id": "D008545",
+          "label": "Melanoma"
+        },
+        {
+          "type": "mesh",
+          "id": "D000069467",
+          "label": "Fecal Microbiota Transplantation"
+        },
+        {
+          "type": "mesh",
+          "id": "D000069196",
+          "label": "Gastrointestinal Microbiome"
+        },
+        {
+          "type": "mesh",
+          "id": "D000082082",
+          "label": "Immune Checkpoint Inhibitors"
+        },
+        {
+          "type": "kegg_disease",
+          "id": "H00038",
+          "label": "Melanoma"
+        }
+      ],
+      "pmids": [
+        33303685
+      ]
+    },
+    {
+      "association_text": "Ruminococcaceae relative abundance was significantly higher in anti-PD-1 responders versus non-responders in a prospective cohort of 43 metastatic melanoma patients (30R, 13NR; p<0.01 by LEfSe and FDR-adjusted pairwise comparisons), establishing the original human evidence for Ruminococcaceae enrichment as a gut microbiome marker of immunotherapy response.",
+      "content_hash": "aa996ad1f29290120b48676243cff8a8920d40e9eafb55cb495e8cab05767e10",
+      "evidence_level": "E2",
+      "evidence_type": "prospective cohort",
+      "refs": [
+        {
+          "type": "mesh",
+          "id": "D008545",
+          "label": "Melanoma"
+        },
+        {
+          "type": "mesh",
+          "id": "D000082082",
+          "label": "Immune Checkpoint Inhibitors"
+        },
+        {
+          "type": "kegg_disease",
+          "id": "H00038",
+          "label": "Melanoma"
+        }
+      ],
+      "pmids": [
+        29097493
+      ]
+    }
+  ],
+  "_meta": {
+    "version": "v1_10_20260404",
+    "generated_at": "2026-05-03"
+  }
+}

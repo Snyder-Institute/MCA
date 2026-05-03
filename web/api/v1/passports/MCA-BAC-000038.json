@@ -1,0 +1,383 @@
+{
+  "passport_id": "MCA-BAC-000038",
+  "preferred_name": "Bifidobacterium bifidum",
+  "taxon_rank": "species",
+  "domain": "Bacteria",
+  "lineage": "Bacteria; Actinomycetota; Actinomycetes; Bifidobacteriales; Bifidobacteriaceae; Bifidobacterium; Bifidobacterium bifidum",
+  "ncbi_taxid": 1681,
+  "is_pathobiont": "no",
+  "last_reviewed": "2026-04-02",
+  "created_at": "2026-04-02",
+  "updated_at": "2026-04-02",
+  "synonyms": [
+    "Actinobacterium bifidum",
+    "Actinomyces bifidus",
+    "Bacillus bifidus",
+    "Bacterium bifidum",
+    "Bacteroides bifidus",
+    "Lactobacillus bifidus type II",
+    "Nocardia bifida",
+    "Tissieria bifida"
+  ],
+  "biology": {
+    "gram_status": "gram-positive",
+    "oxygen_tolerance": "obligate anaerobe",
+    "morphology": "bacillus (rod)",
+    "key_traits": [
+      "acid-producing",
+      "short-chain fatty acid (SCFA) producer"
+    ],
+    "bacdive_url": "https://bacdive.dsmz.de/strain/1693"
+  },
+  "ecology": {
+    "primary_niches": [
+      {
+        "value": "gut",
+        "mesh_anatomy_id": "D041981"
+      }
+    ],
+    "reservoirs": [
+      "human"
+    ],
+    "transmission_routes": []
+  },
+  "clinical_profile": {
+    "clinical_roles": [
+      "immunomodulator",
+      "probiotic organism",
+      "biomarker organism",
+      "commensal"
+    ],
+    "typical_specimens": [
+      {
+        "value": "stool",
+        "mesh_anatomy_id": "D005243"
+      }
+    ],
+    "bloom_triggers": [],
+    "risk_contexts": [
+      "cancer patients"
+    ],
+    "amr_highlights": [],
+    "virulence_factors": []
+  },
+  "metabolites": [],
+  "evidence_pmids": [
+    33432149,
+    33303685
+  ],
+  "associations": [
+    {
+      "association_text": "B. bifidum was significantly enriched in stool samples of patients with non-small-cell lung cancer (NSCLC) who responded to cancer therapeutics (partial response) compared to non-responders, as determined by 16S rRNA LEfSe analysis and confirmed by quantitative PCR (P=0.0022).",
+      "content_hash": "cbdd0ae20a21e76b38f42de605e3c528fd1b5b5c1fb55d1bfe9574ef2534cd0e",
+      "evidence_level": "E2",
+      "evidence_type": "cohort study",
+      "refs": [
+        {
+          "type": "mesh",
+          "id": "D002289",
+          "label": "Carcinoma, Non-Small-Cell Lung"
+        },
+        {
+          "type": "kegg_disease",
+          "id": "H00014",
+          "label": "Non-small cell lung cancer"
+        }
+      ],
+      "pmids": [
+        33432149
+      ]
+    },
+    {
+      "association_text": "B. bifidum abundance remained significantly higher in NSCLC responders compared to non-responders even after excluding EGFR TKI-treated patients (P=0.0128), supporting a treatment-agnostic association between B. bifidum enrichment and therapeutic response.",
+      "content_hash": "4406b10985c77817b6703458c9cfda044f937db9873bb4fc1ef1dd61539c057c",
+      "evidence_level": "E2",
+      "evidence_type": "cohort study",
+      "refs": [
+        {
+          "type": "mesh",
+          "id": "D002289",
+          "label": "Carcinoma, Non-Small-Cell Lung"
+        },
+        {
+          "type": "kegg_disease",
+          "id": "H00014",
+          "label": "Non-small cell lung cancer"
+        }
+      ],
+      "pmids": [
+        33432149
+      ]
+    },
+    {
+      "association_text": "Oral administration of B. bifidum strains K57 and K18 in combination with anti-PD-1 antibody significantly reduced tumour burden in syngeneic MC38 colon cancer mouse models compared to anti-PD-1 alone (P<0.0001 for both strains).",
+      "content_hash": "385b382f33e0ab1999002ce42ff8f8299519ec08dcdc858490e1ba9252f3cb9b",
+      "evidence_level": "E2",
+      "evidence_type": "animal model",
+      "refs": [
+        {
+          "type": "mesh",
+          "id": "D047368",
+          "label": "Tumor Burden"
+        },
+        {
+          "type": "mesh",
+          "id": "D000082082",
+          "label": "Immune Checkpoint Inhibitors"
+        },
+        {
+          "type": "mesh",
+          "id": "D009374",
+          "label": "Neoplasms, Experimental"
+        }
+      ],
+      "pmids": [
+        33432149
+      ]
+    },
+    {
+      "association_text": "Oral administration of B. bifidum strains K57 and K18 in combination with oxaliplatin significantly reduced tumour growth in syngeneic MC38 mouse models compared to oxaliplatin alone (P=0.0004 for K57, P=0.0001 for K18).",
+      "content_hash": "d0302127cc7b129f059af34887598aeea0bc5b1961545f4bd5fc432cdaf9fa9f",
+      "evidence_level": "E2",
+      "evidence_type": "animal model",
+      "refs": [
+        {
+          "type": "mesh",
+          "id": "D047368",
+          "label": "Tumor Burden"
+        },
+        {
+          "type": "mesh",
+          "id": "D009374",
+          "label": "Neoplasms, Experimental"
+        }
+      ],
+      "pmids": [
+        33432149
+      ]
+    },
+    {
+      "association_text": "B. bifidum K57 combined with anti-PD-1 reduced tumour burden in orthotopic and subcutaneous Lewis lung carcinoma (LLC1) syngeneic mouse models, including in anti-PD-1-resistant settings (P=0.038 for orthotopic model).",
+      "content_hash": "26edfcc88a33ec4e5e964cbc9fa026199c41d2dd883b19902ac58a5f619cd620",
+      "evidence_level": "E2",
+      "evidence_type": "animal model",
+      "refs": [
+        {
+          "type": "mesh",
+          "id": "D047368",
+          "label": "Tumor Burden"
+        },
+        {
+          "type": "mesh",
+          "id": "D000082082",
+          "label": "Immune Checkpoint Inhibitors"
+        },
+        {
+          "type": "mesh",
+          "id": "D008175",
+          "label": "Lung Neoplasms"
+        }
+      ],
+      "pmids": [
+        33432149
+      ]
+    },
+    {
+      "association_text": "B. bifidum K57 combined with anti-PD-1 significantly reduced tumour growth in anti-PD-1-resistant 4T1 breast cancer syngeneic mouse models, whereas anti-PD-1 or B. bifidum K57 alone showed little antitumour effect (P<0.0001).",
+      "content_hash": "2f668afca1ac2138b7b42d32f0068202d99b2d77538e33bb2063e4dcf404ffc2",
+      "evidence_level": "E2",
+      "evidence_type": "animal model",
+      "refs": [
+        {
+          "type": "mesh",
+          "id": "D047368",
+          "label": "Tumor Burden"
+        },
+        {
+          "type": "mesh",
+          "id": "D000082082",
+          "label": "Immune Checkpoint Inhibitors"
+        }
+      ],
+      "pmids": [
+        33432149
+      ]
+    },
+    {
+      "association_text": "Synergistic B. bifidum strains K57 and K18 induced significantly more IFN-γ secretion from human CD8+ T cells in autologous monocyte co-culture assays compared to non-synergistic strains; IFN-γ induction was abrogated by TLR2-blocking antibody, implicating peptidoglycan-TLR2 signalling as the mechanism.",
+      "content_hash": "0edbcc92f668beb7d2167550f36e5cba4ce86c0326f469036b124a7112c4a496",
+      "evidence_level": "E2",
+      "evidence_type": "in vitro",
+      "refs": [
+        {
+          "type": "mesh",
+          "id": "D007371",
+          "label": "Interferon-gamma"
+        }
+      ],
+      "pmids": [
+        33432149
+      ]
+    },
+    {
+      "association_text": "In syngeneic mouse tumour models, B. bifidum K57 combined with anti-PD-1 significantly increased intratumoral CD8+ T cell and effector CD8+ T cell populations and CD8+/Treg ratios in tumour and spleen, and elevated IFN-γ and IL-2 while reducing TNF-α and IL-10 expression in tumours.",
+      "content_hash": "73fded683092f2c80fd8cd6b08246b3e7b8b6f72d217d2dd7a31dc6ec6b53eea",
+      "evidence_level": "E2",
+      "evidence_type": "animal model",
+      "refs": [
+        {
+          "type": "mesh",
+          "id": "D007371",
+          "label": "Interferon-gamma"
+        },
+        {
+          "type": "mesh",
+          "id": "D000082082",
+          "label": "Immune Checkpoint Inhibitors"
+        },
+        {
+          "type": "mesh",
+          "id": "D047368",
+          "label": "Tumor Burden"
+        }
+      ],
+      "pmids": [
+        33432149
+      ]
+    },
+    {
+      "association_text": "Functional metagenome profiling (HUMAnN2) of stool WGS from NSCLC patients showed that the peptidoglycan biosynthesis pathway was significantly enriched in responders with B. bifidum compared to non-responders (P=0.012), linking B. bifidum peptidoglycan capacity to therapeutic response.",
+      "content_hash": "7c034ec5bf4890b01797606b6dc119f4d31b2c961290cbdd28eb2dbc9aa6a5d2",
+      "evidence_level": "E2",
+      "evidence_type": "cohort study",
+      "refs": [
+        {
+          "type": "mesh",
+          "id": "D002289",
+          "label": "Carcinoma, Non-Small-Cell Lung"
+        },
+        {
+          "type": "kegg_disease",
+          "id": "H00014",
+          "label": "Non-small cell lung cancer"
+        }
+      ],
+      "pmids": [
+        33432149
+      ]
+    },
+    {
+      "association_text": "Serum metabolomics in B. bifidum K57-treated mice showed elevated L-tryptophan levels; in vitro L-tryptophan treatment increased IFN-γ production from activated human CD8+ T cells (P=0.0082), suggesting a tryptophan-mediated immunostimulatory mechanism.",
+      "content_hash": "7600bbe2a29f173f6ba01623212a3e1d8f675dbb4b599d8de34c12ec1f512a3a",
+      "evidence_level": "E2",
+      "evidence_type": "in vitro",
+      "refs": [
+        {
+          "type": "mesh",
+          "id": "D014364",
+          "label": "Tryptophan"
+        },
+        {
+          "type": "mesh",
+          "id": "D007371",
+          "label": "Interferon-gamma"
+        }
+      ],
+      "pmids": [
+        33432149
+      ]
+    },
+    {
+      "association_text": "Overall serum lipid levels were lower in B. bifidum-treated syngeneic tumour mice than in anti-PD-1-alone controls, with the greatest reduction in the anti-PD-1 plus B. bifidum K57 group, consistent with a lipid-lowering effect accompanying antitumour T cell activity.",
+      "content_hash": "8c0e286c17c4e433eff751cc8e4a971c796afa816ae401996fdeb8185722ea51",
+      "evidence_level": "E2",
+      "evidence_type": "animal model",
+      "refs": [
+        {
+          "type": "mesh",
+          "id": "D055442",
+          "label": "Metabolome"
+        }
+      ],
+      "pmids": [
+        33432149
+      ]
+    },
+    {
+      "association_text": "In a phase 1 FMT trial (n=10 anti-PD-1-refractory metastatic melanoma patients), B. bifidum relative abundance was lower in recipient stool post-FMT plus nivolumab versus pretreatment (ANCOM); the paper contextualizes this decrease as potentially favorable for anti-tumor immune activation, citing B. bifidum's reported role in promoting immune tolerance via induction of regulatory T cells.",
+      "content_hash": "bbee03b24cf70bd99dc6af87be78733ce61be8189a5351f932ac5d3f23250e04",
+      "evidence_level": "E2",
+      "evidence_type": "phase 1 clinical trial",
+      "refs": [
+        {
+          "type": "mesh",
+          "id": "D008545",
+          "label": "Melanoma"
+        },
+        {
+          "type": "mesh",
+          "id": "D000069467",
+          "label": "Fecal Microbiota Transplantation"
+        },
+        {
+          "type": "mesh",
+          "id": "D000069196",
+          "label": "Gastrointestinal Microbiome"
+        },
+        {
+          "type": "mesh",
+          "id": "D050378",
+          "label": "T-Lymphocytes, Regulatory"
+        },
+        {
+          "type": "kegg_disease",
+          "id": "H00038",
+          "label": "Melanoma"
+        }
+      ],
+      "pmids": [
+        33303685
+      ]
+    },
+    {
+      "association_text": "In a phase 1 FMT trial (n=10 anti-PD-1-refractory metastatic melanoma patients), Bifidobacterium bifidum relative abundance was lower in recipient stool post-FMT plus nivolumab versus pretreatment (ANCOM); the paper notes that B. bifidum has been reported to promote immune tolerance via induction of regulatory T cells, framing its post-FMT decrease as potentially favorable for anti-tumor immune activation.",
+      "content_hash": "be7c294d6ed72242a25cbdaab48e62355049d16acd6643bca9f812ef3372fb4b",
+      "evidence_level": "E1",
+      "evidence_type": "phase 1 clinical trial",
+      "refs": [
+        {
+          "type": "mesh",
+          "id": "D008545",
+          "label": "Melanoma"
+        },
+        {
+          "type": "mesh",
+          "id": "D000069467",
+          "label": "Fecal Microbiota Transplantation"
+        },
+        {
+          "type": "mesh",
+          "id": "D000069196",
+          "label": "Gastrointestinal Microbiome"
+        },
+        {
+          "type": "mesh",
+          "id": "D050378",
+          "label": "T-Lymphocytes, Regulatory"
+        },
+        {
+          "type": "kegg_disease",
+          "id": "H00038",
+          "label": "Melanoma"
+        }
+      ],
+      "pmids": [
+        33303685
+      ]
+    }
+  ],
+  "_meta": {
+    "version": "v1_10_20260404",
+    "generated_at": "2026-05-03"
+  }
+}

@@ -1,0 +1,158 @@
+{
+  "passport_id": "MCA-BAC-000027",
+  "preferred_name": "Faecalibacterium prausnitzii",
+  "taxon_rank": "species",
+  "domain": "Bacteria",
+  "lineage": "cellular organisms|Bacteria|Bacillati|Bacillota|Clostridia|Eubacteriales|Oscillospiraceae|Faecalibacterium",
+  "ncbi_taxid": 853,
+  "is_pathobiont": "no",
+  "last_reviewed": "2026-04-03",
+  "created_at": "2026-04-01",
+  "updated_at": "2026-04-03",
+  "synonyms": [],
+  "biology": {
+    "gram_status": null,
+    "oxygen_tolerance": "obligate anaerobe",
+    "morphology": null,
+    "key_traits": [
+      "butyrate-producing"
+    ],
+    "bacdive_url": "https://bacdive.dsmz.de/strain/159475"
+  },
+  "ecology": {
+    "primary_niches": [
+      {
+        "value": "gut",
+        "mesh_anatomy_id": "D007422"
+      }
+    ],
+    "reservoirs": [
+      "human"
+    ],
+    "transmission_routes": []
+  },
+  "clinical_profile": {
+    "clinical_roles": [
+      "protective commensal"
+    ],
+    "typical_specimens": [
+      {
+        "value": "stool",
+        "mesh_anatomy_id": "D005243"
+      }
+    ],
+    "bloom_triggers": [],
+    "risk_contexts": [
+      "melanoma patients receiving immune checkpoint inhibitor therapy (ICB)"
+    ],
+    "amr_highlights": [],
+    "virulence_factors": []
+  },
+  "metabolites": [],
+  "evidence_pmids": [
+    34941392,
+    33542131,
+    32129694,
+    29097493
+  ],
+  "associations": [
+    {
+      "association_text": "Faecalibacterium prausnitzii relative abundance was enriched in anti-PD-1 responders versus non-responders in the shotgun metagenomic subset of 111 metastatic melanoma patients (n=71 responders, n=40 non-responders; fig. S2A), providing species-level confirmation of its association with immunotherapy response.",
+      "content_hash": "4d3e85a8bd6602f95fe77d994eeccf4b2505b8a7eb8cd14875302b8a90d6ec93",
+      "evidence_level": "E2",
+      "evidence_type": "prospective cohort",
+      "refs": [
+        {
+          "type": "mesh",
+          "id": "D008545",
+          "label": "Melanoma"
+        },
+        {
+          "type": "mesh",
+          "id": "D000082082",
+          "label": "Immune Checkpoint Inhibitors"
+        },
+        {
+          "type": "kegg_disease",
+          "id": "H00038",
+          "label": "Melanoma"
+        }
+      ],
+      "pmids": [
+        34941392
+      ]
+    },
+    {
+      "association_text": "Faecalibacterium prausnitzii was significantly enriched in anti-PD-1 responders versus non-responders in metagenomic WGS of fecal samples from 25 metastatic melanoma patients (14R, 11NR), establishing the original species-level human evidence of its enrichment in the gut microbiome of immunotherapy responders (Fig. 2F).",
+      "content_hash": "529908e0dad99bbe506039df36486a010e381a69ff87a4530ce43725e26f6a5f",
+      "evidence_level": "E2",
+      "evidence_type": "prospective cohort",
+      "refs": [
+        {
+          "type": "mesh",
+          "id": "D008545",
+          "label": "Melanoma"
+        },
+        {
+          "type": "mesh",
+          "id": "D000082082",
+          "label": "Immune Checkpoint Inhibitors"
+        },
+        {
+          "type": "kegg_disease",
+          "id": "H00038",
+          "label": "Melanoma"
+        }
+      ],
+      "pmids": [
+        29097493
+      ]
+    },
+    {
+      "association_text": "Faecalibacterium prausnitzii was among the bacterial species significantly enriched in responders (objective response or stable disease >12 months) to FMT plus pembrolizumab in a Phase 2 trial of 15 PD-1-refractory advanced melanoma patients, confirming prior reports; transkingdom network analysis further identified it as negatively correlated with circulating CXCL8 (IL-8), an immunosuppressive cytokine elevated in non-responders.",
+      "content_hash": "0a9ae39be94595298bb209c9a715bf10f6bff93b60e8c01078b7523eebd0e206",
+      "evidence_level": "E2",
+      "evidence_type": "phase 2 clinical trial",
+      "refs": [
+        {
+          "type": "mesh",
+          "id": "D008545",
+          "label": "Melanoma"
+        },
+        {
+          "type": "kegg_disease",
+          "id": "H00038",
+          "label": "Melanoma"
+        }
+      ],
+      "pmids": [
+        33542131
+      ]
+    },
+    {
+      "association_text": "Antibiotic-induced depletion of Faecalibacterium prausnitzii in one PD-1-refractory melanoma patient undergoing FMT plus pembrolizumab (PT-18-0018) was associated with pronounced disruption of the transplanted microbiome and clinical disease progression; re-transplantation from the same donor restored gut colonization and was followed by renewed disease stabilization.",
+      "content_hash": "a27913256aed6136dc49a61f6378ffbb030ccca4b0150a7a8de9c1e8878a34f1",
+      "evidence_level": "E2",
+      "evidence_type": "phase 2 clinical trial",
+      "refs": [
+        {
+          "type": "mesh",
+          "id": "D008545",
+          "label": "Melanoma"
+        },
+        {
+          "type": "kegg_disease",
+          "id": "H00038",
+          "label": "Melanoma"
+        }
+      ],
+      "pmids": [
+        33542131
+      ]
+    }
+  ],
+  "_meta": {
+    "version": "v1_10_20260404",
+    "generated_at": "2026-05-03"
+  }
+}

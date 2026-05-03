@@ -1,0 +1,182 @@
+{
+  "passport_id": "MCA-BAC-000051",
+  "preferred_name": "Staphylococcus aureus",
+  "taxon_rank": "species",
+  "domain": "Bacteria",
+  "lineage": "Bacteria; Bacillota; Bacilli; Staphylococcales; Staphylococcaceae; Staphylococcus",
+  "ncbi_taxid": 1280,
+  "is_pathobiont": "yes",
+  "last_reviewed": "2026-04-03",
+  "created_at": "2026-04-03",
+  "updated_at": "2026-04-03",
+  "synonyms": [
+    "Micrococcus aureus"
+  ],
+  "biology": {
+    "gram_status": "gram-positive",
+    "oxygen_tolerance": "facultative anaerobe",
+    "morphology": "coccus",
+    "key_traits": [
+      "non-motile",
+      "non-spore-forming",
+      "coagulase-positive",
+      "catalase-positive"
+    ],
+    "bacdive_url": "https://bacdive.dsmz.de/strain/14487"
+  },
+  "ecology": {
+    "primary_niches": [],
+    "reservoirs": [
+      "human",
+      "animal"
+    ],
+    "transmission_routes": [
+      "fecal-oral",
+      "healthcare-associated"
+    ]
+  },
+  "clinical_profile": {
+    "clinical_roles": [
+      "primary pathogen"
+    ],
+    "typical_specimens": [
+      {
+        "value": "blood",
+        "mesh_anatomy_id": "D001769"
+      },
+      {
+        "value": "stool",
+        "mesh_anatomy_id": "D005243"
+      }
+    ],
+    "bloom_triggers": [
+      {
+        "value": "antibiotic exposure",
+        "kegg_drug_id": "D00929"
+      }
+    ],
+    "risk_contexts": [
+      "ICU / critical care",
+      "bacteremia"
+    ],
+    "amr_highlights": [
+      {
+        "value": "MRSA",
+        "aro_id": "ARO:3004306"
+      }
+    ],
+    "virulence_factors": [
+      {
+        "value": "alpha-hemolysin (Hla)",
+        "vfdb_id": "VF0001"
+      },
+      {
+        "value": "beta-hemolysin (Hlb)",
+        "vfdb_id": "VF0002"
+      },
+      {
+        "value": "delta-hemolysin (Hld)",
+        "vfdb_id": "VF0007"
+      },
+      {
+        "value": "gamma-hemolysin (Hlg)",
+        "vfdb_id": "VF0011"
+      },
+      {
+        "value": "Panton-Valentine leukocidin (PVL)",
+        "vfdb_id": "VF0018"
+      },
+      {
+        "value": "staphylococcal protein A (SpA)",
+        "vfdb_id": "VF0017"
+      },
+      {
+        "value": "staphylococcal enterotoxin (SE)",
+        "vfdb_id": "VF0020"
+      }
+    ]
+  },
+  "metabolites": [],
+  "evidence_pmids": [
+    25385792
+  ],
+  "associations": [
+    {
+      "association_text": "Staphylococcus aureus disseminates from the bloodstream to the gastrointestinal tract following bacteremia and is shed in feces at high titres, establishing a reservoir for fecal-oral transmission in a murine intravenous infection model.",
+      "content_hash": "30c2d1081a54af128ce9093f4b6793b1016bc1d301b3867d67caf3c1ac24fa70",
+      "evidence_level": "E1",
+      "evidence_type": "animal model",
+      "refs": [
+        {
+          "type": "mesh",
+          "id": "D016470",
+          "label": "Bacteremia"
+        },
+        {
+          "type": "mesh",
+          "id": "D013203",
+          "label": "Staphylococcal Infections"
+        },
+        {
+          "type": "mesh",
+          "id": "D041981",
+          "label": "Gastrointestinal Tract"
+        }
+      ],
+      "pmids": [
+        25385792
+      ]
+    },
+    {
+      "association_text": "Fecal-oral transmission of S. aureus from bacteremic donor mice to naive cage-mates requires intact agr quorum-sensing and sae two-component regulatory systems; agr+sae double-mutant strains show approximately 10³-fold reduction in transmission efficiency (n=6 recipient mice per group).",
+      "content_hash": "3e9a5c984199ea10d5b591cf30b5fa04b1eeba4675cecb27fd08374bd441f088",
+      "evidence_level": "E1",
+      "evidence_type": "animal model",
+      "refs": [
+        {
+          "type": "mesh",
+          "id": "D013203",
+          "label": "Staphylococcal Infections"
+        },
+        {
+          "type": "mesh",
+          "id": "D041981",
+          "label": "Gastrointestinal Tract"
+        }
+      ],
+      "pmids": [
+        25385792
+      ]
+    },
+    {
+      "association_text": "In mixed MRSA/MSSA infections in oxacillin-treated mice, MRSA is selectively transmitted to antibiotic-naive recipient mice via the fecal-oral route, demonstrating that antibiotic exposure drives selective spread of resistant strains through the GI reservoir (n=6 recipients).",
+      "content_hash": "2c2c883342aed090d5f5dd55d8fda919e95972aefd7ac5123210dc11497b3311",
+      "evidence_level": "E1",
+      "evidence_type": "animal model",
+      "refs": [
+        {
+          "type": "mesh",
+          "id": "D013203",
+          "label": "Staphylococcal Infections"
+        },
+        {
+          "type": "mesh",
+          "id": "D024881",
+          "label": "Drug Resistance, Bacterial"
+        },
+        {
+          "type": "kegg_disease",
+          "id": "H00330",
+          "label": "MRSA infection"
+        }
+      ],
+      "pmids": [
+        25385792
+      ]
+    }
+  ],
+  "_meta": {
+    "version": "v1_10_20260404",
+    "generated_at": "2026-05-03"
+  }
+}

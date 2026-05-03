@@ -1,0 +1,79 @@
+{
+  "passport_id": "MCA-BAC-000047",
+  "preferred_name": "Roseburia",
+  "taxon_rank": "genus",
+  "domain": "Bacteria",
+  "lineage": "Bacteria; Bacillota; Clostridia; Eubacteriales; Lachnospiraceae; Roseburia",
+  "ncbi_taxid": 841,
+  "is_pathobiont": "no",
+  "last_reviewed": "2026-04-02",
+  "created_at": "2026-04-02",
+  "updated_at": "2026-04-02",
+  "synonyms": [],
+  "biology": {
+    "gram_status": "gram-variable",
+    "oxygen_tolerance": "obligate anaerobe",
+    "morphology": "bacillus (rod)",
+    "key_traits": [
+      "butyrate-producing",
+      "short-chain fatty acid (SCFA) producer",
+      "flagellated"
+    ],
+    "bacdive_url": null
+  },
+  "ecology": {
+    "primary_niches": [
+      {
+        "value": "gut",
+        "mesh_anatomy_id": "D007422"
+      }
+    ],
+    "reservoirs": [
+      "human"
+    ],
+    "transmission_routes": []
+  },
+  "clinical_profile": {
+    "clinical_roles": [
+      "protective commensal"
+    ],
+    "typical_specimens": [
+      {
+        "value": "stool",
+        "mesh_anatomy_id": "D005243"
+      }
+    ],
+    "bloom_triggers": [],
+    "risk_contexts": [],
+    "amr_highlights": [],
+    "virulence_factors": []
+  },
+  "metabolites": [
+    {
+      "name": "butyrate",
+      "relationship": "produces",
+      "kegg_compound_id": "C00246",
+      "chebi_id": "CHEBI:17968"
+    },
+    {
+      "name": "acetate",
+      "relationship": "produces",
+      "kegg_compound_id": "C00033",
+      "chebi_id": "CHEBI:30089"
+    },
+    {
+      "name": "propionate",
+      "relationship": "produces",
+      "kegg_compound_id": "C00163",
+      "chebi_id": "CHEBI:17272"
+    }
+  ],
+  "evidence_pmids": [
+    32129694
+  ],
+  "associations": [],
+  "_meta": {
+    "version": "v1_10_20260404",
+    "generated_at": "2026-05-03"
+  }
+}

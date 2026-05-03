@@ -1,0 +1,77 @@
+{
+  "passport_id": "MCA-BAC-000041",
+  "preferred_name": "Dorea",
+  "taxon_rank": "genus",
+  "domain": "Bacteria",
+  "lineage": "Bacteria; Bacillota; Clostridia; Eubacteriales; Lachnospiraceae; Dorea",
+  "ncbi_taxid": 189330,
+  "is_pathobiont": "no",
+  "last_reviewed": "2026-04-02",
+  "created_at": "2026-04-02",
+  "updated_at": "2026-04-02",
+  "synonyms": [],
+  "biology": {
+    "gram_status": "gram-positive",
+    "oxygen_tolerance": "obligate anaerobe",
+    "morphology": "bacillus (rod)",
+    "key_traits": [
+      "short-chain fatty acid (SCFA) producer"
+    ],
+    "bacdive_url": null
+  },
+  "ecology": {
+    "primary_niches": [
+      {
+        "value": "gut",
+        "mesh_anatomy_id": "D007422"
+      }
+    ],
+    "reservoirs": [
+      "human"
+    ],
+    "transmission_routes": []
+  },
+  "clinical_profile": {
+    "clinical_roles": [
+      "protective commensal"
+    ],
+    "typical_specimens": [
+      {
+        "value": "stool",
+        "mesh_anatomy_id": "D005243"
+      }
+    ],
+    "bloom_triggers": [],
+    "risk_contexts": [],
+    "amr_highlights": [],
+    "virulence_factors": []
+  },
+  "metabolites": [
+    {
+      "name": "acetate",
+      "relationship": "produces",
+      "kegg_compound_id": "C00033",
+      "chebi_id": "CHEBI:30089"
+    },
+    {
+      "name": "formate",
+      "relationship": "produces",
+      "kegg_compound_id": "C00058",
+      "chebi_id": "CHEBI:15740"
+    },
+    {
+      "name": "ethanol",
+      "relationship": "produces",
+      "kegg_compound_id": "C00469",
+      "chebi_id": "CHEBI:16236"
+    }
+  ],
+  "evidence_pmids": [
+    32129694
+  ],
+  "associations": [],
+  "_meta": {
+    "version": "v1_10_20260404",
+    "generated_at": "2026-05-03"
+  }
+}

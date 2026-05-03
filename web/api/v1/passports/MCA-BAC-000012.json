@@ -1,0 +1,106 @@
+{
+  "passport_id": "MCA-BAC-000012",
+  "preferred_name": "Alistipes communis",
+  "taxon_rank": "species",
+  "domain": "Bacteria",
+  "lineage": "Bacteria; Bacteroidota; Bacteroidia; Bacteroidales; Rikenellaceae; Alistipes",
+  "ncbi_taxid": 2585118,
+  "is_pathobiont": "unknown",
+  "last_reviewed": "2026-04-01",
+  "created_at": "2026-04-01",
+  "updated_at": "2026-04-01",
+  "synonyms": [
+    "Alistipes obesi"
+  ],
+  "biology": {
+    "gram_status": null,
+    "oxygen_tolerance": "obligate anaerobe",
+    "morphology": "bacillus (rod)",
+    "key_traits": [],
+    "bacdive_url": null
+  },
+  "ecology": {
+    "primary_niches": [
+      {
+        "value": "gut",
+        "mesh_anatomy_id": "D007422"
+      }
+    ],
+    "reservoirs": [
+      "human"
+    ],
+    "transmission_routes": []
+  },
+  "clinical_profile": {
+    "clinical_roles": [
+      "commensal"
+    ],
+    "typical_specimens": [
+      {
+        "value": "stool",
+        "mesh_anatomy_id": "D005243"
+      }
+    ],
+    "bloom_triggers": [],
+    "risk_contexts": [],
+    "amr_highlights": [],
+    "virulence_factors": []
+  },
+  "metabolites": [],
+  "evidence_pmids": [
+    41814006
+  ],
+  "associations": [
+    {
+      "association_text": "Alistipes communis relative abundance was significantly lower in individuals with prior exposure to clindamycin, fluoroquinolones, or flucloxacillin, with depletion effects persisting for 4–8 years post-prescription, in a multi-cohort observational study of 14,979 Swedish adults (SCAPIS, SIMPLER, MOS cohorts).",
+      "content_hash": "b3f3d272f6e2499e41523c8b6c5070d3ed6d66220199f6d79dc5c3567ac8b032",
+      "evidence_level": "E3",
+      "evidence_type": "multi-cohort observational study",
+      "refs": [
+        {
+          "type": "mesh",
+          "id": "D016638",
+          "label": "Critical Illness"
+        },
+        {
+          "type": "mesh",
+          "id": "D064806",
+          "label": "Dysbiosis"
+        },
+        {
+          "type": "mesh",
+          "id": "D064307",
+          "label": "Microbiota"
+        }
+      ],
+      "pmids": [
+        41814006
+      ]
+    },
+    {
+      "association_text": "Lower Alistipes communis relative abundance was inversely associated with elevated BMI, waist-hip ratio, serum triglycerides, and C-reactive protein in the SCAPIS cohort (n≈10,456), with the species showing an inverse relationship to cardiometabolic risk markers.",
+      "content_hash": "aedeb52462215d83d8e336d3a0017f2e098d06c82220c3add0f48850f4a04b94",
+      "evidence_level": "E3",
+      "evidence_type": "cross-sectional cohort study",
+      "refs": [
+        {
+          "type": "kegg_disease",
+          "id": "H01637",
+          "label": "Hypertriglyceridemia"
+        },
+        {
+          "type": "kegg_disease",
+          "id": "H01742",
+          "label": "Coronary artery disease"
+        }
+      ],
+      "pmids": [
+        41814006
+      ]
+    }
+  ],
+  "_meta": {
+    "version": "v1_10_20260404",
+    "generated_at": "2026-05-03"
+  }
+}

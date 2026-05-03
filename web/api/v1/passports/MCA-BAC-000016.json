@@ -1,0 +1,59 @@
+{
+  "passport_id": "MCA-BAC-000016",
+  "preferred_name": "Bifidobacterium",
+  "taxon_rank": "genus",
+  "domain": "Bacteria",
+  "lineage": "Bacteria|Actinomycetota|Actinomycetes|Bifidobacteriales|Bifidobacteriaceae",
+  "ncbi_taxid": 1678,
+  "is_pathobiont": "no",
+  "last_reviewed": "2026-04-01",
+  "created_at": "2026-04-01",
+  "updated_at": "2026-04-01",
+  "synonyms": [
+    "Bifidibacterium",
+    "Tissieria"
+  ],
+  "biology": {
+    "gram_status": null,
+    "oxygen_tolerance": null,
+    "morphology": null,
+    "key_traits": [],
+    "bacdive_url": null
+  },
+  "ecology": null,
+  "clinical_profile": {
+    "clinical_roles": [
+      "probiotic candidate",
+      "commensal"
+    ],
+    "typical_specimens": [],
+    "bloom_triggers": [],
+    "risk_contexts": [],
+    "amr_highlights": [
+      {
+        "value": "intrinsic glycopeptide resistance (vancomycin; lacks acquired vanA/vanB/vanC genes)"
+      }
+    ],
+    "virulence_factors": []
+  },
+  "metabolites": [],
+  "evidence_pmids": [
+    40544256
+  ],
+  "associations": [
+    {
+      "association_text": "Bifidobacterium species display intrinsic vancomycin resistance but lack acquired resistance genes (vanA, vanB, vanC) and have fewer reported associations with bloodstream infections compared to Lacticaseibacillus spp., suggesting a relatively lower BSI risk profile for immunocompromised patients receiving Bifidobacterium-containing probiotics.",
+      "content_hash": "7bd46fa2805f950ca14842f55f2b932cb1763248a3ddcd552fd51e9b1d271abb",
+      "evidence_level": "E1",
+      "evidence_type": "case report",
+      "refs": [],
+      "pmids": [
+        40544256
+      ]
+    }
+  ],
+  "_meta": {
+    "version": "v1_10_20260404",
+    "generated_at": "2026-05-03"
+  }
+}

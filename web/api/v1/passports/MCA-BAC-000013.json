@@ -1,0 +1,96 @@
+{
+  "passport_id": "MCA-BAC-000013",
+  "preferred_name": "Odoribacter splanchnicus",
+  "taxon_rank": "species",
+  "domain": "Bacteria",
+  "lineage": "Bacteria; Bacteroidota; Bacteroidia; Bacteroidales; Odoribacteraceae; Odoribacter",
+  "ncbi_taxid": 28118,
+  "is_pathobiont": "unknown",
+  "last_reviewed": "2026-04-01",
+  "created_at": "2026-04-01",
+  "updated_at": "2026-04-01",
+  "synonyms": [
+    "Bacteroides splanchnicus"
+  ],
+  "biology": {
+    "gram_status": null,
+    "oxygen_tolerance": "obligate anaerobe",
+    "morphology": null,
+    "key_traits": [],
+    "bacdive_url": null
+  },
+  "ecology": {
+    "primary_niches": [],
+    "reservoirs": [
+      "human"
+    ],
+    "transmission_routes": []
+  },
+  "clinical_profile": {
+    "clinical_roles": [
+      "commensal"
+    ],
+    "typical_specimens": [
+      {
+        "value": "stool",
+        "mesh_anatomy_id": "D005243"
+      }
+    ],
+    "bloom_triggers": [],
+    "risk_contexts": [],
+    "amr_highlights": [],
+    "virulence_factors": []
+  },
+  "metabolites": [],
+  "evidence_pmids": [
+    41814006
+  ],
+  "associations": [
+    {
+      "association_text": "Odoribacter splanchnicus relative abundance was significantly lower in individuals with prior exposure to clindamycin, fluoroquinolones, or flucloxacillin, with depletion effects persisting for 4–8 years post-prescription, in a multi-cohort observational study of 14,979 Swedish adults (SCAPIS, SIMPLER, MOS cohorts).",
+      "content_hash": "88f8205ac5b7159490336632432bdf0491191b150abc71ba886bf235677dfbf0",
+      "evidence_level": "E3",
+      "evidence_type": "multi-cohort observational study",
+      "refs": [
+        {
+          "type": "mesh",
+          "id": "D016638",
+          "label": "Critical Illness"
+        },
+        {
+          "type": "mesh",
+          "id": "D064806",
+          "label": "Dysbiosis"
+        }
+      ],
+      "pmids": [
+        41814006
+      ]
+    },
+    {
+      "association_text": "Lower Odoribacter splanchnicus relative abundance was inversely associated with elevated BMI, waist-hip ratio, serum triglycerides, and C-reactive protein in the SCAPIS cohort (n≈10,456), with the species showing an inverse relationship to cardiometabolic risk markers.",
+      "content_hash": "aa13ee78db9b0bce5100d04e816a7b84bf3f76795d25de6d9da335d7ed526c83",
+      "evidence_level": "E3",
+      "evidence_type": "cross-sectional cohort study",
+      "refs": [
+        {
+          "type": "kegg_disease",
+          "id": "H01637",
+          "label": "Hypertriglyceridemia"
+        },
+        {
+          "type": "kegg_disease",
+          "id": "H01742",
+          "label": "Coronary artery disease"
+        }
+      ],
+      "pmids": [
+        41814006
+      ]
+    }
+  ],
+  "_meta": {
+    "version": "v1_10_20260404",
+    "generated_at": "2026-05-03"
+  }
+}

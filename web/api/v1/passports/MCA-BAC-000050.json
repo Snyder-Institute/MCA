@@ -1,0 +1,110 @@
+{
+  "passport_id": "MCA-BAC-000050",
+  "preferred_name": "Alistipes indistinctus",
+  "taxon_rank": "species",
+  "domain": "Bacteria",
+  "lineage": "Bacteria; Bacteroidota; Bacteroidia; Bacteroidales; Rikenellaceae; Alistipes",
+  "ncbi_taxid": 626932,
+  "is_pathobiont": "no",
+  "last_reviewed": "2026-04-03",
+  "created_at": "2026-04-03",
+  "updated_at": "2026-04-03",
+  "synonyms": [],
+  "biology": {
+    "gram_status": "gram-negative",
+    "oxygen_tolerance": "obligate anaerobe",
+    "morphology": "bacillus (rod)",
+    "key_traits": [],
+    "bacdive_url": null
+  },
+  "ecology": {
+    "primary_niches": [
+      {
+        "value": "gut",
+        "mesh_anatomy_id": "D007422"
+      }
+    ],
+    "reservoirs": [
+      "human"
+    ],
+    "transmission_routes": []
+  },
+  "clinical_profile": {
+    "clinical_roles": [
+      "protective commensal"
+    ],
+    "typical_specimens": [
+      {
+        "value": "stool"
+      }
+    ],
+    "bloom_triggers": [],
+    "risk_contexts": [
+      "NSCLC patients receiving PD-1/PD-L1 blockade"
+    ],
+    "amr_highlights": [],
+    "virulence_factors": []
+  },
+  "metabolites": [],
+  "evidence_pmids": [
+    29097494
+  ],
+  "associations": [
+    {
+      "association_text": "Alistipes indistinctus was significantly enriched in NSCLC and RCC patients with longer progression-free survival (>3 months) vs. shorter PFS after PD-1/PD-L1 blockade, identified by shotgun metagenomics of pre-treatment stool (n=100) as one of several commensals overrepresented in responders.",
+      "content_hash": "9d4345df20a0b4f336679e42292bf8984c8d48819af660165bfcd9826d701ab3",
+      "evidence_level": "E2",
+      "evidence_type": "multi-cohort metagenomics study",
+      "refs": [
+        {
+          "type": "mesh",
+          "id": "D002289",
+          "label": "Carcinoma, Non-Small-Cell Lung"
+        },
+        {
+          "type": "mesh",
+          "id": "D000082082",
+          "label": "Immune Checkpoint Inhibitors"
+        },
+        {
+          "type": "kegg_disease",
+          "id": "H00014",
+          "label": "Non-small cell lung cancer"
+        },
+        {
+          "type": "kegg_disease",
+          "id": "H00021",
+          "label": "Renal cell carcinoma"
+        }
+      ],
+      "pmids": [
+        29097494
+      ]
+    },
+    {
+      "association_text": "Oral gavage with Alistipes indistinctus reversed compromised PD-1 blockade efficacy in antibiotic-treated mice receiving NR-FMT-induced dysbiosis bearing MCA-205 sarcomas, restoring antitumor effects comparable to those of A. muciniphila supplementation (Fig. 4C).",
+      "content_hash": "49f543f62ef421b4f7bfb4305758ad9814b3c411b88109d42f3689b5b543f0f3",
+      "evidence_level": "E1",
+      "evidence_type": "mouse model (oral gavage)",
+      "refs": [
+        {
+          "type": "mesh",
+          "id": "D000082082",
+          "label": "Immune Checkpoint Inhibitors"
+        },
+        {
+          "type": "mesh",
+          "id": "D009369",
+          "label": "Neoplasms"
+        }
+      ],
+      "pmids": [
+        29097494
+      ]
+    }
+  ],
+  "_meta": {
+    "version": "v1_10_20260404",
+    "generated_at": "2026-05-03"
+  }
+}

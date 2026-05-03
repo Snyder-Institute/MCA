@@ -1,0 +1,73 @@
+{
+  "passport_id": "MCA-BAC-000017",
+  "preferred_name": "Clostridium scindens",
+  "taxon_rank": "species",
+  "domain": "Bacteria",
+  "lineage": "cellular organisms|Bacteria|Bacillati|Bacillota|Clostridia|Lachnospirales|Lachnospiraceae|Clostridium",
+  "ncbi_taxid": 28264,
+  "is_pathobiont": "no",
+  "last_reviewed": "2026-04-01",
+  "created_at": "2026-04-01",
+  "updated_at": "2026-04-01",
+  "synonyms": [
+    "Eubacterium scindens"
+  ],
+  "biology": {
+    "gram_status": "gram-positive",
+    "oxygen_tolerance": "obligate anaerobe",
+    "morphology": "bacillus (rod)",
+    "key_traits": [
+      "secondary bile acid producer (7α-dehydroxylating)"
+    ],
+    "bacdive_url": "https://bacdive.dsmz.de/strain/2748"
+  },
+  "ecology": {
+    "primary_niches": [
+      {
+        "value": "gut",
+        "mesh_anatomy_id": "D007422"
+      }
+    ],
+    "reservoirs": [
+      "human"
+    ],
+    "transmission_routes": []
+  },
+  "clinical_profile": {
+    "clinical_roles": [
+      "protective commensal"
+    ],
+    "typical_specimens": [
+      {
+        "value": "stool",
+        "mesh_anatomy_id": "D005243"
+      }
+    ],
+    "bloom_triggers": [],
+    "risk_contexts": [],
+    "amr_highlights": [],
+    "virulence_factors": []
+  },
+  "metabolites": [
+    {
+      "name": "deoxycholic acid",
+      "relationship": "produces",
+      "kegg_compound_id": "C04483",
+      "chebi_id": null
+    },
+    {
+      "name": "lithocholic acid",
+      "relationship": "produces",
+      "kegg_compound_id": "C03990",
+      "chebi_id": null
+    }
+  ],
+  "evidence_pmids": [
+    41039149
+  ],
+  "associations": [],
+  "_meta": {
+    "version": "v1_10_20260404",
+    "generated_at": "2026-05-03"
+  }
+}

@@ -1,0 +1,97 @@
+{
+  "passport_id": "MCA-BAC-000043",
+  "preferred_name": "Enterocloster clostridioformis",
+  "taxon_rank": "species",
+  "domain": "Bacteria",
+  "lineage": "cellular organisms|Bacteria|Bacillati|Bacillota|Clostridia|Lachnospirales|Lachnospiraceae|Enterocloster",
+  "ncbi_taxid": 1531,
+  "is_pathobiont": "unknown",
+  "last_reviewed": "2026-04-02",
+  "created_at": "2026-04-02",
+  "updated_at": "2026-04-03",
+  "synonyms": [
+    "Clostridium clostridiforme",
+    "Clostridium clostridioforme"
+  ],
+  "biology": {
+    "gram_status": "gram-positive",
+    "oxygen_tolerance": "obligate anaerobe",
+    "morphology": "bacillus (rod)",
+    "key_traits": [],
+    "bacdive_url": "https://bacdive.dsmz.de/strain/2569"
+  },
+  "ecology": {
+    "primary_niches": [
+      {
+        "value": "gut",
+        "mesh_anatomy_id": "D007422"
+      }
+    ],
+    "reservoirs": [
+      "human"
+    ],
+    "transmission_routes": []
+  },
+  "clinical_profile": {
+    "clinical_roles": [
+      "commensal"
+    ],
+    "typical_specimens": [
+      {
+        "value": "stool"
+      },
+      {
+        "value": "blood"
+      }
+    ],
+    "bloom_triggers": [
+      {
+        "value": "immunosuppression"
+      }
+    ],
+    "risk_contexts": [
+      "melanoma patients receiving immune checkpoint inhibitor therapy (ICB)"
+    ],
+    "amr_highlights": [
+      {
+        "value": "none documented"
+      }
+    ],
+    "virulence_factors": [
+      {
+        "value": "none documented"
+      }
+    ]
+  },
+  "metabolites": [],
+  "evidence_pmids": [
+    33542131
+  ],
+  "associations": [
+    {
+      "association_text": "Enterocloster clostridioformis was among organisms enriched in responders (objective response or stable disease >12 months) to FMT plus pembrolizumab in a Phase 2 trial of 15 PD-1-refractory advanced melanoma patients, as identified by transkingdom multi-omic network analysis (Fig. 4E).",
+      "content_hash": "268a3d1b7dfcc8f2a7d9a47e150e256495370f99d72842596391c53f69072054",
+      "evidence_level": "E2",
+      "evidence_type": "phase 2 clinical trial",
+      "refs": [
+        {
+          "type": "mesh",
+          "id": "D008545",
+          "label": "Melanoma"
+        },
+        {
+          "type": "kegg_disease",
+          "id": "H00038",
+          "label": "Melanoma"
+        }
+      ],
+      "pmids": [
+        33542131
+      ]
+    }
+  ],
+  "_meta": {
+    "version": "v1_10_20260404",
+    "generated_at": "2026-05-03"
+  }
+}

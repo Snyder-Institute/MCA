@@ -1,0 +1,65 @@
+{
+  "passport_id": "MCA-BAC-000030",
+  "preferred_name": "Lactiplantibacillus plantarum",
+  "taxon_rank": "species",
+  "domain": "Bacteria",
+  "lineage": "cellular organisms|Bacteria|Bacillati|Bacillota|Bacilli|Lactobacillales|Lactobacillaceae|Lactiplantibacillus",
+  "ncbi_taxid": 1590,
+  "is_pathobiont": "no",
+  "last_reviewed": "2026-04-01",
+  "created_at": "2026-04-01",
+  "updated_at": "2026-04-01",
+  "synonyms": [],
+  "biology": {
+    "gram_status": "gram-positive",
+    "oxygen_tolerance": "facultative anaerobe",
+    "morphology": "bacillus (rod)",
+    "key_traits": [],
+    "bacdive_url": "https://bacdive.dsmz.de/strain/6493"
+  },
+  "ecology": {
+    "primary_niches": [
+      {
+        "value": "gut",
+        "mesh_anatomy_id": "D007422"
+      },
+      {
+        "value": "oral cavity",
+        "mesh_anatomy_id": "D009055"
+      },
+      {
+        "value": "environment"
+      }
+    ],
+    "reservoirs": [
+      "human",
+      "environment",
+      "food"
+    ],
+    "transmission_routes": []
+  },
+  "clinical_profile": {
+    "clinical_roles": [
+      "probiotic candidate"
+    ],
+    "typical_specimens": [
+      {
+        "value": "stool",
+        "mesh_anatomy_id": "D005243"
+      }
+    ],
+    "bloom_triggers": [],
+    "risk_contexts": [],
+    "amr_highlights": [],
+    "virulence_factors": []
+  },
+  "metabolites": [],
+  "evidence_pmids": [
+    38584858
+  ],
+  "associations": [],
+  "_meta": {
+    "version": "v1_10_20260404",
+    "generated_at": "2026-05-03"
+  }
+}

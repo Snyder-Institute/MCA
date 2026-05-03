@@ -1,0 +1,60 @@
+{
+  "passport_id": "MCA-BAC-000024",
+  "preferred_name": "Bifidobacterium animalis subsp. lactis",
+  "taxon_rank": "subspecies",
+  "domain": "Bacteria",
+  "lineage": "cellular organisms|Bacteria|Bacillati|Actinomycetota|Actinomycetes|Bifidobacteriales|Bifidobacteriaceae|Bifidobacterium|Bifidobacterium animalis",
+  "ncbi_taxid": 302911,
+  "is_pathobiont": "no",
+  "last_reviewed": "2026-04-01",
+  "created_at": "2026-04-01",
+  "updated_at": "2026-04-01",
+  "synonyms": [
+    "Bifidobacterium lactis"
+  ],
+  "biology": {
+    "gram_status": "gram-positive",
+    "oxygen_tolerance": "obligate anaerobe",
+    "morphology": "bacillus (rod)",
+    "key_traits": [],
+    "bacdive_url": "https://bacdive.dsmz.de/strain/1733"
+  },
+  "ecology": {
+    "primary_niches": [
+      {
+        "value": "gut",
+        "mesh_anatomy_id": "D007422"
+      }
+    ],
+    "reservoirs": [
+      "human",
+      "animal",
+      "food"
+    ],
+    "transmission_routes": []
+  },
+  "clinical_profile": {
+    "clinical_roles": [
+      "probiotic candidate"
+    ],
+    "typical_specimens": [
+      {
+        "value": "stool",
+        "mesh_anatomy_id": "D005243"
+      }
+    ],
+    "bloom_triggers": [],
+    "risk_contexts": [],
+    "amr_highlights": [],
+    "virulence_factors": []
+  },
+  "metabolites": [],
+  "evidence_pmids": [
+    38584858
+  ],
+  "associations": [],
+  "_meta": {
+    "version": "v1_10_20260404",
+    "generated_at": "2026-05-03"
+  }
+}

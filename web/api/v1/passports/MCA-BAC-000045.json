@@ -1,0 +1,88 @@
+{
+  "passport_id": "MCA-BAC-000045",
+  "preferred_name": "Phascolarctobacterium faecium",
+  "taxon_rank": "species",
+  "domain": "Bacteria",
+  "lineage": "cellular organisms|Bacteria|Bacillati|Bacillota|Negativicutes|Acidaminococcales|Acidaminococcaceae|Phascolarctobacterium",
+  "ncbi_taxid": 33025,
+  "is_pathobiont": "unknown",
+  "last_reviewed": "2026-04-02",
+  "created_at": "2026-04-02",
+  "updated_at": "2026-04-02",
+  "synonyms": [],
+  "biology": {
+    "gram_status": "gram-negative",
+    "oxygen_tolerance": "obligate anaerobe",
+    "morphology": "bacillus (rod)",
+    "key_traits": [],
+    "bacdive_url": "https://bacdive.dsmz.de/strain/100"
+  },
+  "ecology": {
+    "primary_niches": [
+      {
+        "value": "gut",
+        "mesh_anatomy_id": "D007422"
+      }
+    ],
+    "reservoirs": [
+      "human",
+      "animal"
+    ],
+    "transmission_routes": []
+  },
+  "clinical_profile": {
+    "clinical_roles": [
+      "commensal"
+    ],
+    "typical_specimens": [
+      {
+        "value": "stool"
+      }
+    ],
+    "bloom_triggers": [],
+    "risk_contexts": [
+      "melanoma patients receiving immune checkpoint inhibitor therapy (ICB)"
+    ],
+    "amr_highlights": [
+      {
+        "value": "none documented"
+      }
+    ],
+    "virulence_factors": [
+      {
+        "value": "none documented"
+      }
+    ]
+  },
+  "metabolites": [],
+  "evidence_pmids": [
+    33542131
+  ],
+  "associations": [
+    {
+      "association_text": "Phascolarctobacterium faecium was enriched in non-responders before FMT in a Phase 2 trial of FMT plus pembrolizumab in 15 PD-1-refractory advanced melanoma patients; transkingdom network analysis identified it as positively correlated with circulating CXCL8 (IL-8), IL-10, and CCL3 — immunosuppressive cytokines associated with poor anti-PD-1 clinical outcomes.",
+      "content_hash": "ae4f8a1d5ff4c57d686952c710fb022878eef877abced4797ff078d9013bda63",
+      "evidence_level": "E2",
+      "evidence_type": "phase 2 clinical trial",
+      "refs": [
+        {
+          "type": "mesh",
+          "id": "D008545",
+          "label": "Melanoma"
+        },
+        {
+          "type": "kegg_disease",
+          "id": "H00038",
+          "label": "Melanoma"
+        }
+      ],
+      "pmids": [
+        33542131
+      ]
+    }
+  ],
+  "_meta": {
+    "version": "v1_10_20260404",
+    "generated_at": "2026-05-03"
+  }
+}

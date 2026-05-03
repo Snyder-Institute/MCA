@@ -1,0 +1,270 @@
+{
+  "passport_id": "MCA-BAC-000015",
+  "preferred_name": "Akkermansia muciniphila",
+  "taxon_rank": "species",
+  "domain": "Bacteria",
+  "lineage": "Bacteria|Verrucomicrobiota|Verrucomicrobiia|Verrucomicrobiales|Akkermansiaceae|Akkermansia",
+  "ncbi_taxid": 239935,
+  "is_pathobiont": "no",
+  "last_reviewed": "2026-04-03",
+  "created_at": "2026-04-01",
+  "updated_at": "2026-04-03",
+  "synonyms": [],
+  "biology": {
+    "gram_status": "gram-negative",
+    "oxygen_tolerance": "obligate anaerobe",
+    "morphology": "bacillus (rod)",
+    "key_traits": [],
+    "bacdive_url": "https://bacdive.dsmz.de/strain/17849"
+  },
+  "ecology": {
+    "primary_niches": [
+      {
+        "value": "gut",
+        "mesh_anatomy_id": "D007422"
+      }
+    ],
+    "reservoirs": [
+      "human"
+    ],
+    "transmission_routes": []
+  },
+  "clinical_profile": {
+    "clinical_roles": [
+      "probiotic candidate",
+      "protective commensal"
+    ],
+    "typical_specimens": [
+      {
+        "value": "stool"
+      }
+    ],
+    "bloom_triggers": [],
+    "risk_contexts": [
+      "melanoma patients receiving immune checkpoint inhibitor therapy (ICB)",
+      "cancer patients",
+      "NSCLC patients receiving PD-1/PD-L1 blockade",
+      "RCC patients receiving PD-1/PD-L1 blockade"
+    ],
+    "amr_highlights": [
+      {
+        "value": "intrinsic glycopeptide resistance (glycopeptides)"
+      }
+    ],
+    "virulence_factors": []
+  },
+  "metabolites": [
+    {
+      "name": "acetate",
+      "relationship": "produces",
+      "kegg_compound_id": "C00033",
+      "chebi_id": "CHEBI:30089"
+    },
+    {
+      "name": "propionate",
+      "relationship": "produces",
+      "kegg_compound_id": "C00163",
+      "chebi_id": "CHEBI:17272"
+    },
+    {
+      "name": "succinate",
+      "relationship": "produces",
+      "kegg_compound_id": "C00042",
+      "chebi_id": "CHEBI:26806"
+    },
+    {
+      "name": "1,2-propanediol",
+      "relationship": "produces",
+      "kegg_compound_id": "C00583",
+      "chebi_id": "CHEBI:16997"
+    }
+  ],
+  "evidence_pmids": [
+    40544256,
+    33542131,
+    32129694,
+    29097494
+  ],
+  "associations": [
+    {
+      "association_text": "Akkermansia muciniphila displays intrinsic resistance to glycopeptide antibiotics, indicating that antimicrobial resistance profiles of novel probiotic organisms may have clinical implications for gut microbiota management in susceptible patient populations.",
+      "content_hash": "daefafbe17e0d1fa7e1296faea25d05daa273eb794ef0e820adf6c5221bbc13b",
+      "evidence_level": "E1",
+      "evidence_type": "case report",
+      "refs": [],
+      "pmids": [
+        40544256
+      ]
+    },
+    {
+      "association_text": "Akkermansia muciniphila was among organisms enriched in responders (objective response or stable disease >12 months) to FMT plus pembrolizumab in a Phase 2 trial of 15 PD-1-refractory advanced melanoma patients; transkingdom network analysis identified it as negatively correlated with circulating CXCL8 (IL-8), an immunosuppressive cytokine elevated in non-responders and associated with immune checkpoint blockade resistance.",
+      "content_hash": "3d0ac5a41be10ac3d04f10e7de015cd65cd335e2c6abf34c44a30e54f4d6511a",
+      "evidence_level": "E2",
+      "evidence_type": "phase 2 clinical trial",
+      "refs": [
+        {
+          "type": "mesh",
+          "id": "D008545",
+          "label": "Melanoma"
+        },
+        {
+          "type": "kegg_disease",
+          "id": "H00038",
+          "label": "Melanoma"
+        }
+      ],
+      "pmids": [
+        33542131
+      ]
+    },
+    {
+      "association_text": "Akkermansia muciniphila was enriched in the gut microbiome of non-responders to cancer therapeutics (immune checkpoint blockade, platinum-based chemotherapy, EGFR TKI) compared with responders among patients with advanced NSCLC (stage IIIB/IV), identified by LEfSe analysis of 16S rRNA gut metagenomics; the authors note that immunomodulatory effects of gut microbiota on cancer therapy may differ by cancer type, race, and geography.",
+      "content_hash": "62e1471a4ef0db9c8989ca5489c020ac86887c9c3b4025f999354b73a5af7583",
+      "evidence_level": "E2",
+      "evidence_type": "cohort study",
+      "refs": [
+        {
+          "type": "mesh",
+          "id": "D002289",
+          "label": "Carcinoma, Non-Small-Cell Lung"
+        },
+        {
+          "type": "mesh",
+          "id": "D000082082",
+          "label": "Immune Checkpoint Inhibitors"
+        },
+        {
+          "type": "kegg_disease",
+          "id": "H00014",
+          "label": "Non-small cell lung cancer"
+        }
+      ],
+      "pmids": [
+        33432149
+      ]
+    },
+    {
+      "association_text": "Higher pre-treatment stool abundance of A. muciniphila was significantly associated with clinical response and longer progression-free survival in NSCLC and RCC patients receiving PD-1/PD-L1 blockade; A. muciniphila was detectable in 69% (11/16) of partial responders vs. 34% (15/44) of progressors (P=0.007) in the discovery metagenomics cohort (n=100), with findings replicated in two independent validation cohorts (n=53 NSCLC+RCC and n=239 NSCLC).",
+      "content_hash": "8303fed7b10f1d99f132bd40fbfb257a7d13a11393409165144195c7321781a2",
+      "evidence_level": "E3",
+      "evidence_type": "multi-cohort metagenomics study",
+      "refs": [
+        {
+          "type": "mesh",
+          "id": "D002289",
+          "label": "Carcinoma, Non-Small-Cell Lung"
+        },
+        {
+          "type": "mesh",
+          "id": "D002292",
+          "label": "Carcinoma, Renal Cell"
+        },
+        {
+          "type": "mesh",
+          "id": "D000082082",
+          "label": "Immune Checkpoint Inhibitors"
+        },
+        {
+          "type": "kegg_disease",
+          "id": "H00014",
+          "label": "Non-small cell lung cancer"
+        },
+        {
+          "type": "kegg_disease",
+          "id": "H00021",
+          "label": "Renal cell carcinoma"
+        }
+      ],
+      "pmids": [
+        29097494
+      ]
+    },
+    {
+      "association_text": "Antibiotic use (β-lactams, fluoroquinolones, or macrolides) within 2 months before or 1 month after initiation of PD-1/PD-L1 mAb was independently associated with significantly shorter progression-free survival and overall survival in 249 patients with NSCLC, RCC, and urothelial carcinoma (median OS: 15.3 vs. 8.3 months; P<0.001), confirmed in 239 additional NSCLC patients, implicating antibiotic-mediated gut dysbiosis — including depletion of A. muciniphila — as a driver of primary ICI resistance.",
+      "content_hash": "5cb9c8c5e1a15146d6791ba5091985143a46305dd2fd8bdfc1e580aa679c1807",
+      "evidence_level": "E3",
+      "evidence_type": "multi-cohort observational study",
+      "refs": [
+        {
+          "type": "mesh",
+          "id": "D000082082",
+          "label": "Immune Checkpoint Inhibitors"
+        },
+        {
+          "type": "mesh",
+          "id": "D000900",
+          "label": "Anti-Bacterial Agents"
+        },
+        {
+          "type": "mesh",
+          "id": "D002289",
+          "label": "Carcinoma, Non-Small-Cell Lung"
+        },
+        {
+          "type": "kegg_disease",
+          "id": "H00014",
+          "label": "Non-small cell lung cancer"
+        },
+        {
+          "type": "kegg_disease",
+          "id": "H00021",
+          "label": "Renal cell carcinoma"
+        },
+        {
+          "type": "kegg_disease",
+          "id": "H00022",
+          "label": "Bladder cancer"
+        }
+      ],
+      "pmids": [
+        29097494
+      ]
+    },
+    {
+      "association_text": "Fecal microbiota transplantation from ICI-responding NSCLC/RCC patients into germ-free or antibiotic-treated mice conferred sensitivity to PD-1 blockade, increasing CXCR3+CD4+ tumor-infiltrating lymphocytes and PD-L1 expression on splenic T cells; FMT from non-responders conveyed resistance to PD-1 blockade, establishing a causal role for gut microbiome composition — including A. muciniphila — in determining ICI efficacy.",
+      "content_hash": "4462bca0bd7954b00175483740a258b648fea65abb693e4a848e72d6b828e802",
+      "evidence_level": "E1",
+      "evidence_type": "mouse model (FMT)",
+      "refs": [
+        {
+          "type": "mesh",
+          "id": "D000069467",
+          "label": "Fecal Microbiota Transplantation"
+        },
+        {
+          "type": "mesh",
+          "id": "D009369",
+          "label": "Neoplasms"
+        }
+      ],
+      "pmids": [
+        29097494
+      ]
+    },
+    {
+      "association_text": "Oral supplementation with A. muciniphila in antibiotic-dysbiotic mice restored PD-1 blockade antitumor efficacy against RET melanoma, MCA-205 sarcoma, and orthotopic LLC lung cancers in an IL-12-dependent manner, increasing CCR9+CXCR3+CD4+ central memory T cell recruitment into mesenteric lymph nodes and tumor beds, and elevating intratumoral CD4+/FoxP3+ ratios.",
+      "content_hash": "7d2caedf7f3a120a3f897817fd27bc92326b4058fe5cfa3629aa0fe0149fd32e",
+      "evidence_level": "E1",
+      "evidence_type": "mouse model (oral gavage)",
+      "refs": [
+        {
+          "type": "mesh",
+          "id": "D000082082",
+          "label": "Immune Checkpoint Inhibitors"
+        },
+        {
+          "type": "mesh",
+          "id": "D009369",
+          "label": "Neoplasms"
+        }
+      ],
+      "pmids": [
+        29097494
+      ]
+    }
+  ],
+  "_meta": {
+    "version": "v1_10_20260404",
+    "generated_at": "2026-05-03"
+  }
+}

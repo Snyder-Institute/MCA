@@ -1,0 +1,244 @@
+{
+  "passport_id": "MCA-BAC-000044",
+  "preferred_name": "Klebsiella aerogenes",
+  "taxon_rank": "species",
+  "domain": "Bacteria",
+  "lineage": "Bacteria; Pseudomonadota; Gammaproteobacteria; Enterobacterales; Enterobacteriaceae; Klebsiella",
+  "ncbi_taxid": 548,
+  "is_pathobiont": "yes",
+  "last_reviewed": "2026-04-02",
+  "created_at": "2026-04-02",
+  "updated_at": "2026-04-02",
+  "synonyms": [
+    "Aerobacter aerogenes",
+    "Klebsiella mobilis",
+    "Enterobacter aerogenes"
+  ],
+  "biology": {
+    "gram_status": "gram-negative",
+    "oxygen_tolerance": "facultative anaerobe",
+    "morphology": "bacillus (rod)",
+    "key_traits": [
+      "encapsulated",
+      "motile (peritrichous flagella)",
+      "lactose fermenter",
+      "urease positive",
+      "mucoid colonies"
+    ],
+    "bacdive_url": "https://bacdive.dsmz.de/strain/4358"
+  },
+  "ecology": {
+    "primary_niches": [
+      {
+        "value": "oral cavity",
+        "mesh_anatomy_id": "D000068956"
+      },
+      {
+        "value": "gut",
+        "mesh_anatomy_id": "D007422"
+      }
+    ],
+    "reservoirs": [
+      "human",
+      "environment"
+    ],
+    "transmission_routes": [
+      "oral-gut"
+    ]
+  },
+  "clinical_profile": {
+    "clinical_roles": [
+      "opportunistic pathogen",
+      "coloniser"
+    ],
+    "typical_specimens": [
+      {
+        "value": "stool",
+        "mesh_anatomy_id": "D005243"
+      },
+      {
+        "value": "biopsy"
+      }
+    ],
+    "bloom_triggers": [
+      {
+        "value": "periodontitis"
+      },
+      {
+        "value": "inflammation"
+      },
+      {
+        "value": "dysbiosis"
+      }
+    ],
+    "risk_contexts": [
+      "inflammatory bowel disease (IBD)"
+    ],
+    "amr_highlights": [],
+    "virulence_factors": []
+  },
+  "metabolites": [],
+  "evidence_pmids": [
+    32758418
+  ],
+  "associations": [
+    {
+      "association_text": "Klebsiella aerogenes expands in the oral cavity during periodontitis, translocates to the gut, and triggers colitis via NLRP3/caspase-11 inflammasome activation and IL-1β production by intestinal macrophages in multiple mouse models (DSS colitis in SPF mice; germ-free Il10−/− and Rag1−/− gnotobiotic colonization models).",
+      "content_hash": "7208b0b7df012e187cbfe9b91be88354037d6afa9abe41684007f3da4eefd765",
+      "evidence_level": "E1",
+      "evidence_type": "mouse experimental (multiple models: DSS colitis, germ-free colonization)",
+      "refs": [
+        {
+          "type": "mesh",
+          "id": "D003092",
+          "label": "Colitis"
+        },
+        {
+          "type": "mesh",
+          "id": "D010518",
+          "label": "Periodontitis"
+        },
+        {
+          "type": "mesh",
+          "id": "D058847",
+          "label": "Inflammasomes"
+        },
+        {
+          "type": "mesh",
+          "id": "D053583",
+          "label": "Interleukin-1beta"
+        },
+        {
+          "type": "mesh",
+          "id": "D000069196",
+          "label": "Gastrointestinal Microbiome"
+        },
+        {
+          "type": "mesh",
+          "id": "D007709",
+          "label": "Klebsiella"
+        },
+        {
+          "type": "kegg_disease",
+          "id": "H01227",
+          "label": "Inflammatory bowel disease"
+        }
+      ],
+      "pmids": [
+        32758418
+      ]
+    },
+    {
+      "association_text": "Oral gavage of K. aerogenes (strain SK431) exacerbates DSS-induced colitis in SPF mice (worsened body weight loss, colon weight, histological scores); the colitogenic effect is fully reversed by IL-1 receptor antagonist anakinra, establishing a causal IL-1β-dependent mechanism for oral pathobiont-driven gut inflammation.",
+      "content_hash": "3502f930d985ae0daaa3ad2a061d79c137036aadfc25ef7dd0c88069e64b9a8d",
+      "evidence_level": "E1",
+      "evidence_type": "mouse experimental (DSS colitis model, SPF C57BL/6 mice, pharmacological intervention with anakinra)",
+      "refs": [
+        {
+          "type": "mesh",
+          "id": "D003092",
+          "label": "Colitis"
+        },
+        {
+          "type": "mesh",
+          "id": "D053583",
+          "label": "Interleukin-1beta"
+        },
+        {
+          "type": "mesh",
+          "id": "D007709",
+          "label": "Klebsiella"
+        },
+        {
+          "type": "mesh",
+          "id": "D000069196",
+          "label": "Gastrointestinal Microbiome"
+        },
+        {
+          "type": "kegg_disease",
+          "id": "H01227",
+          "label": "Inflammatory bowel disease"
+        }
+      ],
+      "pmids": [
+        32758418
+      ]
+    },
+    {
+      "association_text": "K. aerogenes is the most abundant species in the synthetic ligature-associated oral microbiome (sLOM) that drives colitis in germ-free Il10−/− and Rag1−/− mice; sLOM-colonized mice show significantly elevated fecal Lcn2, worsened colonic histological scores, and increased colonic Th17/Th1 T cells compared to sHOM controls (p<0.05 to p<0.0001 across outcomes).",
+      "content_hash": "661862c1fcdc654bf1bd803c2ad8c6589f23f8373a37c201b2d1bc50a7e996f5",
+      "evidence_level": "E1",
+      "evidence_type": "mouse experimental (germ-free gnotobiotic colonization model, synthetic microbiome community)",
+      "refs": [
+        {
+          "type": "mesh",
+          "id": "D003092",
+          "label": "Colitis"
+        },
+        {
+          "type": "mesh",
+          "id": "D000069196",
+          "label": "Gastrointestinal Microbiome"
+        },
+        {
+          "type": "mesh",
+          "id": "D007709",
+          "label": "Klebsiella"
+        },
+        {
+          "type": "kegg_disease",
+          "id": "H01227",
+          "label": "Inflammatory bowel disease"
+        }
+      ],
+      "pmids": [
+        32758418
+      ]
+    },
+    {
+      "association_text": "Oral K. aerogenes and related Enterobacteriaceae prime RORγt+ Th17 effector memory T cells in cervical lymph nodes during periodontitis; these cells express gut-homing markers (α4β7, CCR9), migrate to the inflamed gut, and amplify colitis via antigen-specific expansion — an effect blocked by anakinra, suggesting IL-1β produced by ectopically colonized oral pathobionts further drives Th17 expansion.",
+      "content_hash": "9bc85cd20324ec11adcf4ee8036bbe94de90ce09430a0468d71efce62585a875",
+      "evidence_level": "E1",
+      "evidence_type": "mouse experimental (Kaede transgenic photoconversion, adoptive T cell transfer, parabiosis models)",
+      "refs": [
+        {
+          "type": "mesh",
+          "id": "D003092",
+          "label": "Colitis"
+        },
+        {
+          "type": "mesh",
+          "id": "D058504",
+          "label": "Th17 Cells"
+        },
+        {
+          "type": "mesh",
+          "id": "D010518",
+          "label": "Periodontitis"
+        },
+        {
+          "type": "mesh",
+          "id": "D000069196",
+          "label": "Gastrointestinal Microbiome"
+        },
+        {
+          "type": "mesh",
+          "id": "D007709",
+          "label": "Klebsiella"
+        },
+        {
+          "type": "kegg_disease",
+          "id": "H01227",
+          "label": "Inflammatory bowel disease"
+        }
+      ],
+      "pmids": [
+        32758418
+      ]
+    }
+  ],
+  "_meta": {
+    "version": "v1_10_20260404",
+    "generated_at": "2026-05-03"
+  }
+}

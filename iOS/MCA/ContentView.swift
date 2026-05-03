@@ -7,6 +7,10 @@ struct ContentView: View {
                 .tabItem {
                     Label("Passports", systemImage: "list.bullet.rectangle")
                 }
+            PathwaySearchView()
+                .tabItem {
+                    Label("Search", systemImage: "arrow.triangle.branch")
+                }
             AnalyzeView(onKeyCleared: {})
                 .tabItem {
                     Label("Extractor", systemImage: "doc.text.magnifyingglass")

@@ -1,0 +1,99 @@
+{
+  "passport_id": "MCA-BAC-000049",
+  "preferred_name": "Veillonellaceae",
+  "taxon_rank": "family",
+  "domain": "Bacteria",
+  "lineage": "Bacteria; Bacillota; Negativicutes; Veillonellales; Veillonellaceae",
+  "ncbi_taxid": 31977,
+  "is_pathobiont": "no",
+  "last_reviewed": "2026-04-02",
+  "created_at": "2026-04-02",
+  "updated_at": "2026-04-02",
+  "synonyms": [],
+  "biology": {
+    "gram_status": "gram-negative",
+    "oxygen_tolerance": "obligate anaerobe",
+    "morphology": "not applicable",
+    "key_traits": [
+      "short-chain fatty acid (SCFA) producer"
+    ],
+    "bacdive_url": null
+  },
+  "ecology": {
+    "primary_niches": [
+      {
+        "value": "gut",
+        "mesh_anatomy_id": "D007422"
+      },
+      {
+        "value": "oral cavity",
+        "mesh_anatomy_id": "D009055"
+      }
+    ],
+    "reservoirs": [
+      "human"
+    ],
+    "transmission_routes": []
+  },
+  "clinical_profile": {
+    "clinical_roles": [
+      "protective commensal"
+    ],
+    "typical_specimens": [
+      {
+        "value": "stool",
+        "mesh_anatomy_id": "D005243"
+      }
+    ],
+    "bloom_triggers": [],
+    "risk_contexts": [],
+    "amr_highlights": [],
+    "virulence_factors": []
+  },
+  "metabolites": [],
+  "evidence_pmids": [
+    33303685
+  ],
+  "associations": [
+    {
+      "association_text": "In a phase 1 FMT trial (n=10 anti-PD-1-refractory metastatic melanoma patients), Veillonellaceae relative abundance was higher in stool post-FMT plus nivolumab versus pretreatment (ANCOM); the responding FMT donor (Donor 1, whose recipients comprised all 3 clinical responders out of 5) was enriched for Veillonellaceae, and the paper explicitly characterizes the family as 'immunotherapy-favorable' based on prior anti-PD-1 cohort studies.",
+      "content_hash": "ec1b7596dfef76cebbd19d66868da32a5730a211e3a9b0e049c63debb72a56fe",
+      "evidence_level": "E1",
+      "evidence_type": "phase 1 clinical trial",
+      "refs": [
+        {
+          "type": "mesh",
+          "id": "D008545",
+          "label": "Melanoma"
+        },
+        {
+          "type": "mesh",
+          "id": "D000069467",
+          "label": "Fecal Microbiota Transplantation"
+        },
+        {
+          "type": "mesh",
+          "id": "D000069196",
+          "label": "Gastrointestinal Microbiome"
+        },
+        {
+          "type": "mesh",
+          "id": "D000082082",
+          "label": "Immune Checkpoint Inhibitors"
+        },
+        {
+          "type": "kegg_disease",
+          "id": "H00038",
+          "label": "Melanoma"
+        }
+      ],
+      "pmids": [
+        33303685
+      ]
+    }
+  ],
+  "_meta": {
+    "version": "v1_10_20260404",
+    "generated_at": "2026-05-03"
+  }
+}

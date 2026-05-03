@@ -4,10 +4,22 @@
 *.code-workspace
 .vscode
 
+# Python bytecode
+__pycache__/
+*.pyc
+
 web/db_connect.php
+web/db_review_connect.php
+web/api/api_key.php
+web/api/config.json
 
 # Staging files (transient curation drafts — not for version control)
 staging/
+
+# Review data — synced from Dropbox; contains paper PDFs and original
+# staging JSONs. Reviewer tokens, votes, and adjudication results live in
+# the DB only and never touch the repo.
+review_data/
 
 # Raw SQL files — only .gz versions are committed
 database/*.sql

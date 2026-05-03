@@ -1,0 +1,120 @@
+{
+  "passport_id": "MCA-BAC-000040",
+  "preferred_name": "Collinsella aerofaciens",
+  "taxon_rank": "species",
+  "domain": "Bacteria",
+  "lineage": "cellular organisms|Bacteria|Bacillati|Actinomycetota|Coriobacteriia|Coriobacteriales|Coriobacteriaceae|Collinsella",
+  "ncbi_taxid": 74426,
+  "is_pathobiont": "unknown",
+  "last_reviewed": "2026-04-03",
+  "created_at": "2026-04-02",
+  "updated_at": "2026-04-03",
+  "synonyms": [
+    "Eggerthella aerofaciens"
+  ],
+  "biology": {
+    "gram_status": "gram-positive",
+    "oxygen_tolerance": "obligate anaerobe",
+    "morphology": "bacillus (rod)",
+    "key_traits": [],
+    "bacdive_url": "https://bacdive.dsmz.de/strain/3044"
+  },
+  "ecology": {
+    "primary_niches": [
+      {
+        "value": "gut",
+        "mesh_anatomy_id": "D007422"
+      }
+    ],
+    "reservoirs": [
+      "human"
+    ],
+    "transmission_routes": []
+  },
+  "clinical_profile": {
+    "clinical_roles": [
+      "commensal"
+    ],
+    "typical_specimens": [
+      {
+        "value": "stool"
+      }
+    ],
+    "bloom_triggers": [],
+    "risk_contexts": [
+      "melanoma patients receiving immune checkpoint inhibitor therapy (ICB)"
+    ],
+    "amr_highlights": [
+      {
+        "value": "none documented"
+      }
+    ],
+    "virulence_factors": [
+      {
+        "value": "none documented"
+      }
+    ]
+  },
+  "metabolites": [],
+  "evidence_pmids": [
+    33542131
+  ],
+  "associations": [
+    {
+      "association_text": "Collinsella aerofaciens was named among bacterial species enriched in responders (objective response or stable disease >12 months) to FMT plus pembrolizumab in a Phase 2 trial of 15 PD-1-refractory advanced melanoma patients (NCT03341143), confirming its previously reported association with favorable anti-PD-1 immunotherapy response in melanoma.",
+      "content_hash": "4fdd789675a5098d2727e78e55443462f0a5cb7d41fba25c522ae48aeb73f2ca",
+      "evidence_level": "E2",
+      "evidence_type": "phase 2 clinical trial",
+      "refs": [
+        {
+          "type": "mesh",
+          "id": "D008545",
+          "label": "Melanoma"
+        },
+        {
+          "type": "kegg_disease",
+          "id": "H00038",
+          "label": "Melanoma"
+        }
+      ],
+      "pmids": [
+        33542131
+      ]
+    },
+    {
+      "association_text": "Collinsella aerofaciens was among 8 commensal species significantly enriched in pre-treatment stool of metastatic melanoma anti-PD-1 responders (n=16) versus non-responders (n=26) by integrated 16S rRNA, shotgun metagenomic, and qPCR analysis (P<0.05, permutation test); it was part of a 10-species composite qPCR score significantly higher in responders (P=0.004).",
+      "content_hash": "3300caf1f79c5434976535fbde82f8b62a4461eb5ce6bb5fca059247adc9068b",
+      "evidence_level": "E2",
+      "evidence_type": "prospective observational cohort",
+      "refs": [
+        {
+          "type": "mesh",
+          "id": "D008545",
+          "label": "Melanoma"
+        },
+        {
+          "type": "mesh",
+          "id": "D007167",
+          "label": "Immunotherapy"
+        },
+        {
+          "type": "mesh",
+          "id": "D061026",
+          "label": "Programmed Cell Death 1 Receptor"
+        },
+        {
+          "type": "kegg_disease",
+          "id": "H00038",
+          "label": "Melanoma"
+        }
+      ],
+      "pmids": [
+        29302014
+      ]
+    }
+  ],
+  "_meta": {
+    "version": "v1_10_20260404",
+    "generated_at": "2026-05-03"
+  }
+}

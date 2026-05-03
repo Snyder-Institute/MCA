@@ -1,0 +1,86 @@
+{
+  "passport_id": "MCA-BAC-000022",
+  "preferred_name": "Porphyromonas gingivalis",
+  "taxon_rank": "species",
+  "domain": "Bacteria",
+  "lineage": "Bacteria|Bacteroidota|Bacteroidia|Bacteroidales|Porphyromonadaceae|Porphyromonas",
+  "ncbi_taxid": 837,
+  "is_pathobiont": "yes",
+  "last_reviewed": "2026-04-01",
+  "created_at": "2026-04-01",
+  "updated_at": "2026-04-01",
+  "synonyms": [
+    "Bacteroides gingivalis"
+  ],
+  "biology": {
+    "gram_status": "gram-negative",
+    "oxygen_tolerance": "obligate anaerobe",
+    "morphology": "coccobacillus",
+    "key_traits": [
+      "biofilm-forming"
+    ],
+    "bacdive_url": null
+  },
+  "ecology": {
+    "primary_niches": [
+      {
+        "value": "oral cavity",
+        "mesh_anatomy_id": "D009055"
+      }
+    ],
+    "reservoirs": [
+      "human"
+    ],
+    "transmission_routes": [
+      "oral-gut translocation (oral-to-gut; facilitated by Pg resistance to acidic pH)"
+    ]
+  },
+  "clinical_profile": {
+    "clinical_roles": [
+      "primary pathogen",
+      "commensal",
+      "biofilm former"
+    ],
+    "typical_specimens": [
+      {
+        "value": "blood",
+        "mesh_anatomy_id": "D001769"
+      },
+      {
+        "value": "unknown"
+      }
+    ],
+    "bloom_triggers": [
+      {
+        "value": "proton pump inhibitor (PPI) use",
+        "kegg_drug_id": "D00455"
+      },
+      {
+        "value": "dietary change (high-fat Western diet)"
+      }
+    ],
+    "risk_contexts": [
+      "periodontitis patients",
+      "rheumatoid arthritis",
+      "type 1 diabetes",
+      "non-alcoholic fatty liver disease (NAFLD) patients",
+      "diabetic retinopathy patients",
+      "pregnancy complications"
+    ],
+    "amr_highlights": [
+      {
+        "value": "unknown"
+      }
+    ],
+    "virulence_factors": []
+  },
+  "metabolites": [],
+  "evidence_pmids": [
+    39456922
+  ],
+  "associations": [],
+  "_meta": {
+    "version": "v1_10_20260404",
+    "generated_at": "2026-05-03"
+  }
+}

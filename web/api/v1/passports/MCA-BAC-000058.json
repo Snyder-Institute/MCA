@@ -1,0 +1,97 @@
+{
+  "passport_id": "MCA-BAC-000058",
+  "preferred_name": "Helicobacter hepaticus",
+  "taxon_rank": "species",
+  "domain": "Bacteria",
+  "lineage": "Bacteria; Pseudomonadati; Campylobacterota; Epsilonproteobacteria; Campylobacterales; Helicobacteraceae; Helicobacter; Helicobacter hepaticus",
+  "ncbi_taxid": 32025,
+  "is_pathobiont": "yes",
+  "last_reviewed": "2026-04-03",
+  "created_at": "2026-04-03",
+  "updated_at": "2026-04-03",
+  "synonyms": [],
+  "biology": {
+    "gram_status": "gram-negative",
+    "oxygen_tolerance": "microaerophile",
+    "morphology": "bacillus (rod)",
+    "key_traits": [],
+    "bacdive_url": "https://bacdive.dsmz.de/strain/6105"
+  },
+  "ecology": {
+    "primary_niches": [
+      {
+        "value": "gut",
+        "mesh_anatomy_id": "D003106"
+      }
+    ],
+    "reservoirs": [
+      "animal"
+    ],
+    "transmission_routes": []
+  },
+  "clinical_profile": {
+    "clinical_roles": [
+      "opportunistic pathogen"
+    ],
+    "typical_specimens": [],
+    "bloom_triggers": [],
+    "risk_contexts": [
+      "immunocompromised patients",
+      "inflammatory bowel disease (IBD)"
+    ],
+    "amr_highlights": [],
+    "virulence_factors": []
+  },
+  "metabolites": [],
+  "evidence_pmids": [
+    29414937
+  ],
+  "associations": [
+    {
+      "association_text": "H. hepaticus colonization drives colitogenic TH17 cell expansion and histopathologically confirmed colitis in mice with impaired immune tolerance (IL-10-deficient or c-Maf-deficient Treg compartment), with H. hepaticus-specific T effector transcriptomes matching disease-associated inflammatory signatures similar to those in IL-10RA blockade-induced colitis.",
+      "content_hash": "d5df45accc769d17bb7dcb05214730742f83729a90f87d16288b6f1780bf19e9",
+      "evidence_level": "E1",
+      "evidence_type": "murine experimental study (conditional knockout and adoptive transfer models)",
+      "refs": [
+        {
+          "type": "mesh",
+          "id": "D003092",
+          "label": "Colitis"
+        },
+        {
+          "type": "kegg_disease",
+          "id": "H01227",
+          "label": "Inflammatory bowel disease (IBD)"
+        }
+      ],
+      "pmids": [
+        29414937
+      ]
+    },
+    {
+      "association_text": "In immunocompetent hosts, H. hepaticus colonization induces c-Maf-dependent RORγt+Foxp3+ induced regulatory T cells (iTreg) in the large intestinal lamina propria that selectively restrain pathobiont-specific TH17 cells; disruption of this iTreg-TH17 homeostasis by c-Maf deficiency leads to spontaneous colitis even without H. hepaticus colonization in aged mice.",
+      "content_hash": "7b854dd087fe858bdce28835971ab6085835943d318a44012ed209ab753e3474",
+      "evidence_level": "E1",
+      "evidence_type": "murine experimental study (TCR transgenic mice, MHCII tetramer tracking, conditional knockout, RNA-seq)",
+      "refs": [
+        {
+          "type": "mesh",
+          "id": "D007108",
+          "label": "Immune Tolerance"
+        },
+        {
+          "type": "kegg_disease",
+          "id": "H01227",
+          "label": "Inflammatory bowel disease (IBD)"
+        }
+      ],
+      "pmids": [
+        29414937
+      ]
+    }
+  ],
+  "_meta": {
+    "version": "v1_10_20260404",
+    "generated_at": "2026-05-03"
+  }
+}

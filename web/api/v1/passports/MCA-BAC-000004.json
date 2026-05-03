@@ -1,0 +1,179 @@
+{
+  "passport_id": "MCA-BAC-000004",
+  "preferred_name": "Lachnospiraceae",
+  "taxon_rank": "family",
+  "domain": "Bacteria",
+  "lineage": "Bacteria; Bacillota; Clostridia; Eubacteriales; Lachnospiraceae",
+  "ncbi_taxid": 186803,
+  "is_pathobiont": "no",
+  "last_reviewed": "2026-04-03",
+  "created_at": "2026-04-01",
+  "updated_at": "2026-04-03",
+  "synonyms": [],
+  "biology": {
+    "gram_status": "gram-positive",
+    "oxygen_tolerance": "obligate anaerobe",
+    "morphology": null,
+    "key_traits": [],
+    "bacdive_url": null
+  },
+  "ecology": {
+    "primary_niches": [
+      {
+        "value": "gut",
+        "mesh_anatomy_id": "D007422"
+      }
+    ],
+    "reservoirs": [
+      "human"
+    ],
+    "transmission_routes": []
+  },
+  "clinical_profile": {
+    "clinical_roles": [
+      "protective commensal"
+    ],
+    "typical_specimens": [
+      {
+        "value": "stool",
+        "mesh_anatomy_id": "D005243"
+      }
+    ],
+    "bloom_triggers": [],
+    "risk_contexts": [],
+    "amr_highlights": [],
+    "virulence_factors": []
+  },
+  "metabolites": [],
+  "evidence_pmids": [
+    36894652,
+    33303685,
+    24503131
+  ],
+  "associations": [
+    {
+      "association_text": "Lachnospiraceae relative abundance was significantly depleted in critically ill ICU patients compared to healthy controls (ANCOM-II p-adj<0.1), contributing to the loss of colonization resistance and gut dysbiosis during critical illness in a prospective cohort of 51 patients.",
+      "content_hash": "5b76587bc8fddd053b1307f1573a52363bfdb6c29a93e42de06bcefad2c45acd",
+      "evidence_level": "E2",
+      "evidence_type": "prospective cohort",
+      "refs": [
+        {
+          "type": "mesh",
+          "id": "D016638",
+          "label": "Critical Illness"
+        },
+        {
+          "type": "mesh",
+          "id": "D064806",
+          "label": "Dysbiosis"
+        }
+      ],
+      "pmids": [
+        36894652
+      ]
+    },
+    {
+      "association_text": "Penalized ridge regression identified Lachnospiraceae as one of the most important families negatively associated with progressive Enterobacteriaceae enrichment between ICU days 1 and 3, consistent with a colonization resistance role against pathobiont expansion during critical illness.",
+      "content_hash": "6249def6d948e00bcc550872b2020be6074efc4ebc9ab205b96e07068472d4f5",
+      "evidence_level": "E2",
+      "evidence_type": "prospective cohort",
+      "refs": [
+        {
+          "type": "mesh",
+          "id": "D016638",
+          "label": "Critical Illness"
+        },
+        {
+          "type": "mesh",
+          "id": "D064806",
+          "label": "Dysbiosis"
+        }
+      ],
+      "pmids": [
+        36894652
+      ]
+    },
+    {
+      "association_text": "In a phase 1 FMT trial (n=10 anti-PD-1-refractory metastatic melanoma patients), both FMT donors who had achieved complete response to anti-PD-1 therapy were characterized by high Lachnospiraceae relative abundance in their stool microbiota; the paper explicitly characterizes this as a previously reported 'immunotherapy-favorable feature' of the gut microbiome associated with response to anti-PD-1 therapy.",
+      "content_hash": "958b85b303082fdeda31d15938bbeb45f49c27c41dc80d544625f4532b2e4280",
+      "evidence_level": "E1",
+      "evidence_type": "phase 1 clinical trial",
+      "refs": [
+        {
+          "type": "mesh",
+          "id": "D008545",
+          "label": "Melanoma"
+        },
+        {
+          "type": "mesh",
+          "id": "D000069467",
+          "label": "Fecal Microbiota Transplantation"
+        },
+        {
+          "type": "mesh",
+          "id": "D000069196",
+          "label": "Gastrointestinal Microbiome"
+        },
+        {
+          "type": "mesh",
+          "id": "D000082082",
+          "label": "Immune Checkpoint Inhibitors"
+        },
+        {
+          "type": "kegg_disease",
+          "id": "H00038",
+          "label": "Melanoma"
+        }
+      ],
+      "pmids": [
+        33303685
+      ]
+    },
+    {
+      "association_text": "In a murine CDI model, susceptibility to C. difficile colonization following antibiotic treatment was associated with loss of the normal cecal microbial community (mainly Lachnospiraceae) and a relative increase in Enterobacteriaceae; disease severity was related to the recovery dynamics of these families, with more severe outcomes in mice where Lachnospiraceae failed to return post-antibiotic and Enterobacteriaceae continued to dominate.",
+      "content_hash": "c0e6fe1fb270c1ac7710564a86268327d29c4981d7e6b3bf9c8a293177b6fbd9",
+      "evidence_level": "E1",
+      "evidence_type": "narrative review of murine experimental studies",
+      "refs": [
+        {
+          "type": "mesh",
+          "id": "D004761",
+          "label": "Enterocolitis Pseudomembranous"
+        },
+        {
+          "type": "kegg_disease",
+          "id": "H00338",
+          "label": "Pseudomembranous colitis"
+        }
+      ],
+      "pmids": [
+        24503131
+      ]
+    },
+    {
+      "association_text": "Monocolonization of germ-free mice with a murine Lachnospiraceae isolate significantly reduced levels of C. difficile colonization and severity of colitis compared to mice monocolonized with a murine E. coli isolate, which had no protective effect, formally demonstrating a colonization resistance function for Lachnospiraceae family members against C. difficile intestinal invasion.",
+      "content_hash": "7d9119d00dac88b59f1ec51721f5cda756b035c1c822c377c341826e242d8624",
+      "evidence_level": "E1",
+      "evidence_type": "narrative review of murine experimental studies",
+      "refs": [
+        {
+          "type": "mesh",
+          "id": "D004761",
+          "label": "Enterocolitis Pseudomembranous"
+        },
+        {
+          "type": "kegg_disease",
+          "id": "H00338",
+          "label": "Pseudomembranous colitis"
+        }
+      ],
+      "pmids": [
+        24503131
+      ]
+    }
+  ],
+  "_meta": {
+    "version": "v1_10_20260404",
+    "generated_at": "2026-05-03"
+  }
+}

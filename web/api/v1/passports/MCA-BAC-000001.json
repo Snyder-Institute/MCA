@@ -1,0 +1,135 @@
+{
+  "passport_id": "MCA-BAC-000001",
+  "preferred_name": "Enterobacteriaceae",
+  "taxon_rank": "family",
+  "domain": "Bacteria",
+  "lineage": "Bacteria; Pseudomonadota; Gammaproteobacteria; Enterobacterales; Enterobacteriaceae",
+  "ncbi_taxid": 543,
+  "is_pathobiont": "yes",
+  "last_reviewed": "2026-04-01",
+  "created_at": "2026-04-01",
+  "updated_at": "2026-04-01",
+  "synonyms": [],
+  "biology": {
+    "gram_status": "gram-negative",
+    "oxygen_tolerance": "facultative anaerobe",
+    "morphology": null,
+    "key_traits": [],
+    "bacdive_url": null
+  },
+  "ecology": {
+    "primary_niches": [
+      {
+        "value": "gut",
+        "mesh_anatomy_id": "D007422"
+      }
+    ],
+    "reservoirs": [
+      "human",
+      "environment"
+    ],
+    "transmission_routes": []
+  },
+  "clinical_profile": {
+    "clinical_roles": [
+      "opportunistic pathogen"
+    ],
+    "typical_specimens": [
+      {
+        "value": "stool",
+        "mesh_anatomy_id": "D005243"
+      }
+    ],
+    "bloom_triggers": [
+      {
+        "value": "antibiotic exposure"
+      },
+      {
+        "value": "hospitalization"
+      }
+    ],
+    "risk_contexts": [
+      "ICU / critical care"
+    ],
+    "amr_highlights": [],
+    "virulence_factors": []
+  },
+  "metabolites": [],
+  "evidence_pmids": [
+    36894652
+  ],
+  "associations": [
+    {
+      "association_text": "Enterobacteriaceae relative abundance was elevated approximately 10-fold in critically ill ICU patients compared to healthy controls during the first week of ICU admission, as measured by 16S rRNA sequencing of rectal swabs in a prospective cohort of 51 patients, representing the dominant compositional shift in ICU-associated gut dysbiosis.",
+      "content_hash": "b25aaf7f4a8143874bda147e79ca3d5ac5e9b9805e7af61bd0dcdf959ca40fb6",
+      "evidence_level": "E2",
+      "evidence_type": "prospective cohort",
+      "refs": [
+        {
+          "type": "mesh",
+          "id": "D016638",
+          "label": "Critical Illness"
+        },
+        {
+          "type": "mesh",
+          "id": "D064806",
+          "label": "Dysbiosis"
+        }
+      ],
+      "pmids": [
+        36894652
+      ]
+    },
+    {
+      "association_text": "Progressive Enterobacteriaceae enrichment (≥2-fold increase between consecutive ICU time points) was independently associated with significantly increased odds of nosocomial infection (OR 6.8, 95% CI 1.7–25.3, p=0.01) compared to ICU patients without progressive enrichment, in a prospective cohort of 51 critically ill adults.",
+      "content_hash": "144b0a1f054c702b0ad0094180300ffc8d61c953e299777952d4dc42d8b2dd88",
+      "evidence_level": "E2",
+      "evidence_type": "prospective cohort",
+      "refs": [
+        {
+          "type": "mesh",
+          "id": "D016638",
+          "label": "Critical Illness"
+        },
+        {
+          "type": "mesh",
+          "id": "D064806",
+          "label": "Dysbiosis"
+        },
+        {
+          "type": "mesh",
+          "id": "D064307",
+          "label": "Microbiota"
+        }
+      ],
+      "pmids": [
+        36894652
+      ]
+    },
+    {
+      "association_text": "Enterobacteriaceae relative abundance positively correlated with systemic inflammatory mediators (IL-8, IL-15, TNF-α, MIP-1α, IL-10) and immature neutrophils in ICU patients, indicating coupling of gut Enterobacteriaceae expansion to innate immune dysregulation during critical illness.",
+      "content_hash": "a2142886efb7ebe3c3807ef6a9e46d388e40f391e26f8abb714605bdb0c4e5b7",
+      "evidence_level": "E2",
+      "evidence_type": "prospective cohort",
+      "refs": [
+        {
+          "type": "mesh",
+          "id": "D016638",
+          "label": "Critical Illness"
+        },
+        {
+          "type": "mesh",
+          "id": "D064806",
+          "label": "Dysbiosis"
+        }
+      ],
+      "pmids": [
+        36894652
+      ]
+    }
+  ],
+  "_meta": {
+    "version": "v1_10_20260404",
+    "generated_at": "2026-05-03"
+  }
+}

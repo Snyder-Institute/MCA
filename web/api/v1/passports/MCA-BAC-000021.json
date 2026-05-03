@@ -1,0 +1,74 @@
+{
+  "passport_id": "MCA-BAC-000021",
+  "preferred_name": "Pediococcus acidilactici",
+  "taxon_rank": "species",
+  "domain": "Bacteria",
+  "lineage": "Bacteria|Bacillota|Bacilli|Lactobacillales|Lactobacillaceae|Pediococcus",
+  "ncbi_taxid": 1254,
+  "is_pathobiont": "unknown",
+  "last_reviewed": "2026-04-01",
+  "created_at": "2026-04-01",
+  "updated_at": "2026-04-01",
+  "synonyms": [
+    "Pediococcus lindneri",
+    "Pediococcus lolii"
+  ],
+  "biology": {
+    "gram_status": "gram-positive",
+    "oxygen_tolerance": "facultative anaerobe",
+    "morphology": "coccus",
+    "key_traits": [],
+    "bacdive_url": "https://bacdive.dsmz.de/strain/6379"
+  },
+  "ecology": {
+    "primary_niches": [
+      {
+        "value": "gut",
+        "mesh_anatomy_id": "D007422"
+      },
+      {
+        "value": "oral cavity",
+        "mesh_anatomy_id": "D009055"
+      }
+    ],
+    "reservoirs": [
+      "human",
+      "food",
+      "environment"
+    ],
+    "transmission_routes": []
+  },
+  "clinical_profile": {
+    "clinical_roles": [],
+    "typical_specimens": [
+      {
+        "value": "stool",
+        "mesh_anatomy_id": "D005243"
+      }
+    ],
+    "bloom_triggers": [],
+    "risk_contexts": [],
+    "amr_highlights": [],
+    "virulence_factors": []
+  },
+  "metabolites": [],
+  "evidence_pmids": [
+    40544256
+  ],
+  "associations": [
+    {
+      "association_text": "Pediococcus acidilactici was the second most abundant species in the gut microbiome (17.4% by shotgun metagenomics) at the time of Lacticaseibacillus rhamnosus bloodstream infection in a post-HSCT patient with B-cell ALL, co-dominating a markedly dysbiotic Bacillota-predominant microbiome (98.5% Bacillota total).",
+      "content_hash": "1cf0f1934039383a94ea777a63fba0b4fc0726253e01c67aca6422f005955cf9",
+      "evidence_level": "E1",
+      "evidence_type": "case report",
+      "refs": [],
+      "pmids": [
+        40544256
+      ]
+    }
+  ],
+  "_meta": {
+    "version": "v1_10_20260404",
+    "generated_at": "2026-05-03"
+  }
+}

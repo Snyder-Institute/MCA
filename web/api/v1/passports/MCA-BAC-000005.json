@@ -1,0 +1,99 @@
+{
+  "passport_id": "MCA-BAC-000005",
+  "preferred_name": "Bifidobacteriaceae",
+  "taxon_rank": "family",
+  "domain": "Bacteria",
+  "lineage": "Bacteria; Actinomycetota; Actinomycetes; Bifidobacteriales; Bifidobacteriaceae",
+  "ncbi_taxid": 31953,
+  "is_pathobiont": "no",
+  "last_reviewed": "2026-04-01",
+  "created_at": "2026-04-01",
+  "updated_at": "2026-04-01",
+  "synonyms": [],
+  "biology": {
+    "gram_status": "gram-positive",
+    "oxygen_tolerance": "obligate anaerobe",
+    "morphology": null,
+    "key_traits": [],
+    "bacdive_url": null
+  },
+  "ecology": {
+    "primary_niches": [
+      {
+        "value": "gut",
+        "mesh_anatomy_id": "D007422"
+      }
+    ],
+    "reservoirs": [
+      "human"
+    ],
+    "transmission_routes": []
+  },
+  "clinical_profile": {
+    "clinical_roles": [
+      "protective commensal"
+    ],
+    "typical_specimens": [
+      {
+        "value": "stool",
+        "mesh_anatomy_id": "D005243"
+      }
+    ],
+    "bloom_triggers": [],
+    "risk_contexts": [],
+    "amr_highlights": [],
+    "virulence_factors": []
+  },
+  "metabolites": [],
+  "evidence_pmids": [
+    36894652
+  ],
+  "associations": [
+    {
+      "association_text": "Bifidobacteriaceae relative abundance was depleted in critically ill ICU patients compared to healthy controls (ANCOM-II p-adj<0.1), representing a commensal family lost during critical illness-associated gut dysbiosis in a prospective cohort of 51 patients.",
+      "content_hash": "b4a78a6d8d36ab16999237239b4729e84da58a1c6eb555579a40afa8888822e9",
+      "evidence_level": "E2",
+      "evidence_type": "prospective cohort",
+      "refs": [
+        {
+          "type": "mesh",
+          "id": "D016638",
+          "label": "Critical Illness"
+        },
+        {
+          "type": "mesh",
+          "id": "D064806",
+          "label": "Dysbiosis"
+        }
+      ],
+      "pmids": [
+        36894652
+      ]
+    },
+    {
+      "association_text": "Penalized ridge regression identified Bifidobacteriaceae as one of the most important families negatively associated with progressive Enterobacteriaceae enrichment between ICU days 1 and 3, consistent with a colonization resistance role against pathobiont expansion during critical illness.",
+      "content_hash": "49ade5e93baabe15c48038e1dd12d4e21473c41c53326e49e99b180e6f6c3090",
+      "evidence_level": "E2",
+      "evidence_type": "prospective cohort",
+      "refs": [
+        {
+          "type": "mesh",
+          "id": "D016638",
+          "label": "Critical Illness"
+        },
+        {
+          "type": "mesh",
+          "id": "D064806",
+          "label": "Dysbiosis"
+        }
+      ],
+      "pmids": [
+        36894652
+      ]
+    }
+  ],
+  "_meta": {
+    "version": "v1_10_20260404",
+    "generated_at": "2026-05-03"
+  }
+}

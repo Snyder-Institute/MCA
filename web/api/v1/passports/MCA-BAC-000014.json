@@ -1,0 +1,57 @@
+{
+  "passport_id": "MCA-BAC-000014",
+  "preferred_name": "Clostridium butyricum",
+  "taxon_rank": "species",
+  "domain": "Bacteria",
+  "lineage": "cellular organisms; Bacteria; Bacillati; Bacillota; Clostridia; Eubacteriales; Clostridiaceae; Clostridium",
+  "ncbi_taxid": 1492,
+  "is_pathobiont": "no",
+  "last_reviewed": "2026-04-01",
+  "created_at": "2026-04-01",
+  "updated_at": "2026-04-01",
+  "synonyms": [],
+  "biology": {
+    "gram_status": null,
+    "oxygen_tolerance": "obligate anaerobe",
+    "morphology": null,
+    "key_traits": [],
+    "bacdive_url": "https://bacdive.dsmz.de/strain/2547"
+  },
+  "ecology": {
+    "primary_niches": [
+      {
+        "value": "environment"
+      }
+    ],
+    "reservoirs": [
+      "environment"
+    ],
+    "transmission_routes": []
+  },
+  "clinical_profile": {
+    "clinical_roles": [
+      "protective commensal"
+    ],
+    "typical_specimens": [],
+    "bloom_triggers": [],
+    "risk_contexts": [],
+    "amr_highlights": [],
+    "virulence_factors": []
+  },
+  "metabolites": [
+    {
+      "name": "butyrate",
+      "relationship": "produces",
+      "kegg_compound_id": "C00246",
+      "chebi_id": null
+    }
+  ],
+  "evidence_pmids": [
+    41641127
+  ],
+  "associations": [],
+  "_meta": {
+    "version": "v1_10_20260404",
+    "generated_at": "2026-05-03"
+  }
+}

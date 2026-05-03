@@ -1,0 +1,124 @@
+{
+  "passport_id": "MCA-BAC-000042",
+  "preferred_name": "Enterobacter cloacae",
+  "taxon_rank": "species",
+  "domain": "Bacteria",
+  "lineage": "Bacteria; Pseudomonadota; Gammaproteobacteria; Enterobacterales; Enterobacteriaceae; Enterobacter cloacae complex; Enterobacter",
+  "ncbi_taxid": 550,
+  "is_pathobiont": "yes",
+  "last_reviewed": "2026-04-02",
+  "created_at": "2026-04-02",
+  "updated_at": "2026-04-02",
+  "synonyms": [
+    "Aerobacter cloacae",
+    "Cloaca cloacae"
+  ],
+  "biology": {
+    "gram_status": "gram-negative",
+    "oxygen_tolerance": "facultative anaerobe",
+    "morphology": "bacillus (rod)",
+    "key_traits": [
+      "motile (peritrichous flagella)",
+      "lactose fermenter",
+      "member of Enterobacter cloacae complex"
+    ],
+    "bacdive_url": "https://bacdive.dsmz.de/strain/4373"
+  },
+  "ecology": {
+    "primary_niches": [
+      {
+        "value": "oral cavity",
+        "mesh_anatomy_id": "D000068956"
+      },
+      {
+        "value": "gut",
+        "mesh_anatomy_id": "D007422"
+      },
+      {
+        "value": "environment"
+      }
+    ],
+    "reservoirs": [
+      "human",
+      "environment"
+    ],
+    "transmission_routes": [
+      "oral-gut",
+      "healthcare-associated"
+    ]
+  },
+  "clinical_profile": {
+    "clinical_roles": [
+      "opportunistic pathogen",
+      "coloniser"
+    ],
+    "typical_specimens": [
+      {
+        "value": "stool",
+        "mesh_anatomy_id": "D005243"
+      },
+      {
+        "value": "biopsy"
+      }
+    ],
+    "bloom_triggers": [
+      {
+        "value": "periodontitis"
+      },
+      {
+        "value": "dysbiosis"
+      }
+    ],
+    "risk_contexts": [
+      "inflammatory bowel disease (IBD)"
+    ],
+    "amr_highlights": [],
+    "virulence_factors": []
+  },
+  "metabolites": [],
+  "evidence_pmids": [
+    32758418
+  ],
+  "associations": [
+    {
+      "association_text": "Enterobacter cloacae (strain SK156) is a component of the synthetic ligature-associated oral microbiome (sLOM, comprising K. aerogenes, K. pneumoniae, K. variicola, E. cloacae, and E. hormaechei) that, upon ectopic gut colonization, drives colitis in germ-free Il10−/− and Rag1−/− mouse models (significantly elevated fecal Lcn2, increased colonic Th17/Th1 cells, and worsened histological scores vs. sHOM controls; p<0.05 to p<0.001).",
+      "content_hash": "81684785d260028600599162acef0eae21bf7ddef70b11268acd205ba9d07a84",
+      "evidence_level": "E1",
+      "evidence_type": "mouse experimental (germ-free gnotobiotic colonization model, synthetic microbiome community)",
+      "refs": [
+        {
+          "type": "mesh",
+          "id": "D003092",
+          "label": "Colitis"
+        },
+        {
+          "type": "mesh",
+          "id": "D010518",
+          "label": "Periodontitis"
+        },
+        {
+          "type": "mesh",
+          "id": "D000069196",
+          "label": "Gastrointestinal Microbiome"
+        },
+        {
+          "type": "mesh",
+          "id": "D004754",
+          "label": "Enterobacter"
+        },
+        {
+          "type": "kegg_disease",
+          "id": "H01227",
+          "label": "Inflammatory bowel disease"
+        }
+      ],
+      "pmids": [
+        32758418
+      ]
+    }
+  ],
+  "_meta": {
+    "version": "v1_10_20260404",
+    "generated_at": "2026-05-03"
+  }
+}

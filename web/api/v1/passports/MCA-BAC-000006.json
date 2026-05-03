@@ -1,0 +1,341 @@
+{
+  "passport_id": "MCA-BAC-000006",
+  "preferred_name": "Clostridioides difficile",
+  "taxon_rank": "species",
+  "domain": "Bacteria",
+  "lineage": "cellular organisms; Bacteria; Bacillati; Bacillota; Clostridia; Peptostreptococcales; Peptostreptococcaceae; Clostridioides",
+  "ncbi_taxid": 1496,
+  "is_pathobiont": "yes",
+  "last_reviewed": "2026-04-03",
+  "created_at": "2026-04-01",
+  "updated_at": "2026-04-03",
+  "synonyms": [
+    "Clostridium difficile",
+    "Peptoclostridium difficile"
+  ],
+  "biology": {
+    "gram_status": "gram-positive",
+    "oxygen_tolerance": "obligate anaerobe",
+    "morphology": "bacillus (rod)",
+    "key_traits": [
+      "spore-forming",
+      "toxin-producing",
+      "biofilm-forming"
+    ],
+    "bacdive_url": "https://bacdive.dsmz.de/strain/2582"
+  },
+  "ecology": {
+    "primary_niches": [
+      {
+        "value": "gut",
+        "mesh_anatomy_id": "D007422"
+      }
+    ],
+    "reservoirs": [
+      "human",
+      "environment",
+      "animal"
+    ],
+    "transmission_routes": [
+      "fecal-oral",
+      "healthcare-associated"
+    ]
+  },
+  "clinical_profile": {
+    "clinical_roles": [
+      "primary pathogen",
+      "opportunistic pathogen"
+    ],
+    "typical_specimens": [
+      {
+        "value": "stool",
+        "mesh_anatomy_id": "D005243"
+      },
+      {
+        "value": "colon tissue",
+        "mesh_anatomy_id": "D003106"
+      }
+    ],
+    "bloom_triggers": [
+      {
+        "value": "antibiotic exposure"
+      },
+      {
+        "value": "dysbiosis"
+      },
+      {
+        "value": "immunosuppression"
+      },
+      {
+        "value": "inflammation"
+      },
+      {
+        "value": "hospitalization"
+      },
+      {
+        "value": "dietary change"
+      },
+      {
+        "value": "clindamycin",
+        "kegg_drug_id": "D00277"
+      },
+      {
+        "value": "fluoroquinolones"
+      },
+      {
+        "value": "broad-spectrum beta-lactams"
+      }
+    ],
+    "risk_contexts": [
+      "ICU / critical care",
+      "post-antibiotic",
+      "inflammatory bowel disease (IBD)",
+      "immunocompromised patients",
+      "elderly",
+      "renal insufficiency",
+      "oncological disease",
+      "prior CDI episode",
+      "ongoing antibiotic treatment"
+    ],
+    "amr_highlights": [
+      {
+        "value": "multidrug-resistant (MDR)",
+        "aro_id": "ARO:3004305"
+      }
+    ],
+    "virulence_factors": [
+      {
+        "value": "CbpA",
+        "vfdb_id": "VF0592"
+      },
+      {
+        "value": "CD0873",
+        "vfdb_id": "VF0593"
+      },
+      {
+        "value": "CD2831",
+        "vfdb_id": "VF0598"
+      },
+      {
+        "value": "CD3246",
+        "vfdb_id": "VF0599"
+      },
+      {
+        "value": "CDT",
+        "vfdb_id": "VF0385"
+      },
+      {
+        "value": "Cwp66",
+        "vfdb_id": "VF0591"
+      },
+      {
+        "value": "Cwp84",
+        "vfdb_id": "VF0590"
+      },
+      {
+        "value": "CwpV",
+        "vfdb_id": "VF0596"
+      },
+      {
+        "value": "FbpA/Fbp68",
+        "vfdb_id": "VF0595"
+      },
+      {
+        "value": "GroEL",
+        "vfdb_id": "VF0594"
+      },
+      {
+        "value": "SlpA",
+        "vfdb_id": "VF0589"
+      },
+      {
+        "value": "TcdA",
+        "vfdb_id": "VF0376"
+      },
+      {
+        "value": "TcdB",
+        "vfdb_id": "VF0377"
+      },
+      {
+        "value": "Zmp1",
+        "vfdb_id": "VF0600"
+      }
+    ]
+  },
+  "metabolites": [
+    {
+      "name": "p-cresol",
+      "relationship": "produces",
+      "kegg_compound_id": "C01468",
+      "chebi_id": "CHEBI:17847"
+    },
+    {
+      "name": "ethanolamine",
+      "relationship": "consumes",
+      "kegg_compound_id": "C00189",
+      "chebi_id": "CHEBI:16000"
+    },
+    {
+      "name": "N-acetylneuraminic acid (sialic acid)",
+      "relationship": "consumes",
+      "kegg_compound_id": "C00270",
+      "chebi_id": "CHEBI:17012"
+    }
+  ],
+  "evidence_pmids": [
+    36894652,
+    41641127,
+    41039149,
+    38786164,
+    38584858,
+    32129694,
+    24503131
+  ],
+  "associations": [
+    {
+      "association_text": "Clostridioides difficile was identified as the causative pathogen of diarrhea/colitis in one critically ill ICU patient (Patient 43) who had concurrent progressive fecal Enterobacteriaceae enrichment, representing an incidental CDI case within a 51-patient prospective cohort studying ICU-associated gut dysbiosis.",
+      "content_hash": "c07400f319e7ef54e0e2f9b1e24e79d0859dc102c804e78562fb83ed812991bd",
+      "evidence_level": "E1",
+      "evidence_type": "prospective cohort",
+      "refs": [
+        {
+          "type": "mesh",
+          "id": "D003428",
+          "label": "Cross Infection"
+        },
+        {
+          "type": "kegg_disease",
+          "id": "H00338",
+          "label": "Pseudomembranous colitis"
+        }
+      ],
+      "pmids": [
+        36894652
+      ]
+    },
+    {
+      "association_text": "Clostridioides difficile is the primary cause of nosocomial gastrointestinal infections in industrialized countries, with incidence, morbidity, and mortality increasing over recent decades.",
+      "content_hash": "f6d264ec21f3712b95a22bc3c81cf6634b4bb904be81a99410e468781f3d7e55",
+      "evidence_level": "E3",
+      "evidence_type": "narrative review",
+      "refs": [
+        {
+          "type": "mesh",
+          "id": "D003015",
+          "label": "Clostridium Infections"
+        },
+        {
+          "type": "mesh",
+          "id": "D003428",
+          "label": "Cross Infection"
+        },
+        {
+          "type": "kegg_disease",
+          "id": "H00338",
+          "label": "Pseudomembranous colitis"
+        }
+      ],
+      "pmids": [
+        38584858
+      ]
+    },
+    {
+      "association_text": "Clostridioides difficile causes pseudomembranous colitis and, when left untreated, can progress to toxic megacolon, a potentially life-threatening complication.",
+      "content_hash": "79c32ba56ce5ee25012484b70592586eced5755d072efde7deca5989b87217c9",
+      "evidence_level": "E3",
+      "evidence_type": "narrative review",
+      "refs": [
+        {
+          "type": "mesh",
+          "id": "D003015",
+          "label": "Clostridium Infections"
+        },
+        {
+          "type": "mesh",
+          "id": "D003551",
+          "label": "Enterocolitis, Pseudomembranous"
+        },
+        {
+          "type": "kegg_disease",
+          "id": "H00338",
+          "label": "Pseudomembranous colitis"
+        }
+      ],
+      "pmids": [
+        38584858
+      ]
+    },
+    {
+      "association_text": "Clostridioides difficile colonization is highly prevalent in infants, while fewer than 5% of adults are asymptomatic carriers.",
+      "content_hash": "3d21d22c04c333669b790caaf771231fa8bfb59e35f7a879bc50697c0406bbd2",
+      "evidence_level": "E3",
+      "evidence_type": "narrative review",
+      "refs": [
+        {
+          "type": "mesh",
+          "id": "D003015",
+          "label": "Clostridium Infections"
+        }
+      ],
+      "pmids": [
+        38584858
+      ]
+    },
+    {
+      "association_text": "Antibiotic-induced disruption of the gut microbiome triggers germination of C. difficile spores into vegetative cells that produce enterotoxins, causing watery diarrhea and colonic inflammation.",
+      "content_hash": "6e6790b1852fdffd9e2efd041ca7b1f5006af598ffa542b493d873c6842053eb",
+      "evidence_level": "E3",
+      "evidence_type": "narrative review",
+      "refs": [
+        {
+          "type": "mesh",
+          "id": "D000900",
+          "label": "Anti-Bacterial Agents"
+        },
+        {
+          "type": "mesh",
+          "id": "D003015",
+          "label": "Clostridium Infections"
+        },
+        {
+          "type": "mesh",
+          "id": "D003967",
+          "label": "Diarrhea"
+        },
+        {
+          "type": "kegg_disease",
+          "id": "H00338",
+          "label": "Pseudomembranous colitis"
+        }
+      ],
+      "pmids": [
+        38584858
+      ]
+    },
+    {
+      "association_text": "In antibiotic-treated mice, cecal cholate levels become elevated while bacterial transformation to secondary bile acids (deoxycholate, lithocholate) is greatly suppressed; this antibiotic-induced shift in the bile acid pool promotes C. difficile spore germination by providing the cholate co-stimulant while removing the inhibitory secondary bile acids that are normally produced by commensal microbiota from primary bile acids.",
+      "content_hash": "676c7bc27aebabbed8754034c6c96006cd0711708bc53f304ef35151f9b55a23",
+      "evidence_level": "E1",
+      "evidence_type": "narrative review of murine experimental and in vitro studies",
+      "refs": [
+        {
+          "type": "mesh",
+          "id": "D001647",
+          "label": "Bile Acids and Salts"
+        },
+        {
+          "type": "kegg_disease",
+          "id": "H00338",
+          "label": "Pseudomembranous colitis"
+        }
+      ],
+      "pmids": [
+        24503131
+      ]
+    }
+  ],
+  "_meta": {
+    "version": "v1_10_20260404",
+    "generated_at": "2026-05-03"
+  }
+}

@@ -1,0 +1,121 @@
+{
+  "passport_id": "MCA-BAC-000002",
+  "preferred_name": "Enterococcaceae",
+  "taxon_rank": "family",
+  "domain": "Bacteria",
+  "lineage": "Bacteria; Bacillota; Bacilli; Lactobacillales; Enterococcaceae",
+  "ncbi_taxid": 81852,
+  "is_pathobiont": "yes",
+  "last_reviewed": "2026-04-01",
+  "created_at": "2026-04-01",
+  "updated_at": "2026-04-01",
+  "synonyms": [],
+  "biology": {
+    "gram_status": "gram-positive",
+    "oxygen_tolerance": "facultative anaerobe",
+    "morphology": null,
+    "key_traits": [],
+    "bacdive_url": null
+  },
+  "ecology": {
+    "primary_niches": [
+      {
+        "value": "gut",
+        "mesh_anatomy_id": "D007422"
+      },
+      {
+        "value": "urinary tract",
+        "mesh_anatomy_id": "D014551"
+      }
+    ],
+    "reservoirs": [
+      "human",
+      "environment"
+    ],
+    "transmission_routes": []
+  },
+  "clinical_profile": {
+    "clinical_roles": [
+      "opportunistic pathogen"
+    ],
+    "typical_specimens": [
+      {
+        "value": "stool",
+        "mesh_anatomy_id": "D005243"
+      },
+      {
+        "value": "urine",
+        "mesh_anatomy_id": "D014556"
+      },
+      {
+        "value": "blood",
+        "mesh_anatomy_id": "D001769"
+      }
+    ],
+    "bloom_triggers": [
+      {
+        "value": "antibiotic exposure"
+      },
+      {
+        "value": "hospitalization"
+      }
+    ],
+    "risk_contexts": [
+      "ICU / critical care"
+    ],
+    "amr_highlights": [],
+    "virulence_factors": []
+  },
+  "metabolites": [],
+  "evidence_pmids": [
+    36894652
+  ],
+  "associations": [
+    {
+      "association_text": "Enterococcaceae was one of two dominant pathobiont families that significantly expanded in the gut microbiota of critically ill ICU patients compared to healthy controls (p=0.0334), representing a key feature of ICU-associated dysbiosis in a prospective cohort of 51 patients.",
+      "content_hash": "0320a79273b190cfa350e46504ae095b45991520f3f82aa6b999c977b480ea2b",
+      "evidence_level": "E2",
+      "evidence_type": "prospective cohort",
+      "refs": [
+        {
+          "type": "mesh",
+          "id": "D016638",
+          "label": "Critical Illness"
+        },
+        {
+          "type": "mesh",
+          "id": "D064806",
+          "label": "Dysbiosis"
+        }
+      ],
+      "pmids": [
+        36894652
+      ]
+    },
+    {
+      "association_text": "Enterococcaceae gut bloom in an ICU patient was associated with a nosocomial urinary tract infection caused by Enterococcus faecalis that progressed to secondary bloodstream infection, representing a direct clinical consequence of gut Enterococcaceae expansion documented in a single case within a 51-patient prospective cohort.",
+      "content_hash": "3d464e07746842e45d66caebb351a7902375c84163ad9b95d9fdca28ec3e6bca",
+      "evidence_level": "E2",
+      "evidence_type": "prospective cohort",
+      "refs": [
+        {
+          "type": "mesh",
+          "id": "D003428",
+          "label": "Cross Infection"
+        },
+        {
+          "type": "kegg_disease",
+          "id": "H01444",
+          "label": "Enterococcal infection"
+        }
+      ],
+      "pmids": [
+        36894652
+      ]
+    }
+  ],
+  "_meta": {
+    "version": "v1_10_20260404",
+    "generated_at": "2026-05-03"
+  }
+}

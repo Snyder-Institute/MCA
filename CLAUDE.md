@@ -13,10 +13,13 @@ MCA is a curated clinical knowledge base for the human microbiome. It organizes 
 ## Tech stack
 
 - **Backend:** PHP 7.4+ with PDO (MySQL)
-- **Database:** MySQL (InnoDB, utf8mb4), 10-table schema centered on `passport`
+- **Database:** MySQL (InnoDB, utf8mb4)
+  - `MCA` — canonical 10-table KB centered on `passport`
+  - `MCA_review` — separate DB for the review cycle (5 tables: paper_snapshot, association_snapshot, review_token, review_paper, review_vote). Migrated by `database/migrations/MCA_review/001_init.sql`. Droppable independently of MCA.
 - **Frontend:** Vanilla HTML/CSS/JS (no frameworks); Google Fonts (Montserrat, Roboto)
-- **Deployment:** LAMP stack; web root is `/web`
-- **Export:** Python (`database/xml2sql.py`) converts versioned XML → MySQL INSERT dumps
+- **Deployment:** Production = nginx + PHP-FPM + MySQL on Rocky 9 (mca.thebiohub.ca). Local dev = identical version-pinned stack via `docker/`.
+- **Export:** Python (`database/xml2sql.py`) converts versioned XML → MySQL INSERT dumps **and** the public read-only API's static JSON (`web/api/v1/passports/*.json` + `web/api/v1/meta.json`)
+- **Review pipeline:** Python scripts in `scripts/` orchestrate the review cycle; LLM-assisted text rewrites use the local Claude Code CLI (`claude -p`) under the curator's Max subscription — no Anthropic API key required.
 
 ---
 
@@ -29,11 +32,26 @@ MCA/
 │   ├── passport.php            # Individual taxon passport detail view
 │   ├── passports.php           # Browse/table view of all taxa
 │   ├── ajax_search.php         # AJAX autocomplete endpoint
+│   ├── pathway_search.php      # KEGG BRITE pathway browser
+│   ├── ajax_pathway.php        # KEGG pathway AJAX endpoint
+│   ├── api/v1/                 # Public read-only API (static JSON; nginx serves directly, no PHP, no DB)
+│   │   ├── meta.json           #   /api/v1/meta — DB version, last_updated, counts
+│   │   └── passports/          #   /api/v1/passports/{id} — full nested passport (one file per taxon)
 │   ├── about.php               # Database stats and curation overview
 │   ├── glossary.php            # Controlled vocabulary glossary
 │   ├── header.php / footer.php # Shared page templates
-│   ├── db_connect.php          # Credentials (gitignored — do not commit)
+│   ├── db_connect.php          # MCA credentials (gitignored — do not commit)
 │   ├── db_connect_template.php # Copy this to db_connect.php and fill in credentials
+│   ├── db_review_connect.php   # MCA_review credentials (gitignored — do not commit)
+│   ├── review_auth.php         # Review-system token validator (302s on bad token)
+│   ├── review.php              # Reviewer landing page (paper list)
+│   ├── review_paper.php        # Reviewer voting page (one paper)
+│   ├── review_pdf.php          # Token-gated PDF stream
+│   ├── api/
+│   │   ├── vote.php            # Auto-save vote endpoint
+│   │   ├── submit.php          # Per-paper submit endpoint
+│   │   └── context.php         # Per-paper context-comment auto-save
+│   ├── robots.txt              # Disallow /review*, /api/*
 │   ├── css/style.css           # Main stylesheet
 │   └── images/                 # Logo and favicon
 ├── database/
@@ -43,11 +61,39 @@ MCA/
 │   ├── MCA_schema.xsd              # XML schema definition
 │   ├── xml2sql.py                  # Converts XML snapshot → MySQL INSERT dump (.sql.gz)
 │   ├── build_brite_index.py        # Builds web/data/kegg_brite_index.json from KEGG flat files
+│   ├── migrations/MCA_review/      # Schema for the separate MCA_review database
+│   │   └── 001_init.sql            #   5 tables: paper_snapshot, association_snapshot,
+│   │                               #   review_token, review_paper, review_vote
 │   ├── curation_log.json           # Audit log of all applied staging files
-│   └── papers_log.json             # Full PMID tracking log (superset of curation_log; includes deleted-PDF papers)
+│   └── papers_log.json             # Full PMID tracking log
+├── scripts/                    # Review-cycle Python pipeline
+│   ├── _db.py                  # DB connection helpers (env-var configured)
+│   ├── _llm.py                 # Claude-CLI subprocess wrapper for STRENGTHEN/WEAKEN rewrites
+│   ├── sync_review_data.py     # Dropbox staged/ + pdfs/ → review_data/
+│   ├── extract_abstracts.py    # NCBI efetch → MCA_review.paper_snapshot
+│   ├── ingest_for_review.py    # Staging JSONs → MCA_review.association_snapshot
+│   ├── mint_tokens.py          # Mint N tokens, write URLs to ~/Desktop
+│   ├── freeze_reviews.py       # Lock the cycle (status='frozen')
+│   ├── export_review_results.py# Write votes CSV + tally JSON + context JSON
+│   ├── build_adjudication.py   # Curator worksheet CSV (with Opus rewrites)
+│   ├── apply_adjudication.py   # Validates worksheet → resolved staging files
+│   └── requirements.txt        # pymysql, pymupdf, cryptography
+├── docker/                     # Local dev stack mirroring production
+│   ├── docker-compose.yml      # nginx 1.20 + php-fpm 8.3 + mysql 8.4
+│   ├── Dockerfile.php
+│   ├── nginx/mca.conf          # Mirrors production rewrites
+│   ├── mysql/init/04_users.sql # Dev users: mca, mca_review
+│   ├── mysql/conf.d/charset.cnf# Critical: forces utf8mb4 on import client
+│   ├── web/db_connect.php      # Docker-only credentials
+│   ├── web/db_review_connect.php # Docker-only credentials
+│   └── README.md
 ├── staging/                    # Staging JSON files from mca-paper-curator (gitignored)
 │   ├── PMID_YYYY-MM-DD_taxon-name.json  # Pending (not yet applied)
 │   └── applied/                    # Applied files (audit trail — never deleted)
+├── review_data/                # Review-cycle working data (gitignored)
+│   ├── staging/                # Synced from Dropbox (read-only mirror)
+│   ├── pdfs/                   # Synced from Dropbox (read-only mirror)
+│   └── resolved_staging/       # Output of apply_adjudication.py — input to mca-xml-update
 └── .claude/
     └── skills/
         ├── mca-paper-curator/  # Skill 1: paper(s) → staging JSON (12-agent, 5-phase pipeline; multi-PDF parallel)
@@ -219,6 +265,100 @@ echo "A${RAND}9!a"
 
 ---
 
+## Review cycle workflow
+
+The Expert Review System routes each `clinical_association` to outside experts who vote on `evidence_level` (E3/E2/E1/Undetermined) and judge the curated `association_text` (Accurate / Overstated / Understated / Unsure). Adjudicated revisions feed back into `mca-xml-update` (skill is unchanged) for the next release.
+
+### Pipeline (one cycle, end to end)
+
+```
+sync_review_data.py     → review_data/staging/ + review_data/pdfs/
+extract_abstracts.py    → MCA_review.paper_snapshot (NCBI efetch)
+ingest_for_review.py    → MCA_review.association_snapshot
+mint_tokens.py N        → N tokens × all papers; tokens.md → cycle_<DATE>/
+[reviewers vote in browser at https://mca.thebiohub.ca/review.php?t=<TOKEN>]
+freeze_reviews.py       → review_paper.status='frozen'; pages render read-only
+export_review_results.py→ cycle_<DATE>/{votes,tally,context_comments}_<DATE>.{csv,json}
+build_adjudication.py   → cycle_<DATE>/adjudication_<DATE>.csv (with Claude Opus rewrites)
+[curator opens CSV in Numbers, fills decisions, saves]
+apply_adjudication.py   → cycle_<DATE>/resolved_staging/*.json   (validates first)
+[cp cycle_<DATE>/resolved_staging/*.json  →  MCA/staging/]
+mca-xml-update          → next-version XML/SQL; files move to staging/applied/
+```
+
+### Artifact storage — Dropbox per-cycle audit folders
+
+All review-cycle artifacts land in a single Dropbox-synced location, one
+folder per cycle, immutable once the cycle closes:
+
+```
+~/Library/CloudStorage/Dropbox-BioinformaticsHub/Projects/mca/review_cycles/
+└── cycle_<YYYY-MM-DD>/         ← active cycle (one per review round)
+    ├── tokens.md
+    ├── votes_<DATE>.csv
+    ├── tally_<DATE>.json
+    ├── context_comments_<DATE>.json
+    ├── adjudication_<DATE>.csv         ← curator's audit trail
+    ├── resolved_staging/*.json         ← post-review canonical files
+    ├── .llm_cache/<sha256>.txt         ← Claude Opus suggestion cache
+    └── notes.md                        ← optional curator notes
+```
+
+The active cycle dir is computed automatically from today's date. Override
+with `MCA_REVIEW_CYCLE_DIR=<absolute path>` env var when re-running an old
+cycle for backfill or testing.
+
+### Two audit trails
+
+| Trail | Location | Answers |
+|---|---|---|
+| **Why** (review provenance) | Dropbox `review_cycles/cycle_<DATE>/` | "Why does claim X read this way? What did reviewers say?" |
+| **What** (applied state) | Repo `staging/applied/` | "What files produced the v1.X release?" |
+
+Linked by filename: `staging/applied/2026-04-03_akkermansia-muciniphila.json` is the same file (post-mca-xml-update) that lives in `cycle_2026-05-03/resolved_staging/2026-04-03_akkermansia-muciniphila.json`.
+
+### Key conventions for the review system
+
+- **MCA is never modified** — review state lives entirely in `MCA_review`. Drop the DB to tear down a cycle.
+- **No PII on the server** — only opaque 64-hex tokens. Token↔reviewer mapping kept offline by the curator.
+- **PDFs only via `review_pdf.php`** — token-gated PHP wrapper; `review_data/pdfs/` is *not* served directly by nginx.
+- **Bad/missing/revoked tokens** redirect to `https://mca.thebiohub.ca/` (not 403). Review URLs are not linked anywhere on the public site; `robots.txt` blocks crawlers.
+- **Adjudication is local, not on the server** — curator works in a CSV file under the cycle's Dropbox folder.
+- **LLM rewrites use the local Claude CLI** (`claude -p`) under the curator's Max subscription — no API key, no separate billing. Suggestions are SHA-256 cached in `cycle_<DATE>/.llm_cache/`.
+- **`apply_adjudication.py` validates the CSV** before writing — refuses to proceed if any `needs_curator` row has a blank `decision_evidence_level`, an unknown grade, or a malformed `discard` value (use `--force` to override).
+- **All review-cycle development testing happens in `docker/`** — production deploy is gated on explicit per-phase OK from the curator (per memory `feedback_no_server_push_review`).
+
+### Local dev quick-start
+
+```bash
+docker compose -f docker/docker-compose.yml up -d
+# nginx on http://localhost:8080, MySQL on 13306 (mca/mca_review users auto-created)
+python3 scripts/sync_review_data.py
+python3 scripts/extract_abstracts.py
+python3 scripts/ingest_for_review.py --truncate
+python3 scripts/mint_tokens.py 3      # writes URLs to <cycle_dir>/tokens.md
+```
+
+### Production deploy (one-shot)
+
+```bash
+MYSQL_ROOT_PASS='<root pw>' bash scripts/deploy_review_to_production.sh
+```
+
+Idempotent. Applies the `MCA_review` schema, creates the `mca_review` MySQL user (scoped grants), writes `db_review_connect.php` on the server, patches the nginx deny block, rsyncs the PHP and PDF files, populates `paper_snapshot` + `association_snapshot` via SSH tunnel, mints N tokens against `MCA_REVIEW_BASE_URL` (defaults to https://mca.thebiohub.ca), and copies the URL list to `~/Desktop/review_tokens_<DATE>.md`.
+
+### Production paths (IMPORTANT — differs from initial AWS setup)
+
+| Path | Contents |
+|---|---|
+| `/srv/mca-repo/web/` | nginx docroot (git-pull-style; **not** `/var/www/mca/` even though older notes say so) |
+| `/srv/mca-repo/web/db_connect.php` | MCA credentials (apache:apache 640, gitignored) |
+| `/srv/mca-repo/web/db_review_connect.php` | MCA_review credentials (apache:apache 640, gitignored) |
+| `/var/www/review_data/pdfs/` | Token-gated paper PDFs streamed by `review_pdf.php` |
+| `/etc/nginx/conf.d/mca.conf` | nginx vhost (clean URLs + extensionless PHP + credential deny block) |
+
+---
+
 ## Release process
 
 ### Version numbering
@@ -237,10 +377,10 @@ Increment the minor version by 1 for each dev cycle (v1.11, v1.12 …). When rea
 ### Release checklist
 
 1. **Finalize XML** — ensure `database/MCA_DB_v[X]_[Y0]_[DATE].xml` is the canonical snapshot with the correct version string inside (`<version>v[X]_[Y0]_[DATE]</version>`).
-2. **Regenerate SQL** — run `python3 database/xml2sql.py database/MCA_DB_v[X]_[Y0]_[DATE].xml` and confirm output counts (passports, associations, UNCERTAIN skipped). Output is `.sql.gz` directly.
+2. **Regenerate SQL + API JSON** — run `python3 database/xml2sql.py database/MCA_DB_v[X]_[Y0]_[DATE].xml` and confirm output counts (passports, associations, UNCERTAIN skipped). Outputs: the `.sql.gz` MySQL dump **and** `web/api/v1/passports/*.json` + `web/api/v1/meta.json` for the public API. Both must be committed together — they share the same `version` string, and stale JSON would silently lie about what's in the DB.
 3. **Update CLAUDE.md** — bump `Current version` in the project overview and all filename references in "Local setup".
 4. **Update `web/data/MCA_DB_latest.xml`** — copy the release XML to this path (used by the web app).
-5. **Commit** — stage XML, `.sql.gz`, `web/data/MCA_DB_latest.xml`, CLAUDE.md, and any other changed files. Commit message format: `v[X].[Y0]: [brief description]`.
+5. **Commit** — stage XML, `.sql.gz`, `web/data/MCA_DB_latest.xml`, `web/api/v1/meta.json`, `web/api/v1/passports/`, CLAUDE.md, and any other changed files. Commit message format: `v[X].[Y0]: [brief description]`.
 6. **Create GitHub Release** — go to `https://github.com/Snyder-Institute/MCA/releases/new`; tag `v[X].[Y0]`; attach three release assets:
    - `MCA_create_database.sql.gz`
    - `MCA_DB_v[X]_[Y0]_[DATE].xml` — raw XML snapshot (no compression)

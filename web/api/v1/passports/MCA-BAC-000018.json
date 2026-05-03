@@ -1,0 +1,184 @@
+{
+  "passport_id": "MCA-BAC-000018",
+  "preferred_name": "Enterococcus faecalis",
+  "taxon_rank": "species",
+  "domain": "Bacteria",
+  "lineage": "Bacteria|Bacillota|Bacilli|Lactobacillales|Enterococcaceae|Enterococcus",
+  "ncbi_taxid": 1351,
+  "is_pathobiont": "context dependent",
+  "last_reviewed": "2026-04-02",
+  "created_at": "2026-04-01",
+  "updated_at": "2026-04-02",
+  "synonyms": [
+    "Enterococcus proteiformis",
+    "Enterocoque",
+    "Micrococcus ovalis",
+    "Micrococcus zymogenes",
+    "Streptococcus faecalis",
+    "Streptococcus glycerinaceus",
+    "Streptococcus liquefaciens"
+  ],
+  "biology": {
+    "gram_status": "gram-positive",
+    "oxygen_tolerance": "facultative anaerobe",
+    "morphology": "coccus",
+    "key_traits": [],
+    "bacdive_url": "https://bacdive.dsmz.de/strain/5279"
+  },
+  "ecology": {
+    "primary_niches": [
+      {
+        "value": "gut",
+        "mesh_anatomy_id": "D007422"
+      },
+      {
+        "value": "urinary tract",
+        "mesh_anatomy_id": "D014551"
+      }
+    ],
+    "reservoirs": [
+      "human",
+      "animal"
+    ],
+    "transmission_routes": []
+  },
+  "clinical_profile": {
+    "clinical_roles": [
+      "opportunistic pathogen",
+      "commensal"
+    ],
+    "typical_specimens": [
+      {
+        "value": "wound swab"
+      }
+    ],
+    "bloom_triggers": [],
+    "risk_contexts": [
+      "immunocompromised patients"
+    ],
+    "amr_highlights": [],
+    "virulence_factors": [
+      {
+        "value": "Ace",
+        "vfdb_id": "VF0355"
+      },
+      {
+        "value": "AS",
+        "vfdb_id": "VF0352"
+      },
+      {
+        "value": "BopD",
+        "vfdb_id": "VF0362"
+      },
+      {
+        "value": "Capsule",
+        "vfdb_id": "VF0361"
+      },
+      {
+        "value": "Cytolysin",
+        "vfdb_id": "VF0356"
+      },
+      {
+        "value": "Ebp pili",
+        "vfdb_id": "VF0538"
+      },
+      {
+        "value": "EfaA",
+        "vfdb_id": "VF0354"
+      },
+      {
+        "value": "Esp",
+        "vfdb_id": "VF0353"
+      },
+      {
+        "value": "Fsr",
+        "vfdb_id": "VF0360"
+      },
+      {
+        "value": "Gelatinase",
+        "vfdb_id": "VF0357"
+      },
+      {
+        "value": "Hyaluronidase",
+        "vfdb_id": "VF0359"
+      },
+      {
+        "value": "SprE",
+        "vfdb_id": "VF0358"
+      }
+    ]
+  },
+  "metabolites": [],
+  "evidence_pmids": [
+    40544256,
+    29590047
+  ],
+  "associations": [
+    {
+      "association_text": "Enterococcus faecalis was isolated from a wound swab in a post-HSCT immunocompromised patient with B-cell ALL; treatment with cefepime was initiated but discontinued due to cefepime-induced neurotoxicity.",
+      "content_hash": "20f4d782fe6c10dc2eec8bba94b3b0bb26b21e0922ae4dd0dea129cfa77ceb6d",
+      "evidence_level": "E1",
+      "evidence_type": "case report",
+      "refs": [],
+      "pmids": [
+        40544256
+      ]
+    },
+    {
+      "association_text": "GF C57BL/6 mice monocolonized with E. faecalis (n=6–10) showed translocation to mesenteric veins, MLNs, and liver but did NOT develop gut barrier leakage (FITC-dextran not elevated), anti-RNA IgG, or anti-dsDNA IgG autoantibodies at 8 weeks post-colonization, in contrast to E. gallinarum-monocolonized mice; Th17 cells were not expanded in small intestinal lamina propria or MLNs (n=5 per group).",
+      "content_hash": "fedfc396fbf0bbf60e7df3178279d695353ef7d2d7a1a7560af22ee035d8880f",
+      "evidence_level": "E2",
+      "evidence_type": "animal model",
+      "refs": [
+        {
+          "type": "mesh",
+          "id": "D018988",
+          "label": "Bacterial Translocation"
+        },
+        {
+          "type": "mesh",
+          "id": "D001323",
+          "label": "Autoantibodies"
+        },
+        {
+          "type": "mesh",
+          "id": "D015551",
+          "label": "Autoimmunity"
+        }
+      ],
+      "pmids": [
+        29590047
+      ]
+    },
+    {
+      "association_text": "E. faecalis lysate or RNA induced significantly lower expression of ERV gp70, β2-glycoprotein I, type I IFN-α, and AhR/CYP1A1 in murine and human hepatocytes compared to E. gallinarum (ANOVA, p<0.05 to p<0.0001, n=3 each); serum anti-E. faecalis RNA IgG was not elevated in SLE (n=15) or AIH (n=17) patients relative to healthy controls (n=9), distinguishing it from E. gallinarum.",
+      "content_hash": "bfa32e7dfa088d21075ed9e423b74308ba3bc677cbd1d7774cbdf3510527b679",
+      "evidence_level": "E2",
+      "evidence_type": "mixed: in vitro + case-control",
+      "refs": [
+        {
+          "type": "mesh",
+          "id": "D022781",
+          "label": "Hepatocytes"
+        },
+        {
+          "type": "mesh",
+          "id": "D008180",
+          "label": "Lupus Erythematosus, Systemic"
+        },
+        {
+          "type": "mesh",
+          "id": "D019693",
+          "label": "Hepatitis, Autoimmune"
+        }
+      ],
+      "pmids": [
+        29590047
+      ]
+    }
+  ],
+  "_meta": {
+    "version": "v1_10_20260404",
+    "generated_at": "2026-05-03"
+  }
+}

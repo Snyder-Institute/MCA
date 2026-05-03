@@ -1,0 +1,81 @@
+{
+  "passport_id": "MCA-FUN-000001",
+  "preferred_name": "Aspergillus terreus",
+  "taxon_rank": "species",
+  "domain": "Fungi",
+  "lineage": "Eukaryota; Fungi; Ascomycota; Eurotiomycetes; Eurotiales; Aspergillaceae; Aspergillus",
+  "ncbi_taxid": 33178,
+  "is_pathobiont": "context dependent",
+  "last_reviewed": "2026-04-01",
+  "created_at": "2026-04-01",
+  "updated_at": "2026-04-01",
+  "synonyms": [
+    "Aspergillus terrestris"
+  ],
+  "biology": {
+    "gram_status": "not applicable",
+    "oxygen_tolerance": "aerobe",
+    "morphology": "mold",
+    "key_traits": [],
+    "bacdive_url": null
+  },
+  "ecology": {
+    "primary_niches": [
+      {
+        "value": "environment"
+      },
+      {
+        "value": "lung",
+        "mesh_anatomy_id": "D008168"
+      }
+    ],
+    "reservoirs": [
+      "environment"
+    ],
+    "transmission_routes": []
+  },
+  "clinical_profile": {
+    "clinical_roles": [
+      "opportunistic pathogen"
+    ],
+    "typical_specimens": [
+      {
+        "value": "bronchoalveolar lavage (BAL)",
+        "mesh_anatomy_id": "D018893"
+      }
+    ],
+    "bloom_triggers": [],
+    "risk_contexts": [
+      "immunocompromised patients",
+      "solid organ transplant recipients"
+    ],
+    "amr_highlights": [],
+    "virulence_factors": []
+  },
+  "metabolites": [],
+  "evidence_pmids": [
+    40544256
+  ],
+  "associations": [
+    {
+      "association_text": "Aspergillus terreus was isolated from bronchoalveolar lavage in a post-allogeneic HSCT patient with B-cell ALL, causing invasive pulmonary aspergillosis that required combination antifungal therapy with isavuconazole and caspofungin.",
+      "content_hash": "1a632710f0a6fa8c02d3e109e150c047566cdfd832b540f78a6d6b5ea1bfdcad",
+      "evidence_level": "E1",
+      "evidence_type": "case report",
+      "refs": [
+        {
+          "type": "kegg_disease",
+          "id": "H01328",
+          "label": "Aspergillosis"
+        }
+      ],
+      "pmids": [
+        40544256
+      ]
+    }
+  ],
+  "_meta": {
+    "version": "v1_10_20260404",
+    "generated_at": "2026-05-03"
+  }
+}
