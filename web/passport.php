@@ -138,6 +138,11 @@ try {
     die("Database error: " . $e->getMessage());
 }
 
+// Set 404 status before any output if no passport was found.
+if (empty($taxon)) {
+    http_response_code(404);
+}
+
 include 'header.php';
 ?>
 
@@ -588,7 +593,23 @@ include 'header.php';
         </div>
 
     <?php else: ?>
-        <div class="callout"><h3>Record not found</h3></div>
+        <div class="callout" style="text-align: center; padding: 48px 24px;">
+            <h3 style="margin: 0 0 12px; color: #404f7c;">We couldn't find that passport.</h3>
+            <p style="color: #666; max-width: 520px; margin: 0 auto 20px; line-height: 1.6;">
+                The passport ID
+                <?php if (!empty($_GET['id'])): ?>
+                    <code style="background: #f3f4f6; padding: 2px 6px; border-radius: 3px; color: #404f7c;"><?= htmlspecialchars($_GET['id']) ?></code>
+                <?php else: ?>
+                    you requested
+                <?php endif; ?>
+                isn't in our knowledge base. It may have been retired, or the ID may have a typo.
+            </p>
+            <p style="margin: 0;">
+                <a href="passports.php" style="color: #404f7c; font-weight: bold; text-decoration: none; padding: 8px 18px; border: 1px solid #404f7c; border-radius: 4px; display: inline-block;">Browse all passports</a>
+                &nbsp;
+                <a href="/" style="color: #404f7c; font-weight: bold;">or go home</a>
+            </p>
+        </div>
     <?php endif; ?>
 </div>
 
