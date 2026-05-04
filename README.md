@@ -3,8 +3,9 @@
 
 ![Version](https://img.shields.io/badge/version-v1.10-blue) ![License](https://img.shields.io/badge/license-MIT-green)
 
-**Web-version**: ~~https://bioinformatics.ucalgary.ca/MCA~~ as of April 16, 2026, University of Calgary IT team refused to host this web.<br />
-**iOS-version**: [https://apps.apple.com/app/microbial-clinical-atlas/](https://apps.apple.com/app/microbial-clinical-atlas/id6761735200)
+**Web app**: [https://mca.thebiohub.ca](https://mca.thebiohub.ca) — full Taxon Passport browser with KEGG pathway search<br />
+**Public API**: [https://mca.thebiohub.ca/api/v1/meta](https://mca.thebiohub.ca/api/v1/meta) — read-only JSON endpoints (see [API](#public-api))<br />
+**iOS app**: [https://apps.apple.com/app/microbial-clinical-atlas/](https://apps.apple.com/app/microbial-clinical-atlas/id6761735200)
 
 ## Introduction
 
@@ -83,6 +84,30 @@ Takes one or more approved staging JSON files and applies them to the XML knowle
 
 ---
 
+## Public API
+
+MCA exposes a read-only JSON API for programmatic access. Endpoints are static files served directly by nginx — no authentication, no rate limit (within reason), 1-hour browser/proxy cache, full CORS.
+
+| Endpoint | Returns |
+|---|---|
+| `GET /api/v1/meta` | DB version, last-update date, passport + association counts |
+| `GET /api/v1/passports/{passport_id}` | Full nested passport (biology, ecology, clinical profile, metabolites, evidence PMIDs, associations with refs and PMIDs) |
+
+```bash
+curl https://mca.thebiohub.ca/api/v1/meta
+curl https://mca.thebiohub.ca/api/v1/passports/MCA-BAC-000001
+```
+
+Each passport JSON is regenerated alongside the SQL dump on every release (see `database/xml2sql.py`). Unknown IDs return a JSON 404 with a hint pointing at `/api/v1/meta`.
+
+---
+
+## Expert review system
+
+The web app also hosts a token-based **Expert Review System** for curated clinical associations (see `web/review*.php` and `scripts/`). Reviewers receive a unique URL, vote on `evidence_level` (E3 / E2 / E1 / Undetermined) and judge the curated `association_text` (Accurate / Overstated / Understated / Unsure), with optional context comments per paper. Reviews drive adjudication for the next versioned release. Review state lives in a separate `MCA_review` MySQL database (private), so the canonical `MCA` knowledge base is never modified during a review cycle.
+
+---
+
 ## iOS App
 
 An iPhone companion app for MCA is available on the App Store. Built with SwiftUI (iOS 17+) using only Apple frameworks — no external dependencies.
@@ -106,11 +131,12 @@ Apple rejected the **Passport Extractor feature** because it uses a user-provide
 ## Tech stack
 
 ### Web
-- **Backend:** PHP 7.4+ with PDO (MySQL)
-- **Database:** MySQL (InnoDB, UTF-8), 10-table schema centered on `passport`
-- **Frontend:** Vanilla HTML/CSS/JS; Google Fonts (Montserrat, Roboto)
-- **Deployment:** LAMP stack
-- **Export:** Versioned XML dumps in `database/`; SQL dumps generated from XML via `xml2sql.py`
+- **Backend:** PHP 8.3 with PDO (MySQL)
+- **Database:** MySQL 8.4 (InnoDB, utf8mb4), 10-table canonical schema; separate 5-table `MCA_review` schema for review cycles
+- **Frontend:** Vanilla HTML/CSS/JS — no frameworks; Google Fonts (Montserrat, Roboto)
+- **Server:** Rocky 9 + nginx 1.20 + PHP-FPM, Let's Encrypt TLS
+- **Local dev:** Docker stack mirroring production (`docker/docker-compose.yml`)
+- **Export:** Versioned XML in `database/`; SQL dump (`.sql.gz`) and public-API JSON files (`web/api/v1/`) regenerated from XML via `database/xml2sql.py` on every release
 
 ### iOS
 - **Language:** Swift (SwiftUI, iOS 17+)

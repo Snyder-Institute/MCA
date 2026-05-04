@@ -527,6 +527,39 @@ def main():
     print(f'  Associations   : {n_assoc_in_json} (UNCERTAIN excluded)')
     print(f'  meta.json      : {meta_out["version"]} ({meta_out["last_updated"]})')
 
+    # ── sitemap.xml ────────────────────────────────────────────────────────
+    # Static XML for search engines. Includes the public clean URLs of the
+    # main pages plus every passport.
+    sitemap_path = os.path.join(repo_root, 'web', 'sitemap.xml')
+    static_pages = [
+        ('/',                'weekly',  '1.0'),
+        ('/about',           'monthly', '0.7'),
+        ('/passports',       'weekly',  '0.9'),
+        ('/pathway_search',  'monthly', '0.7'),
+        ('/glossary',        'monthly', '0.5'),
+        ('/literature',      'monthly', '0.6'),
+    ]
+    sitemap = ['<?xml version="1.0" encoding="UTF-8"?>']
+    sitemap.append('<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">')
+    for path, freq, prio in static_pages:
+        sitemap.append('  <url>')
+        sitemap.append(f'    <loc>https://mca.thebiohub.ca{path}</loc>')
+        sitemap.append(f'    <lastmod>{today}</lastmod>')
+        sitemap.append(f'    <changefreq>{freq}</changefreq>')
+        sitemap.append(f'    <priority>{prio}</priority>')
+        sitemap.append('  </url>')
+    for pid in written_passports:
+        sitemap.append('  <url>')
+        sitemap.append(f'    <loc>https://mca.thebiohub.ca/{pid}</loc>')
+        sitemap.append(f'    <lastmod>{today}</lastmod>')
+        sitemap.append('    <changefreq>monthly</changefreq>')
+        sitemap.append('    <priority>0.8</priority>')
+        sitemap.append('  </url>')
+    sitemap.append('</urlset>')
+    with open(sitemap_path, 'w', encoding='utf-8') as f:
+        f.write('\n'.join(sitemap) + '\n')
+    print(f'  sitemap.xml    : {len(static_pages)} static + {len(written_passports)} passport URLs')
+
 
 if __name__ == '__main__':
     main()

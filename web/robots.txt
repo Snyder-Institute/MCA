@@ -3,3 +3,5 @@ Disallow: /review.php
 Disallow: /review_paper.php
 Disallow: /review_pdf.php
 Disallow: /api/
+
+Sitemap: https://mca.thebiohub.ca/sitemap.xml
