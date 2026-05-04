@@ -242,10 +242,6 @@ include 'header.php';
 </style>
 
 <div class="page-content">
-    <div style="margin-bottom: 20px;">
-        <a href="index.php" style="font-weight: bold; font-size: 12px; color: #000; text-decoration: none; letter-spacing: 1px;">&larr; BACK TO HOME</a>
-    </div>
-
     <?php if ($taxon): ?>
         <div class="passport-header">
             <div class="passport-header-inner" style="display: flex; justify-content: space-between; align-items: flex-end;">
@@ -619,7 +615,7 @@ include 'header.php';
             <p style="margin: 0;">
                 <a href="passports.php" style="color: #404f7c; font-weight: bold; text-decoration: none; padding: 8px 18px; border: 1px solid #404f7c; border-radius: 4px; display: inline-block;">Browse all passports</a>
                 &nbsp;
-                <a href="/" style="color: #404f7c; font-weight: bold;">or go home</a>
+                <a href="/" style="color: #404f7c; font-weight: bold; text-decoration: none; padding: 8px 18px; border: 1px solid #404f7c; border-radius: 4px; display: inline-block;">Back to home</a>
             </p>
         </div>
     <?php endif; ?>
