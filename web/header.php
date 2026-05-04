@@ -1,9 +1,38 @@
+<?php
+// Pages may set $page_title, $page_description, $page_url, $page_image before
+// including this header to override the defaults below.
+$default_title = 'Microbial Clinical Atlas';
+$default_desc  = 'A curated knowledge base of clinically relevant microbes — Taxon Passports linking microorganisms to ecology, clinical role, and evidence-graded literature.';
+$default_url   = 'https://mca.thebiohub.ca' . ($_SERVER['REQUEST_URI'] ?? '/');
+$default_image = 'https://mca.thebiohub.ca/images/logo.png';
+
+$meta_title = htmlspecialchars($page_title       ?? $default_title, ENT_QUOTES);
+$meta_desc  = htmlspecialchars($page_description ?? $default_desc,  ENT_QUOTES);
+$meta_url   = htmlspecialchars($page_url         ?? $default_url,   ENT_QUOTES);
+$meta_image = htmlspecialchars($page_image       ?? $default_image, ENT_QUOTES);
+?>
 <!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Microbial Clinical Atlas</title>
+    <title><?= $meta_title ?></title>
+    <meta name="description" content="<?= $meta_desc ?>">
+
+    <!-- Open Graph (for Slack, Facebook, LinkedIn link previews) -->
+    <meta property="og:type" content="website">
+    <meta property="og:title" content="<?= $meta_title ?>">
+    <meta property="og:description" content="<?= $meta_desc ?>">
+    <meta property="og:url" content="<?= $meta_url ?>">
+    <meta property="og:image" content="<?= $meta_image ?>">
+    <meta property="og:site_name" content="Microbial Clinical Atlas">
+
+    <!-- Twitter card -->
+    <meta name="twitter:card" content="summary">
+    <meta name="twitter:title" content="<?= $meta_title ?>">
+    <meta name="twitter:description" content="<?= $meta_desc ?>">
+    <meta name="twitter:image" content="<?= $meta_image ?>">
+
     <link rel="icon" type="image/x-icon" href="images/favicon.ico">
     <link rel="stylesheet" href="css/style.css?v=2">
     <!-- Google Tag Manager -->

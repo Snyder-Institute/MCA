@@ -9,7 +9,13 @@ include 'header.php';
         </a>
     </div>
 
-    <div class="google-search-container" style="margin-top: 80px;">
+    <p style="text-align: center; max-width: 640px; margin: 32px auto 0; color: #666; font-size: 16px; line-height: 1.6;">
+        A curated knowledge base of clinically relevant microbes &mdash;
+        each <strong>Taxon Passport</strong> links a microorganism to its
+        ecology, clinical role, and evidence-graded literature.
+    </p>
+
+    <div class="google-search-container" style="margin-top: 32px;">
         <input type="text" id="microbe-search" placeholder="Search by name (e.g. Enterobacteriaceae)" autocomplete="off" autofocus>
         <div id="search-results"></div>
     </div>

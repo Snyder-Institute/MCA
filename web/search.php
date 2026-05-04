@@ -46,7 +46,10 @@ if ($search_query !== '') {
             exit;
         }
     } catch (PDOException $e) {
-        die("Search error: " . $e->getMessage());
+        error_log("[search.php] DB error: " . $e->getMessage());
+        http_response_code(500);
+        require 'error_page.php';
+        exit;
     }
 }
 

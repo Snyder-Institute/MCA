@@ -135,12 +135,24 @@ try {
         $formatted_lineage = implode('<span class="lineage-sep"> › </span>', $lineage_crumbs) ?: 'n/a';
     }
 } catch (PDOException $e) {
-    die("Database error: " . $e->getMessage());
+    error_log("[passport.php] DB error: " . $e->getMessage());
+    http_response_code(500);
+    require 'error_page.php';
+    exit;
 }
 
 // Set 404 status before any output if no passport was found.
 if (empty($taxon)) {
     http_response_code(404);
+}
+
+// Per-passport metadata for link previews (Slack, Twitter, Open Graph).
+if (!empty($taxon)) {
+    $page_title       = $taxon['preferred_name'] . ' — ' . $taxon['passport_id'] . ' | Microbial Clinical Atlas';
+    $rank_label       = $taxon['taxon_rank'] ? ucfirst($taxon['taxon_rank']) . ' · ' : '';
+    $page_description = $rank_label . ($taxon['lineage'] ?? '') .
+                        ' — Taxon Passport with ecology, clinical profile, and evidence-graded associations.';
+    $page_url         = 'https://mca.thebiohub.ca/' . $taxon['passport_id'];
 }
 
 include 'header.php';

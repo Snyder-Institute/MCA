@@ -79,7 +79,10 @@ try {
     $total_stmt = $pdo->query("SELECT COUNT(*) FROM passport");
     $total_count = (int)$total_stmt->fetchColumn();
 } catch (PDOException $e) {
-    die("Database Error: " . $e->getMessage());
+    error_log("[passports.php] DB error: " . $e->getMessage());
+    http_response_code(500);
+    require 'error_page.php';
+    exit;
 }
 
 $is_filtered = ($filter_rank !== '' || $filter_domain !== '' || $filter_name !== '' || $filter_pathobiont !== '' || $filter_role !== '' || $filter_evidence !== '');
