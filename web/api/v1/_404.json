@@ -1,0 +1,5 @@
+{
+  "error": "not_found",
+  "message": "No matching resource. The catalog is at /api/v1/meta; passports use the form /api/v1/passports/MCA-BAC-000001.",
+  "docs": "https://mca.thebiohub.ca/api/v1/meta"
+}
