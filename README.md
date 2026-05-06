@@ -3,13 +3,13 @@
 
 ![Version](https://img.shields.io/badge/version-v1.10-blue) ![License](https://img.shields.io/badge/license-MIT-green)
 
-**Web app**: [https://mca.thebiohub.ca](https://mca.thebiohub.ca) — full Taxon Passport browser with KEGG pathway search<br />
+**Web app**: [https://mca.thebiohub.ca](https://mca.thebiohub.ca) — full Taxon Passport browser with Advanced Search (pathway / taxon / disease)<br />
 **Public API**: [https://mca.thebiohub.ca/api/v1/meta](https://mca.thebiohub.ca/api/v1/meta) — read-only JSON endpoints (see [API](#public-api))<br />
 **iOS app**: [https://apps.apple.com/app/microbial-clinical-atlas/](https://apps.apple.com/app/microbial-clinical-atlas/id6761735200)
 
 ## Introduction
 
-**Microbial Clinical Atlas (MCA)** is a curated knowledge base for translating microbiome readouts into clinically and biologically interpretable insights. MCA organizes microbial information into standardized **Taxon Passports** — structured records capturing taxonomic identity, ecological context, clinical associations, and evidence-linked references (PMIDs). The project is designed to support microbiologists, bioinformaticians, and translational researchers by providing consistent fields, stable identifiers, and structured, reproducible outputs.
+**Microbial Clinical Atlas (MCA)** is a curated knowledge base for translating microbiome readouts into clinically and biologically interpretable insights. MCA organizes microbial information into standardized **Taxon Passports** — structured records capturing taxonomic identity, ecological context, clinical associations, and evidence-linked references (PMIDs). The current release (v1.10) holds **64 taxon passports** drawn from **25 curated papers**, with **139 evidence-graded clinical associations**. The project is designed to support microbiologists, bioinformaticians, and translational researchers by providing consistent fields, stable identifiers, and structured, reproducible outputs.
 
 ---
 
@@ -23,8 +23,9 @@ Microbiome studies routinely report associations between taxa and clinical or ex
 
 - **Standardize** curated microbial knowledge into consistent, comparable Taxon Passports with stable identifiers.
 - **Link evidence** to curated claims using explicit literature references (PMIDs) and structured evidence grades.
+- **Validate** AI-curated content with a structured **Expert Review System** before each release (see [Expert Review System](#expert-review-system)).
 - **Support interpretation** of microbiome signals in clinical and translational settings by organizing taxa, contexts, and evidence in a reusable framework.
-- **Enable reuse** via versioned, structured exports (XML and SQL) suitable for web applications and downstream analysis.
+- **Enable reuse** via versioned, structured exports (XML, SQL, JSON) suitable for web applications, downstream analysis, and the iOS companion app.
 
 ---
 
@@ -51,15 +52,21 @@ Each passport also carries **Clinical Associations** — individual evidence-gra
 | **E2** | Moderate evidence — single cohort, single RCT, case-control, or cross-sectional study |
 | **E1** | Limited / preliminary — animal models, in vitro studies, case reports, mechanistic work |
 
+`UNCERTAIN` claims are stored in the canonical XML for audit but excluded from the SQL dump and the public API — they are not surfaced to clinicians.
+
 ### Stable identifiers
 
 Passport IDs follow the format `MCA-[DOMAIN]-[NNNNNN]` (e.g., `MCA-BAC-000001` for bacteria, `MCA-FUN-000001` for fungi). These identifiers are permanent and are never reassigned.
+
+### Versioning
+
+MCA uses a two-part version scheme `vMAJOR.MINOR`. **Release** versions always end in digit `0` (v1.10, v1.20, …) and ship as tagged GitHub Releases with attached XML + SQL artifacts. **Dev** versions never end in `0` and cover intermediate curation cycles between releases.
 
 ---
 
 ## Curation pipeline
 
-MCA entries are produced by a two-skill, human-in-the-loop curation pipeline:
+MCA entries are produced by a two-skill, human-in-the-loop curation pipeline that combines AI-assisted extraction with structured expert review.
 
 ![MCA curation workflow](images/workflow.png)
 
@@ -80,7 +87,27 @@ Takes one or more approved staging JSON files and applies them to the XML knowle
 - **Phase 0** — Each file is hard-validated (JSON integrity, required fields, CREATE/UPDATE consistency against the XML). Any hard failure blocks all writes.
 - **Phase 1** — A non-blocking pre-flight summary is shown: files to apply, CREATE vs UPDATE counts, fields to be changed, and any warnings (UNCERTAIN grades, missing PMIDs).
 - **Phase 2** — One `xml_writer_agent` is spawned per file, sequentially. CREATE actions assign a new passport ID; UPDATE actions only append to list fields and overwrite scalar fields — existing data is never removed. A SHA-256 content hash is computed for each clinical association on write.
-- **Phase 3** — Applied staging files are archived to `staging/applied/`, a curation log entry is appended to `database/curation_log.json`, and `xml2sql.py` is run to regenerate the SQL dump.
+- **Phase 3** — Applied staging files are archived to `staging/applied/`, a curation log entry is appended to `database/curation_log.json`, and `xml2sql.py` is run to regenerate the SQL dump and the public-API JSON files.
+
+---
+
+## Expert Review System
+
+Every release of MCA passes through a structured **Expert Review** cycle in which a small panel of domain experts validates the AI-curated clinical claims before they reach end users. The system is the trust-conferring step between the AI pipeline and the public knowledge base — the moment where each MCA claim earns its citability.
+
+### Why a review system exists
+
+The AI curation pipeline is fast and consistent, but it cannot judge clinical nuance the way a domain expert can. Without human validation, an AI-curated knowledge base risks propagating overstated claims, mis-graded evidence, or subtle wording errors at scale. MCA's review system makes that human-judgment check explicit, structured, and reproducible.
+
+### Reviewer experience
+
+- Each reviewer receives a **unique opaque token URL** (`/review.php?t=<64-hex>`) — no login, no account, fully anonymous.
+- The landing page lists the reviewer's assigned papers; a per-paper page shows each clinical association as a card with two voting rows:
+  - **Evidence level** — accept the curator's grade or pick a different one (E3 / E2 / E1 / Undetermined).
+  - **Quality of statement** — Accurate / Overstated / Understated / Unsure.
+- Optional comment per claim and per paper. Votes auto-save on every click.
+- A built-in yellow **reviewer guidelines** callout on every paper page explains the four evidence levels and four quality grades.
+- A standalone visual walkthrough is hosted at <https://mca.thebiohub.ca/reviewer_howto.html>.
 
 ---
 
@@ -102,12 +129,6 @@ Each passport JSON is regenerated alongside the SQL dump on every release (see `
 
 ---
 
-## Expert review system
-
-The web app also hosts a token-based **Expert Review System** for curated clinical associations (see `web/review*.php` and `scripts/`). Reviewers receive a unique URL, vote on `evidence_level` (E3 / E2 / E1 / Undetermined) and judge the curated `association_text` (Accurate / Overstated / Understated / Unsure), with optional context comments per paper. Reviews drive adjudication for the next versioned release. Review state lives in a separate `MCA_review` MySQL database (private), so the canonical `MCA` knowledge base is never modified during a review cycle.
-
----
-
 ## iOS App
 
 An iPhone companion app for MCA is available on the App Store. Built with SwiftUI (iOS 17+) using only Apple frameworks — no external dependencies.
@@ -115,14 +136,17 @@ An iPhone companion app for MCA is available on the App Store. Built with SwiftU
 ### Passports
 Offline SQLite browser of all curated taxon passports. Full-text search, bookmarks, and a full passport detail view that mirrors the web layout.
 
+### Advanced Search
+Unified search bar over KEGG pathways, MCA taxa, and diseases — a slimmer mobile counterpart of the web Advanced Search. Selecting a suggestion auto-routes to the right view (pathway → linked taxa, taxon → linked pathways + co-occurring taxa + drug target classes, disease → linked taxa + pathways). Powered by a bundled `kegg_pathway_index.json` so it works fully offline.
+
 ### Extractor
 Enter a PMID, choose abstract or full text, and the app fetches the paper from PubMed/PMC (or accepts a PDF upload), sends it to the Claude API, extracts all taxa, and cross-references results against the MCA database. Results are cached locally. Once extracted, users can share the result as a JSON file with the developer so that **community contributions can be reviewed and incorporated into future MCA releases**.
 
 ### About
 Database stats, curation pipeline overview, acknowledgements.
 
-## Note on App Store availability
-Apple rejected the **Passport Extractor feature** because it uses a user-provided API key to access Claude — which Apple treats as a paid transaction that must go through their in-app purchase system, while Siri has limited capacity. The app is free, open-source, and no payment is involved — users simply bring their own API key. Apple does not offer an exception for academic or research tools. The App Store version ships without the Extractor (Passports + About only). The full app with the Extractor is available by building from source in the iOS folder.
+### Note on App Store availability
+Apple rejected the **Passport Extractor feature** because it uses a user-provided API key to access Claude — which Apple treats as a paid transaction that must go through their in-app purchase system, while Siri has limited capacity. The app is free, open-source, and no payment is involved — users simply bring their own API key. Apple does not offer an exception for academic or research tools. The App Store version ships without the Extractor (Passports + About only). The full app with the Extractor is available by building from source in the `iOS/` folder.
 
 ![Passport Extractor](.github/images/PassportExtractor.png)
 
@@ -140,11 +164,10 @@ Apple rejected the **Passport Extractor feature** because it uses a user-provide
 
 ### iOS
 - **Language:** Swift (SwiftUI, iOS 17+)
-- **Database:** SQLite (generated from XML via `xml2sqlite.py`)
+- **Database:** SQLite (generated from XML via `database/xml2sqlite.py`)
 - **Dependencies:** None — Apple frameworks only
 
 ---
 
 **Maintained by:** [Bioinformatics Hub](https://TheBioHub.ca/), Snyder Institute, Cumming School of Medicine, University of Calgary<br />
 **Contact at:** Bioinformatics@ucalgary.ca
-
