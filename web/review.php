@@ -6,11 +6,14 @@
 declare(strict_types=1);
 require_once __DIR__ . '/review_auth.php';
 
-// ── Round configuration (cycle 2026-05-03) ────────────────────────────────
-// 24 curated papers split into 3 groups for staged reviewer release:
-//   Round 1 — papers anchored by E3/E2 claims (highest-priority validation)
-//   Round 2 — E1-dominant papers (sent after round 1 closes)
-//   Skip   — papers with all-UNCERTAIN claims (excluded from SQL anyway)
+// ── Round configuration (cycle re-minted 2026-05-06) ──────────────────────
+// MCA has 25 curated papers; 24 of them carry reviewable claims and are
+// split into 3 groups for staged reviewer release. PMID 31548871 has zero
+// clinical_associations (UPDATE-only that just added taxon-level PMIDs)
+// and is omitted entirely from this filter.
+//   Round 1 (11 papers) — anchored by E3/E2 claims (highest-priority validation)
+//   Round 2 (9 papers)  — E1-dominant papers (sent after round 1 closes)
+//   Skip   (4 papers)   — all-UNCERTAIN claims (excluded from SQL anyway)
 // To advance the cycle, change $active_round_pmids to $round_2_pmids.
 $round_1_pmids = [41814006, 38584858, 29097494, 33542131, 36894652,
                   29302014, 29097493, 34941392, 33432149, 29590047,
