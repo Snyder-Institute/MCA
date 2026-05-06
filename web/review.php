@@ -5,25 +5,21 @@
 
 declare(strict_types=1);
 require_once __DIR__ . '/review_auth.php';
+require_once __DIR__ . '/review_rounds.php';
 
-// ── Round configuration (cycle re-minted 2026-05-06) ──────────────────────
-// MCA has 25 curated papers; 24 of them carry reviewable claims and are
-// split into 3 groups for staged reviewer release. PMID 31548871 has zero
-// clinical_associations (UPDATE-only that just added taxon-level PMIDs)
-// and is omitted entirely from this filter.
-//   Round 1 (11 papers) — anchored by E3/E2 claims (highest-priority validation)
-//   Round 2 (9 papers)  — E1-dominant papers (sent after round 1 closes)
-//   Skip   (4 papers)   — all-UNCERTAIN claims (excluded from SQL anyway)
-// To advance the cycle, change $active_round_pmids to $round_2_pmids.
-$round_1_pmids = [41814006, 38584858, 29097494, 33542131, 36894652,
-                  29302014, 29097493, 34941392, 33432149, 29590047,
-                  29546356];
-$round_2_pmids = [39456922, 35831502, 40544256, 32758418,
-                  33303685, 24503131, 33766858, 25385792, 29414937];
-$skip_pmids    = [32129694, 38786164, 41641127, 41039149];
+// Each token is bound to a review round in MCA_review.review_token.round
+// (default 1, schema 002). review.php picks the visible paper list from
+// the token's round so round-1 and round-2 reviewers can run in parallel
+// without a global flag flip.
+$stmt = $pdo_review->prepare(
+    "SELECT round FROM review_token WHERE token = :t LIMIT 1"
+);
+$stmt->execute(['t' => $review_token]);
+$token_round = (int) ($stmt->fetchColumn() ?: 1);
 
-$active_round_pmids = $round_1_pmids;
+$active_round_pmids = active_round_pmids($token_round, $round_1_pmids, $round_2_pmids);
 $pmid_csv = implode(',', array_map('intval', $active_round_pmids));
+$levels_csv = evidence_levels_sql(active_evidence_levels($token_round));
 
 $stmt = $pdo_review->prepare(
     "SELECT
@@ -39,14 +35,14 @@ $stmt = $pdo_review->prepare(
              JOIN association_snapshot a2 ON a2.association_uid = v.association_uid
              WHERE v.token = rp.token
                AND a2.pmid = rp.pmid
-               AND a2.evidence_level IN ('E3', 'E2')
+               AND a2.evidence_level IN ($levels_csv)
          ) AS n_voted
      FROM review_paper rp
      JOIN paper_snapshot ps ON ps.pmid = rp.pmid
-     -- INNER JOIN drops papers with no E3/E2 associations from the list.
-     -- Round 1 review is E3+E2 only; E1/UNCERTAIN claims are hidden.
+     -- INNER JOIN drops papers with no claims at the active evidence levels
+     -- (round 1 = E3+E2; round 2 = E1; both filter out UNCERTAIN entirely).
      JOIN association_snapshot a ON a.pmid = rp.pmid
-                                AND a.evidence_level IN ('E3', 'E2')
+                                AND a.evidence_level IN ($levels_csv)
      WHERE rp.token = :t
        AND rp.pmid IN ($pmid_csv)
      GROUP BY rp.pmid, rp.token, rp.status, ps.title, ps.journal, ps.year, ps.keywords

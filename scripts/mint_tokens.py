@@ -35,9 +35,16 @@ import _paths  # noqa: E402
 def main() -> None:
     ap = argparse.ArgumentParser(description=__doc__.splitlines()[0])
     ap.add_argument("n", type=int, help="number of tokens to mint")
+    ap.add_argument(
+        "--round", type=int, default=1, dest="rnd",
+        help="review round to bind tokens to (default 1). "
+             "review.php picks the visible paper list from this column.",
+    )
     args = ap.parse_args()
     if args.n < 1:
         sys.exit("ERROR: N must be >= 1")
+    if args.rnd < 1:
+        sys.exit("ERROR: --round must be >= 1")
 
     base_url = _db.base_url()
     now = datetime.now(timezone.utc).replace(tzinfo=None)
@@ -52,8 +59,8 @@ def main() -> None:
 
         tokens = [secrets.token_hex(32) for _ in range(args.n)]
         c.executemany(
-            "INSERT INTO review_token (token, created_at) VALUES (%s, %s)",
-            [(t, now) for t in tokens],
+            "INSERT INTO review_token (token, created_at, round) VALUES (%s, %s, %s)",
+            [(t, now, args.rnd) for t in tokens],
         )
 
         rows = [(t, p["pmid"]) for t in tokens for p in papers]
@@ -64,11 +71,12 @@ def main() -> None:
         conn.commit()
 
     lines = [
-        f"# Reviewer tokens minted {now:%Y-%m-%d %H:%M UTC}",
+        f"# Reviewer tokens — round {args.rnd} — minted {now:%Y-%m-%d %H:%M UTC}",
         "",
         f"- Base URL : {base_url}",
         f"- Papers   : {len(papers)}",
         f"- Tokens   : {len(tokens)}",
+        f"- Round    : {args.rnd}",
         "",
         "## URLs",
         "",
@@ -76,10 +84,14 @@ def main() -> None:
     for i, t in enumerate(tokens, 1):
         lines.append(f"{i:2d}. {base_url}/review.php?t={t}")
     lines.append("")
-    out_path = _paths.cycle_dir() / "tokens.md"
+    # Round-1 keeps the historical "tokens.md" filename for backward
+    # compatibility with earlier cycles; later rounds get round-tagged files
+    # so they don't clobber an existing tokens.md.
+    fname = "tokens.md" if args.rnd == 1 else f"tokens-round-{args.rnd}.md"
+    out_path = _paths.cycle_dir() / fname
     out_path.write_text("\n".join(lines))
 
-    print(f"Minted {len(tokens)} tokens; wrote URLs to {out_path}")
+    print(f"Minted {len(tokens)} tokens (round {args.rnd}); wrote URLs to {out_path}")
     print(f"Pre-populated {len(rows)} review_paper rows ({len(tokens)} x {len(papers)}).")
 
 

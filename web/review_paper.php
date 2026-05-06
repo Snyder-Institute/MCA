@@ -15,9 +15,25 @@
 
 declare(strict_types=1);
 require_once __DIR__ . '/review_auth.php';
+require_once __DIR__ . '/review_rounds.php';
 
 $pmid = isset($_GET['pmid']) ? (int) $_GET['pmid'] : 0;
 if ($pmid <= 0) { http_response_code(400); exit('Bad request'); }
+
+// Sub-option (ii) gate: a token bound to round R may only access papers in
+// $round_R_pmids. review_paper rows are pre-populated for ALL papers per
+// token (mint_tokens.py), so we can't rely on that table to enforce the
+// scope; we re-check from review_token.round + the round mapping.
+$stmt = $pdo_review->prepare(
+    "SELECT round FROM review_token WHERE token = :t LIMIT 1"
+);
+$stmt->execute(['t' => $review_token]);
+$token_round = (int) ($stmt->fetchColumn() ?: 1);
+$allowed_pmids = active_round_pmids($token_round, $round_1_pmids, $round_2_pmids);
+if (!in_array($pmid, $allowed_pmids, true)) {
+    http_response_code(404);
+    exit('Paper not in your review queue');
+}
 
 $stmt = $pdo_review->prepare(
     'SELECT status, context_comment FROM review_paper WHERE token = :t AND pmid = :p LIMIT 1'
@@ -35,10 +51,14 @@ $stmt->execute(['p' => $pmid]);
 $paper = $stmt->fetch(PDO::FETCH_ASSOC);
 if (!$paper) { http_response_code(404); exit('Paper not found'); }
 
-// Round 1 of the review cycle is E3- and E2-only. Claims the curator graded
-// as E1 or UNCERTAIN are excluded here so reviewers see only the higher-
-// confidence claims. Reviewers can still cast an E1/Undetermined VOTE on
-// the cards shown — this filter is on the curator-assigned grade only.
+// Filter cards by the active evidence levels for this token's round.
+// Round 1 = E3+E2 (high-confidence). Round 2 = E1 (E1-dominant papers).
+// UNCERTAIN claims are excluded from MCA SQL by xml2sql.py and are not
+// reviewed in any round. Reviewers can still cast an E1/Undetermined VOTE
+// on the cards shown — this filter is on the curator-assigned grade only.
+$levels_csv  = evidence_levels_sql(active_evidence_levels($token_round));
+$order_field = ($token_round === 2) ? "FIELD(a.evidence_level, 'E1')"
+                                    : "FIELD(a.evidence_level, 'E3', 'E2')";
 $stmt = $pdo_review->prepare(
     "SELECT a.association_uid, a.taxon_name, a.taxon_rank,
             a.association_text, a.evidence_level, a.supporting_pmids,
@@ -48,9 +68,8 @@ $stmt = $pdo_review->prepare(
      LEFT JOIN review_vote v
             ON v.association_uid = a.association_uid AND v.token = :t
      WHERE a.pmid = :p
-       AND a.evidence_level IN ('E3', 'E2')
-     ORDER BY FIELD(a.evidence_level, 'E3', 'E2'),
-              a.taxon_name, a.association_uid"
+       AND a.evidence_level IN ($levels_csv)
+     ORDER BY $order_field, a.taxon_name, a.association_uid"
 );
 $stmt->execute(['t' => $review_token, 'p' => $pmid]);
 $associations = $stmt->fetchAll(PDO::FETCH_ASSOC);
