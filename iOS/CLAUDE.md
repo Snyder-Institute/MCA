@@ -5,11 +5,14 @@
 MCA (Microbial Clinical Atlas) is an iPhone companion app for the MCA knowledge base. It has three tabs:
 
 1. **Passports tab** — Offline SQLite browser of curated microbial taxon passports with bookmarks
-2. **Extractor tab** — Paper-to-passport analyzer: enter a PMID → choose abstract or full text → extract all taxa via Claude API → cross-reference against MCA database → display results with links to full passports. Includes offline extraction cache (JSON files in Application Support) with recent history and swipe-to-delete.
+2. **Search tab** — KEGG pathway search with unified search bar (pathway/taxon/disease autocomplete), powered by a bundled JSON index subset
 3. **About tab** — Database stats, curation pipeline, acknowledgements
+
+**Extractor tab** (hidden, code retained) — Paper-to-passport analyzer using Claude API. Hidden from the TabView due to App Store restrictions on BYOK API key models. All source files remain in the project for future re-enablement via server proxy.
 
 **Maintained by:** Bioinformatics Hub, Snyder Institute, Cumming School of Medicine, University of Calgary
 **Contact:** bioinformatics@ucalgary.ca
+**App Store:** https://apps.apple.com/app/microbial-clinical-atlas/id6761735200
 **Web counterpart:** [MCA web app](https://github.com/Snyder-Institute/MCA) — the iOS app mirrors the web's passport.php layout
 
 ---
@@ -20,7 +23,7 @@ MCA (Microbial Clinical Atlas) is an iPhone companion app for the MCA knowledge 
 - **Database:** SQLite3 via raw C API — bundled read-only (`journal_mode=delete`, NOT WAL)
 - **No external packages** — only Apple frameworks: SwiftUI, Foundation, SQLite3, PDFKit, MessageUI, Security
 - **Auto-inclusion:** `PBXFileSystemSynchronizedRootGroup` — any file placed in `MCA/MCA/` is automatically included in the Xcode project; no need to edit `project.pbxproj`
-- **Do NOT edit `project.pbxproj`** — Xcode tools cannot safely modify it; Info.plist keys must be added manually via Xcode UI
+- **`project.pbxproj` edits** — limited to `MARKETING_VERSION` and `CURRENT_PROJECT_VERSION` bumps only. All other changes (build settings, Info.plist keys, targets) must be made via the Xcode UI
 
 ---
 
@@ -33,7 +36,7 @@ MCA/                            # Monorepo root (web + database + iOS)
 │   │   ├── MCA.xcodeproj/
 │   │   └── MCA/                          # All source files here (auto-included)
 │   │       ├── MCAApp.swift              # App entry point
-│   │       ├── ContentView.swift         # TabView root (Passports, Extractor, About)
+│   │       ├── ContentView.swift         # TabView root (Passports, Search, About)
 │   │       │
 │   │       │── # Passports tab
 │   │       ├── PassportListView.swift    # Browse/search list with bookmarks
@@ -42,7 +45,12 @@ MCA/                            # Monorepo root (web + database + iOS)
 │   │       ├── DatabaseManager.swift     # Singleton SQLite reader (raw C API)
 │   │       ├── GlossaryView.swift        # Field glossary (accessible from passport toolbar)
 │   │       │
-│   │       │── # Extractor tab
+│   │       │── # Search tab
+│   │       ├── PathwaySearchView.swift   # Unified search bar with pathway/taxon/disease results
+│   │       ├── PathwayIndex.swift        # Codable structs + loader for KEGG pathway JSON index
+│   │       ├── kegg_pathway_index.json   # Bundled subset of KEGG BRITE index (106KB)
+│   │       │
+│   │       │── # Extractor tab (hidden — code retained for future proxy re-enablement)
 │   │       ├── AnalyzeView.swift         # Main extractor screen (PMID input, source choice, PDF upload, cache lookup)
 │   │       ├── ExtractionCache.swift     # Offline extraction cache (JSON files in Application Support)
 │   │       ├── PubMedService.swift       # PubMed esearch + efetch, PMCID conversion, PMC full text with section parser
@@ -244,24 +252,31 @@ All badge colors must match the web version. The canonical color reference is th
 
 ---
 
-## App Store submission checklist
+## App Store
 
-When submitting to the App Store, remind the user of the following:
+- **App Store URL:** https://apps.apple.com/app/microbial-clinical-atlas/id6761735200
+- **App ID:** 6761735200
+- **Bundle ID:** `ca.thebiohub.mca`
+- **First approved:** 2026-04-09
+- **Free app, no in-app purchases**
 
-- **Free app, no in-app purchases** — less review scrutiny
-- **Demo mode works without API key** — Apple reviewers can test the full app (Passports tab, Extractor demo, About tab) without needing a Claude API key
-- **Review notes** — include a note explaining the app's purpose, e.g.: "MCA is an offline clinical microbiology reference for researchers and clinicians. The Passport Extractor allows users to analyze published papers and identify taxa that may be candidates for future inclusion in the curated MCA database, supporting community-driven growth of the knowledge base."
-- **Privacy policy** — required by Apple; must cover PubMed API calls, Claude API (user-provided key), and local-only data storage (bookmarks, extraction cache)
-- **Screenshots** — at minimum: Passports list, a Passport detail, Extractor demo result, About tab
-- **TestFlight** — same uploaded build can be used for internal testing (immediate, no review) and App Store submission (1-3 day review) in parallel
-- **BYOK model** — users bring their own Claude API key; no monetization concerns for Apple
+### Submitting updates
+
+1. Bump `MARKETING_VERSION` (e.g., `1.0.0` → `1.1.0`) and `CURRENT_PROJECT_VERSION` (build number) in `project.pbxproj`
+2. In Xcode: Product → Archive (destination: Any iOS Device arm64)
+3. Organizer → Distribute App → App Store Connect → Upload
+4. In App Store Connect: create new version, select the build, update "What's New", submit for review
+
+### Screenshots
+
+At minimum: Passports list, Passport detail, Search tab, About tab
 
 ---
 
 ## What NOT to do
 
 - Do not add external Swift packages — Apple frameworks only
-- Do not edit `project.pbxproj` — it risks crashing Xcode
+- Do not edit `project.pbxproj` beyond version bumps — other changes via Xcode UI only
 - Do not use WAL journal mode for SQLite — app bundle is read-only
 - Do not link to ontologies from the Extractor output — pure text extraction
 - Do not introduce new badge colors without updating the color table above

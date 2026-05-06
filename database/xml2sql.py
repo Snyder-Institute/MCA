@@ -535,7 +535,7 @@ def main():
         ('/',                'weekly',  '1.0'),
         ('/about',           'monthly', '0.7'),
         ('/passports',       'weekly',  '0.9'),
-        ('/pathway_search',  'monthly', '0.7'),
+        ('/advanced_search', 'monthly', '0.7'),
         ('/glossary',        'monthly', '0.5'),
         ('/literature',      'monthly', '0.6'),
     ]

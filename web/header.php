@@ -52,7 +52,7 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
     <a href="index.php" class="navbar-brand">Microbial Clinical Atlas</a>
     <div style="display: flex; gap: 20px;">
         <a href="about.php" style="color: white; font-weight: bold;">About</a>
-        <a href="pathway_search.php" style="color: white; font-weight: bold;">Search</a>
+        <a href="advanced_search.php" style="color: white; font-weight: bold;">Search</a>
         <a href="passports.php" style="color: white; font-weight: bold;">Passports</a>
     </div>
 </nav>

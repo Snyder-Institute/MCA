@@ -93,7 +93,7 @@
         </a>
     </div>
 
-    <h1>Pathway Search — Help</h1>
+    <h1>Advanced Search — Help</h1>
     <p class="subtitle">MCA supports six pathway query scenarios using KEGG BRITE and KEGG flat-file annotations.</p>
 
     <div class="help-section-title">How Pathway Links Work</div>
@@ -317,7 +317,7 @@
     </table>
 
     <p style="margin-top: 20px; font-size: 13px; color: #888;">
-        <a href="pathway_search.php" style="color: #007bff;">← Back to Pathway Search</a>
+        <a href="advanced_search.php" style="color: #007bff;">← Back to Advanced Search</a>
     </p>
 
 </div>

@@ -34,6 +34,35 @@
 }
 .ps-btn:hover { background: #2f3a5e; }
 
+.ps-input-wrap { flex: 1; position: relative; display: flex; }
+.ps-input { padding-right: 38px; }
+.ps-clear {
+    position: absolute;
+    right: 10px;
+    top: 50%;
+    transform: translateY(-50%);
+    width: 22px; height: 22px;
+    border: none; border-radius: 50%;
+    background: #d0d8f0; color: #fff;
+    font-size: 16px; line-height: 1; font-weight: 700;
+    cursor: pointer; padding: 0;
+    display: none; align-items: center; justify-content: center;
+    font-family: inherit;
+    transition: background 0.15s;
+}
+.ps-clear:hover { background: #404f7c; }
+.ps-clear.show { display: flex; }
+
+.ps-btn-secondary {
+    padding: 9px 22px;
+    background: #fff; color: #404f7c;
+    border: 1.5px solid #d0d8f0; border-radius: 8px;
+    font-size: 13px; font-weight: 600;
+    cursor: pointer; font-family: inherit;
+    transition: all 0.15s;
+}
+.ps-btn-secondary:hover { background: #f0f4ff; border-color: #404f7c; }
+
 /* ── Autocomplete ────────────────────────────────────────────────────────────── */
 .ac-dropdown {
     position: absolute;
@@ -64,17 +93,6 @@
 .ac-pathway { background: #dbeafe; color: #1e40af; }
 .ac-taxon   { background: #d1fae5; color: #065f46; }
 .ac-disease { background: #fce7f3; color: #9d174d; }
-
-/* ── Mode tabs ──────────────────────────────────────────────────────────────── */
-.ps-tabs { display: flex; gap: 6px; margin-bottom: 24px; flex-wrap: wrap; }
-.ps-tab {
-    padding: 7px 16px;
-    border: 1.5px solid #d0d8f0; border-radius: 20px;
-    font-size: 13px; font-weight: 600; color: #404f7c;
-    background: #fff; cursor: pointer; transition: all 0.15s;
-}
-.ps-tab:hover { background: #f0f4ff; }
-.ps-tab.active { background: #404f7c; color: #fff; border-color: #404f7c; }
 
 /* ── Results ────────────────────────────────────────────────────────────────── */
 .ps-results { min-height: 80px; }
@@ -162,12 +180,12 @@
 <div class="ps-wrap">
 
     <div class="logo-container" style="margin-bottom: 20px;">
-        <a href="index.php" style="display: inline-block;">
+        <a href="index.php" id="ps-logo" style="display: inline-block;">
             <img src="./images/logo.png" class="logo-main" alt="MCA Logo" style="cursor: pointer;">
         </a>
     </div>
 
-    <h1>Pathway Search</h1>
+    <h1>Advanced Search</h1>
     <p class="ps-subtitle">
         Search MCA taxa by KEGG pathway, disease, or taxon name. &nbsp;
         <a href="search_help.php" style="color:#007bff;text-decoration:none;">Help &amp; query guide →</a>
@@ -176,27 +194,19 @@
     <!-- Search bar -->
     <div class="ps-bar-wrap">
         <div class="ps-bar-row">
-            <input id="ps-input" class="ps-input" type="text" autocomplete="off"
-                   placeholder="Pathway name or ID (e.g. Inflammatory bowel disease, hsa05321)…">
+            <div class="ps-input-wrap">
+                <input id="ps-input" class="ps-input" type="text" autocomplete="off"
+                       placeholder="Search pathways, taxa, or diseases…">
+                <button class="ps-clear" id="ps-clear" type="button" aria-label="Clear search">&times;</button>
+            </div>
             <button class="ps-btn" onclick="triggerSearch()">Search</button>
+            <button class="ps-btn-secondary" onclick="loadBrowse()">Browse all pathways</button>
         </div>
         <div class="ac-dropdown" id="ac-drop"></div>
     </div>
 
-    <!-- Mode tabs -->
-    <div class="ps-tabs">
-        <button class="ps-tab active" data-mode="pathway" onclick="setMode('pathway')">By Pathway &nbsp;<span style="opacity:.7;font-size:11px;">Q3</span></button>
-        <button class="ps-tab"        data-mode="taxon"   onclick="setMode('taxon')">By Taxon &nbsp;<span style="opacity:.7;font-size:11px;">Q1 · Q2 · Q6</span></button>
-        <button class="ps-tab"        data-mode="disease" onclick="setMode('disease')">By Disease &nbsp;<span style="opacity:.7;font-size:11px;">Q4</span></button>
-        <button class="ps-tab"        data-mode="browse"  onclick="setMode('browse')">Browse &nbsp;<span style="opacity:.7;font-size:11px;">Q5</span></button>
-    </div>
-
     <!-- Results -->
-    <div class="ps-results" id="ps-results">
-        <p style="color:#888;font-size:14px;">
-            Type a pathway name, disease, or taxon to begin. Use <strong>Browse</strong> to see all pathways with linked taxa.
-        </p>
-    </div>
+    <div class="ps-results" id="ps-results"></div>
 
 </div>
 
@@ -204,39 +214,31 @@
 var currentMode = 'pathway';
 var acTimer = null;
 
-// ── Mode ───────────────────────────────────────────────────────────────────────
-
-function setMode(mode) {
-    currentMode = mode;
-    document.querySelectorAll('.ps-tab').forEach(function(t) {
-        t.classList.toggle('active', t.dataset.mode === mode);
-    });
-    var ph = {
-        pathway: 'Pathway name or ID (e.g. Inflammatory bowel disease, hsa05321, nt06510)…',
-        taxon:   'Taxon name or passport ID (e.g. Akkermansia muciniphila, MCA-BAC-000015)…',
-        disease: 'Disease name or KEGG Disease ID (e.g. Melanoma, H00038)…',
-        browse:  ''
-    };
-    document.getElementById('ps-input').placeholder = ph[mode] || '';
-    if (mode === 'browse') loadBrowse();
-    else setResults('<p style="color:#888;font-size:14px;">Type a query above and press Search.</p>');
-}
-
 // ── Autocomplete ────────────────────────────────────────────────────────────────
 
-var inp  = document.getElementById('ps-input');
-var drop = document.getElementById('ac-drop');
+var inp      = document.getElementById('ps-input');
+var drop     = document.getElementById('ac-drop');
+var clearBtn = document.getElementById('ps-clear');
+var logoLink = document.getElementById('ps-logo');
 
 inp.addEventListener('input', function() {
     clearTimeout(acTimer);
     var q = inp.value.trim();
+    clearBtn.classList.toggle('show', inp.value.length > 0);
     if (q.length < 2) { drop.style.display = 'none'; return; }
     acTimer = setTimeout(function() { fetchAC(q); }, 200);
 });
 
 inp.addEventListener('keydown', function(e) {
     if (e.key === 'Enter')  { drop.style.display = 'none'; triggerSearch(); }
-    if (e.key === 'Escape') { drop.style.display = 'none'; }
+    if (e.key === 'Escape') { drop.style.display = 'none'; resetToInitial(); }
+});
+
+clearBtn.addEventListener('click', resetToInitial);
+
+logoLink.addEventListener('click', function(e) {
+    e.preventDefault();
+    resetToInitial();
 });
 
 document.addEventListener('click', function(e) {
@@ -291,14 +293,7 @@ function renderAC(data, q) {
 function selectAC(type, id, name) {
     inp.value = name;
     drop.style.display = 'none';
-    if (type === 'pathway') setMode('pathway');
-    else if (type === 'taxon') setMode('taxon');
-    else if (type === 'disease') setMode('disease');
-    // Remove tab switch side-effect (already done above), then load
     currentMode = type;
-    document.querySelectorAll('.ps-tab').forEach(function(t) {
-        t.classList.toggle('active', t.dataset.mode === type);
-    });
     loadResults(id);
 }
 
@@ -306,32 +301,32 @@ function selectAC(type, id, name) {
 
 function triggerSearch() {
     var q = inp.value.trim();
-    if (!q || currentMode === 'browse') return;
+    if (!q) { resetToInitial(); return; }
 
     // Direct ID detection
     if (/^hsa\d{5}$/i.test(q) || /^map\d{5}$/i.test(q) || /^nt\d+$/i.test(q)) {
-        loadResults(q.toLowerCase()); return;
+        currentMode = 'pathway'; loadResults(q.toLowerCase()); return;
     }
-    if (/^H\d{5}$/i.test(q)) { setMode('disease'); loadResults(q.toUpperCase()); return; }
-    if (/^MCA-/i.test(q))    { setMode('taxon');   loadResults(q); return; }
+    if (/^H\d{5}$/i.test(q)) { currentMode = 'disease'; loadResults(q.toUpperCase()); return; }
+    if (/^MCA-/i.test(q))    { currentMode = 'taxon';   loadResults(q); return; }
 
-    // Fetch top autocomplete match for current mode
+    // Pick top match across all groups: disease > taxon > pathway
     fetch('ajax_pathway.php?mode=autocomplete&q=' + encodeURIComponent(q) + '&limit=1')
         .then(function(r) { return r.json(); })
         .then(function(data) {
-            if (currentMode === 'pathway' && data.pathways && data.pathways.length)
-                loadResults(data.pathways[0].id);
-            else if (currentMode === 'taxon' && data.taxa && data.taxa.length)
-                loadResults(data.taxa[0].passport_id);
-            else if (currentMode === 'disease' && data.diseases && data.diseases.length)
-                loadResults(data.diseases[0].id);
-            else
+            if (data.diseases && data.diseases.length) {
+                currentMode = 'disease'; loadResults(data.diseases[0].id);
+            } else if (data.taxa && data.taxa.length) {
+                currentMode = 'taxon'; loadResults(data.taxa[0].passport_id);
+            } else if (data.pathways && data.pathways.length) {
+                currentMode = 'pathway'; loadResults(data.pathways[0].id);
+            } else {
                 setResults('<p class="ps-empty">No results found for "' + es(q) + '".</p>');
+            }
         });
 }
 
 function loadResults(id) {
-    if (currentMode === 'browse') { loadBrowse(); return; }
     setResults('<p class="ps-loading">Loading…</p>');
     fetch('ajax_pathway.php?mode=' + currentMode + '&id=' + encodeURIComponent(id))
         .then(function(r) { return r.json(); })
@@ -352,6 +347,20 @@ function loadBrowse() {
 }
 
 function setResults(html) { document.getElementById('ps-results').innerHTML = html; }
+
+// ── Initial / reset state ──────────────────────────────────────────────────────
+
+function showInitialState() {
+    setResults('');
+}
+
+function resetToInitial() {
+    inp.value = '';
+    drop.style.display = 'none';
+    clearBtn.classList.remove('show');
+    showInitialState();
+    inp.focus();
+}
 
 // ── Render helpers ─────────────────────────────────────────────────────────────
 
@@ -443,17 +452,17 @@ function renderTaxon(data) {
         html += '<div class="info-box">No KEGG pathway links found for this taxon. This indicates that the passport does not yet have KEGG Disease, Drug, or Compound IDs annotated.</div>';
     }
 
-    // Q1 — via diseases
+    // Pathways linked via clinical-association diseases
     if (data.pathways.via_diseases && data.pathways.via_diseases.length) {
-        html += '<div class="sec-label">Pathways via Disease Associations (Q1)</div>';
+        html += '<div class="sec-label">Pathways via Disease Associations</div>';
         data.pathways.via_diseases.forEach(function(p) {
             html += pathwayCard(p, p.linking_diseases, 'disease');
         });
     }
 
-    // Q1 — via compounds
+    // Pathways linked via metabolite compounds
     if (data.pathways.via_compounds && data.pathways.via_compounds.length) {
-        html += '<div class="sec-label">Pathways via Metabolites (Q1)</div>';
+        html += '<div class="sec-label">Pathways via Metabolites</div>';
         data.pathways.via_compounds.forEach(function(p) {
             html += pathwayCard(p, p.linking_compounds, 'compound');
         });
@@ -470,18 +479,9 @@ function renderTaxon(data) {
         });
     }
 
-    // Q2 — guidance
-    if (data.total_pathways > 0) {
-        html += '<div class="info-box" style="margin-top:20px;">' +
-            '<strong>Q2 — Filter by pathway:</strong> Click any pathway above to view all MCA taxa in that pathway. ' +
-            'To see which specific clinical associations of <em>' + es(data.name) + '</em> belong to a given pathway, ' +
-            '<a href="' + es(data.passport_id) + '" style="color:#404f7c;font-weight:600;">open the passport</a> ' +
-            'and cross-reference the KEGG Disease IDs shown on each association.</div>';
-    }
-
-    // Q6 — co-occurring taxa
+    // Co-occurring taxa via shared pathways
     if (data.cooccurring && data.cooccurring.length) {
-        html += '<div class="sec-label">Co-occurring Taxa via Shared Pathways (Q6)</div>';
+        html += '<div class="sec-label">Co-occurring Taxa via Shared Pathways</div>';
         html += '<div class="cooc-grid">';
         data.cooccurring.forEach(function(t) {
             var pbClass = t.is_pathobiont === 'yes' ? 'pb-yes' : 'pb-other';
@@ -569,6 +569,9 @@ function hi(text, q) {
     var re = new RegExp('(' + q.replace(/[.*+?^${}()|[\]\\]/g,'\\$&') + ')', 'gi');
     return safe.replace(re, '<strong>$1</strong>');
 }
+
+// ── Init: show clean intro; Browse only on explicit request ──────────────────
+showInitialState();
 </script>
 
 <?php include 'footer.php'; ?>

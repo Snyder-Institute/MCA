@@ -32,7 +32,7 @@ MCA/
 │   ├── passport.php            # Individual taxon passport detail view
 │   ├── passports.php           # Browse/table view of all taxa
 │   ├── ajax_search.php         # AJAX autocomplete endpoint
-│   ├── pathway_search.php      # KEGG BRITE pathway browser
+│   ├── advanced_search.php     # KEGG BRITE pathway/taxon/disease search (formerly pathway_search.php)
 │   ├── ajax_pathway.php        # KEGG pathway AJAX endpoint
 │   ├── 404.php                 # Friendly site-wide 404 (5s redirect to homepage)
 │   ├── error_page.php          # Generic 500 page (used by passport.php / search.php / passports.php on PDOException)
