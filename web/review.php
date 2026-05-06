@@ -36,11 +36,14 @@ $stmt = $pdo_review->prepare(
              JOIN association_snapshot a2 ON a2.association_uid = v.association_uid
              WHERE v.token = rp.token
                AND a2.pmid = rp.pmid
+               AND a2.evidence_level IN ('E3', 'E2')
          ) AS n_voted
      FROM review_paper rp
      JOIN paper_snapshot ps ON ps.pmid = rp.pmid
-     -- INNER JOIN drops papers with zero ingested associations from the list.
+     -- INNER JOIN drops papers with no E3/E2 associations from the list.
+     -- Round 1 review is E3+E2 only; E1/UNCERTAIN claims are hidden.
      JOIN association_snapshot a ON a.pmid = rp.pmid
+                                AND a.evidence_level IN ('E3', 'E2')
      WHERE rp.token = :t
        AND rp.pmid IN ($pmid_csv)
      GROUP BY rp.pmid, rp.token, rp.status, ps.title, ps.journal, ps.year, ps.keywords

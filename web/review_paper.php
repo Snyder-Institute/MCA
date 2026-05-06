@@ -35,6 +35,10 @@ $stmt->execute(['p' => $pmid]);
 $paper = $stmt->fetch(PDO::FETCH_ASSOC);
 if (!$paper) { http_response_code(404); exit('Paper not found'); }
 
+// Round 1 of the review cycle is E3- and E2-only. Claims the curator graded
+// as E1 or UNCERTAIN are excluded here so reviewers see only the higher-
+// confidence claims. Reviewers can still cast an E1/Undetermined VOTE on
+// the cards shown — this filter is on the curator-assigned grade only.
 $stmt = $pdo_review->prepare(
     "SELECT a.association_uid, a.taxon_name, a.taxon_rank,
             a.association_text, a.evidence_level, a.supporting_pmids,
@@ -44,7 +48,8 @@ $stmt = $pdo_review->prepare(
      LEFT JOIN review_vote v
             ON v.association_uid = a.association_uid AND v.token = :t
      WHERE a.pmid = :p
-     ORDER BY FIELD(a.evidence_level, 'E3', 'E2', 'E1', 'UNCERTAIN'),
+       AND a.evidence_level IN ('E3', 'E2')
+     ORDER BY FIELD(a.evidence_level, 'E3', 'E2'),
               a.taxon_name, a.association_uid"
 );
 $stmt->execute(['t' => $review_token, 'p' => $pmid]);
