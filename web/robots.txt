@@ -2,6 +2,7 @@ User-agent: *
 Disallow: /review.php
 Disallow: /review_paper.php
 Disallow: /review_pdf.php
+Disallow: /reviewer_howto.html
 Disallow: /api/
 
 Sitemap: https://mca.thebiohub.ca/sitemap.xml

@@ -1,0 +1,256 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="robots" content="noindex, nofollow">
+<title>MCA Review — How to review (4 steps)</title>
+<style>
+  body {
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+    margin: 0; padding: 36px; max-width: 1080px; margin: 0 auto;
+    color: #222; background: #fafbfd;
+  }
+  h1 { font-size: 24px; margin: 0 0 6px; color: #404f7c; }
+  .lede { color: #555; font-size: 14px; margin: 0 0 30px; }
+  .grid { display: grid; grid-template-columns: 1fr 1fr; gap: 28px; }
+  .panel {
+    background: #fff; border: 1px solid #e0e0e0; border-radius: 10px;
+    padding: 22px; box-shadow: 0 2px 6px rgba(0,0,0,.04);
+  }
+  .step-num {
+    display: inline-block; width: 26px; height: 26px; line-height: 26px;
+    text-align: center; background: #404f7c; color: #fff; border-radius: 50%;
+    font-weight: 700; font-size: 14px; margin-right: 8px;
+  }
+  .step-title { font-size: 16px; font-weight: 600; color: #222;
+                vertical-align: middle; }
+  .step-body { color: #555; font-size: 13px; margin: 10px 0 14px; line-height: 1.55; }
+  .step-body strong { color: #404f7c; }
+
+  /* Mock UI elements */
+  .mock {
+    background: #fafafa; border: 1px solid #ddd; border-radius: 6px;
+    padding: 12px; font-size: 12px; color: #333;
+    position: relative;
+  }
+  .mock-url-bar {
+    background: #f0f0f0; border: 1px solid #ccc; border-radius: 16px;
+    padding: 6px 12px; font-family: ui-monospace, monospace;
+    color: #333; word-break: break-all; font-size: 11px;
+  }
+  .mock-paper-row {
+    display: flex; gap: 10px; padding: 8px 6px; border-bottom: 1px solid #eee;
+    align-items: center;
+  }
+  .mock-paper-row:last-child { border-bottom: none; }
+  .mock-paper-title { color: #404f7c; flex: 1; font-weight: 500;
+                      text-decoration: underline; }
+  .mock-progress { color: #888; min-width: 50px; text-align: center; }
+  .mock-pill {
+    background: #888; color: #fff; padding: 2px 9px; border-radius: 10px;
+    font-size: 10px; min-width: 70px; text-align: center; white-space: nowrap;
+  }
+  .mock-pill.green { background: #0a7; }
+  .mock-pill.yellow { background: #fbbf24; color: #222; }
+
+  .mock-card {
+    border: 1px solid #e0e0e0; border-radius: 6px;
+    padding: 10px 12px; margin: 8px 0; background: #fff;
+  }
+  .mock-taxon { color: #404f7c; font-weight: 600; font-size: 12px; }
+  .mock-claim { font-size: 12px; line-height: 1.4; margin: 6px 0 10px; color: #444; }
+  .mock-row { display: flex; gap: 5px; align-items: center; margin: 4px 0;
+              flex-wrap: wrap; }
+  .mock-row-label { color: #777; font-size: 11px; min-width: 64px; }
+  .mock-btn {
+    padding: 3px 9px; font-size: 11px; border: 1px solid #ccc; background: #fff;
+    color: #333; border-radius: 3px;
+  }
+  .mock-btn.active { background: #404f7c; color: #fff; border-color: #404f7c; }
+  .mock-submit-btn {
+    padding: 8px 18px; background: #404f7c; color: #fff; border: none;
+    border-radius: 4px; font-size: 13px; font-weight: 600;
+    display: inline-block;
+  }
+  .mock-submit-btn.done { background: #0a7; }
+
+  /* Callout (numbered) */
+  .callout {
+    display: inline-flex; align-items: center; gap: 6px;
+    background: #fef3c7; color: #92400e; border: 1px solid #fbbf24;
+    border-radius: 4px; padding: 3px 9px; font-size: 11px; font-weight: 600;
+    margin-top: 8px;
+  }
+  .callout-arrow {
+    color: #fbbf24; font-size: 14px; font-weight: 700;
+  }
+
+  .footer-note {
+    margin-top: 36px; padding: 18px 22px;
+    background: #fff8e1; border-left: 4px solid #fbbf24; border-radius: 6px;
+    font-size: 13px; line-height: 1.55; color: #555;
+  }
+  .footer-note strong { color: #92400e; }
+  .footer-note code { background: rgba(0,0,0,.06); padding: 1px 5px;
+                      border-radius: 3px; font-size: 12px; }
+
+  .interlude {
+    grid-column: 1 / -1;
+    background: #fff; border: 1px solid #e0e0e0; border-radius: 10px;
+    padding: 24px 28px; box-shadow: 0 2px 6px rgba(0,0,0,.04);
+  }
+  .interlude .rationale {
+    font-size: 14px; line-height: 1.65; color: #444; margin: 0 0 22px;
+    padding: 14px 18px; background: #f0f4ff; border-left: 4px solid #404f7c;
+    border-radius: 4px;
+  }
+  .interlude .rationale strong { color: #404f7c; }
+  .guidelines {
+    background: #fff8e1; border-left: 4px solid #fbbf24; border-radius: 4px;
+    padding: 16px 20px;
+  }
+  .guidelines-title {
+    font-size: 12px; font-weight: 700; color: #92400e;
+    text-transform: uppercase; letter-spacing: 0.5px; margin: 0 0 12px;
+  }
+  .guideline-cols {
+    display: grid; grid-template-columns: 1fr 1fr; gap: 22px;
+  }
+  .guideline-col h4 {
+    font-size: 13px; color: #92400e; margin: 0 0 4px;
+  }
+  .guideline-col .sub {
+    color: #666; font-size: 12px; margin: 0 0 8px; line-height: 1.5;
+  }
+  .guideline-col ul {
+    margin: 0; padding-left: 20px; font-size: 13px; line-height: 1.55; color: #555;
+  }
+  .guideline-col ul li { margin-bottom: 5px; }
+  .guideline-col strong { color: #92400e; }
+</style>
+</head>
+<body>
+
+<h1>MCA Review — How to review</h1>
+<p class="lede">A four-step walkthrough of the reviewer interface.</p>
+
+<div class="grid">
+
+  <!-- STEP 1 -->
+  <div class="panel">
+    <div><span class="step-num">1</span><span class="step-title">Open your invitation link</span></div>
+    <p class="step-body">The link in your email opens directly to your paper list. <strong>No login, no account.</strong> Bookmark it if you'd like — you can return any time before the cycle closes.</p>
+    <div class="mock">
+      <div class="mock-url-bar">https://mca.thebiohub.ca/review.php?t=<em>your-unique-token</em></div>
+      <div class="callout"><span class="callout-arrow">↑</span> Paste in any browser</div>
+    </div>
+  </div>
+
+  <!-- STEP 2 -->
+  <div class="panel">
+    <div><span class="step-num">2</span><span class="step-title">Pick a paper</span></div>
+    <p class="step-body">You'll see your assigned papers. Click any title to start. The <strong>Progress</strong> column shows how many claims you've reviewed; <strong>Status</strong> updates as you go.</p>
+    <div class="mock">
+      <div class="mock-paper-row">
+        <div class="mock-paper-title">Antibiotic use and gut microbiome composition links…</div>
+        <div class="mock-progress">0 / 14</div>
+        <div class="mock-pill">Not started</div>
+      </div>
+      <div class="mock-paper-row">
+        <div class="mock-paper-title">Microbiota-Based Therapeutics for recurrent C. difficile…</div>
+        <div class="mock-progress">3 / 4</div>
+        <div class="mock-pill yellow">In progress</div>
+      </div>
+      <div class="mock-paper-row">
+        <div class="mock-paper-title">Translocation of a gut pathobiont drives autoimmunity…</div>
+        <div class="mock-progress">2 / 2</div>
+        <div class="mock-pill green">Submitted</div>
+      </div>
+      <div class="callout"><span class="callout-arrow">↑</span> Click a paper title to open it</div>
+    </div>
+  </div>
+
+  <!-- INTERLUDE: rationale + reviewer guidelines -->
+  <div class="interlude">
+    <div class="rationale">
+      Each <strong>clinical association</strong> below was extracted from a
+      published paper by an AI curation pipeline and linked to a specific
+      microbial taxon. For each card, we would be grateful if you could
+      assess two things: <strong>(1)</strong> the curator's evidence-level
+      grade — feel free to accept it or choose a different one; and
+      <strong>(2)</strong> whether the AI-written statement faithfully
+      reflects what the paper actually says (Accurate / Overstated /
+      Understated / Unsure).
+    </div>
+
+    <div class="guidelines">
+      <div class="guidelines-title">Reviewer guidelines</div>
+      <div class="guideline-cols">
+        <div class="guideline-col">
+          <h4>Evidence level</h4>
+          <p class="sub">How strongly the cited paper(s) support the claim — judged by study type, scale, and clinical relevance.</p>
+          <ul>
+            <li><strong>E3 — Strong</strong>: clinical practice guidelines, meta-analyses, systematic reviews, or multiple independent human cohorts within a single paper.</li>
+            <li><strong>E2 — Moderate</strong>: a single human cohort, a single randomised controlled trial, a case-control study, or a cross-sectional human study.</li>
+            <li><strong>E1 — Limited / preliminary</strong>: animal models, in vitro studies, case reports, or mechanistic work without human-cohort confirmation.</li>
+            <li><strong>Undetermined</strong>: you cannot tell from the paper which level applies, or the cited evidence is too ambiguous to grade.</li>
+          </ul>
+        </div>
+        <div class="guideline-col">
+          <h4>Quality of the curated statement</h4>
+          <p class="sub">How faithfully the AI-written statement reflects what the paper actually says.</p>
+          <ul>
+            <li><strong>Accurate</strong>: the statement matches the paper's claims and scope. Nothing added, nothing weakened.</li>
+            <li><strong>Overstated</strong>: the statement claims more than the paper supports — wider population, stronger causality, more certainty, or broader scope.</li>
+            <li><strong>Understated</strong>: the statement claims less than the paper supports — leaves out a stronger finding, narrows a population, or softens a clearly established result.</li>
+            <li><strong>Unsure</strong>: you cannot confidently judge. Please feel free to choose this rather than guessing — it is a perfectly valid answer.</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- STEP 3 -->
+  <div class="panel">
+    <div><span class="step-num">3</span><span class="step-title">Vote on each claim</span></div>
+    <p class="step-body">For every claim card: pick one <strong>Evidence</strong> button (pre-set to the curator's choice — accept or change) and one <strong>Quality</strong> button. Add a comment if you want to flag anything. <strong>Votes auto-save</strong> on every click.</p>
+    <div class="mock">
+      <div class="mock-card">
+        <div class="mock-taxon"><em>Eggerthella lenta</em></div>
+        <div class="mock-claim">Higher relative abundance was significantly associated with prior antibiotic use, persisting 4–8 years post-prescription…</div>
+        <div class="mock-row">
+          <span class="mock-row-label">Evidence:</span>
+          <span class="mock-btn active">E3</span>
+          <span class="mock-btn">E2</span>
+          <span class="mock-btn">E1</span>
+          <span class="mock-btn">Undetermined</span>
+        </div>
+        <div class="mock-row">
+          <span class="mock-row-label">Quality:</span>
+          <span class="mock-btn active">Accurate</span>
+          <span class="mock-btn">Overstated</span>
+          <span class="mock-btn">Understated</span>
+          <span class="mock-btn">Unsure</span>
+        </div>
+      </div>
+      <div class="callout"><span class="callout-arrow">↑</span> Pick one Evidence + one Quality per card</div>
+    </div>
+  </div>
+
+  <!-- STEP 4 -->
+  <div class="panel">
+    <div><span class="step-num">4</span><span class="step-title">Submit when done</span></div>
+    <p class="step-body">Once you've reviewed every claim on a paper, click <strong>Submit this paper</strong>. The status pill turns green on the paper list. You can re-open and edit any paper at any time before the cycle is frozen.</p>
+    <div class="mock" style="text-align: center; padding: 20px;">
+      <span class="mock-submit-btn">Submit this paper</span>
+      <div style="margin: 14px 0 4px; color: #aaa; font-size: 18px;">↓</div>
+      <span class="mock-submit-btn done">✓ Submitted (re-submit)</span>
+      <br>
+      <div class="callout" style="margin-top: 22px;"><span class="callout-arrow">↑</span> Status pill on paper list turns green</div>
+    </div>
+  </div>
+
+</div>
+
+</body>
+</html>

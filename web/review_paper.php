@@ -452,7 +452,7 @@ $pdf_url = 'review_pdf.php?t=' . urlencode($review_token) . '&pmid=' . $pmid;
         <li><strong>Accurate</strong>: the statement matches the paper's claims and scope. Nothing added, nothing weakened.</li>
         <li><strong>Overstated</strong>: the statement claims more than the paper supports — wider population, stronger causality, more certainty, or broader scope than the original.</li>
         <li><strong>Understated</strong>: the statement claims less than the paper supports — leaves out a stronger finding, narrows a population, or softens a clearly established result.</li>
-        <li><strong>Unsure</strong>: you cannot confidently judge whether the wording is accurate, overstated, or understated. Pick this rather than guessing — it is a valid answer.</li>
+        <li><strong>Unsure</strong>: you cannot confidently judge whether the wording is accurate, overstated, or understated. Please feel free to choose this rather than guessing — it is a perfectly valid answer.</li>
     </ul>
 
     <p style="margin-top: 12px;">
