@@ -6,6 +6,22 @@
 declare(strict_types=1);
 require_once __DIR__ . '/review_auth.php';
 
+// ── Round configuration (cycle 2026-05-03) ────────────────────────────────
+// 24 curated papers split into 3 groups for staged reviewer release:
+//   Round 1 — papers anchored by E3/E2 claims (highest-priority validation)
+//   Round 2 — E1-dominant papers (sent after round 1 closes)
+//   Skip   — papers with all-UNCERTAIN claims (excluded from SQL anyway)
+// To advance the cycle, change $active_round_pmids to $round_2_pmids.
+$round_1_pmids = [41814006, 38584858, 29097494, 33542131, 36894652,
+                  29302014, 29097493, 34941392, 33432149, 29590047,
+                  29546356];
+$round_2_pmids = [39456922, 35831502, 40544256, 32758418,
+                  33303685, 24503131, 33766858, 25385792, 29414937];
+$skip_pmids    = [32129694, 38786164, 41641127, 41039149];
+
+$active_round_pmids = $round_1_pmids;
+$pmid_csv = implode(',', array_map('intval', $active_round_pmids));
+
 $stmt = $pdo_review->prepare(
     "SELECT
          rp.pmid,
@@ -26,8 +42,9 @@ $stmt = $pdo_review->prepare(
      -- INNER JOIN drops papers with zero ingested associations from the list.
      JOIN association_snapshot a ON a.pmid = rp.pmid
      WHERE rp.token = :t
+       AND rp.pmid IN ($pmid_csv)
      GROUP BY rp.pmid, rp.token, rp.status, ps.title, ps.journal, ps.year, ps.keywords
-     ORDER BY n_e3 DESC, n_e2 DESC, n_e1 DESC, ps.year DESC, ps.pmid"
+     ORDER BY FIELD(rp.pmid, $pmid_csv)"
 );
 $stmt->execute(['t' => $review_token]);
 $rows = $stmt->fetchAll(PDO::FETCH_ASSOC);

@@ -259,6 +259,17 @@
    <sample_size>1</sample_size>
    <paper_summary>First reported case of clinically significant bloodstream infection caused by Prevotella copri in a heart failure patient. Blood cultures confirmed P. copri bacteremia; concurrent 16S rRNA profiling showed Prevotella genus domination (15.2%) with P. copri at 6.1% relative abundance, supporting gut-to-blood translocation. Patient recovered with metronidazole. Authors explicitly characterize P. copri as a pathobiont.</paper_summary>
   </Paper>
+  <Paper>
+   <pmid>41814006</pmid>
+   <title>Antibiotic use and gut microbiome composition links from individual-level prescription data of 14,979 individuals</title>
+   <authors>Baldanzi G et al.</authors>
+   <journal>Nature Medicine</journal>
+   <year>2026</year>
+   <study_design>multi-cohort observational study</study_design>
+   <population>Swedish adults from three independent cohorts: SCAPIS, SIMPLER, and MOS</population>
+   <sample_size>14979</sample_size>
+   <paper_summary>This multi-cohort Swedish study (n=14,979; SCAPIS, SIMPLER, MOS) linked individual-level antibiotic prescription records to shotgun gut metagenomics, finding that Eggerthella lenta relative abundance was significantly elevated in individuals with prior clindamycin, fluoroquinolone, or flucloxacillin use, with disruptions persisting for 4–8 years post-prescription. In the SCAPIS cohort (n≈10,456), higher Eggerthella lenta abundance was further associated with elevated BMI, waist-hip ratio, serum triglycerides, and C-reactive protein, placing it among the antibiotic-increased, cardiometabolic-risk-associated species identified in this study.</paper_summary>
+  </Paper>
  </Papers>
  <TaxonPassport>
   <passport_id>MCA-BAC-000001</passport_id>
