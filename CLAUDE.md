@@ -384,8 +384,8 @@ Increment the minor version by 1 for each dev cycle (v1.11, v1.12 …). When rea
 1. **Finalize XML** — ensure `database/MCA_DB_v[X]_[Y0]_[DATE].xml` is the canonical snapshot with the correct version string inside (`<version>v[X]_[Y0]_[DATE]</version>`).
 2. **Regenerate SQL + API JSON + sitemap** — run `python3 database/xml2sql.py database/MCA_DB_v[X]_[Y0]_[DATE].xml` and confirm output counts (passports, associations, UNCERTAIN skipped). Outputs: the `.sql.gz` MySQL dump, `web/api/v1/passports/*.json` + `web/api/v1/meta.json` for the public API, and `web/sitemap.xml` for SEO. All must be committed together — they share the same `version` string, and stale outputs would silently lie about what's in the DB.
 3. **Update CLAUDE.md** — bump `Current version` in the project overview and all filename references in "Local setup".
-4. **Update `web/data/MCA_DB_latest.xml`** — copy the release XML to this path (used by the web app).
-5. **Commit** — stage XML, `.sql.gz`, `web/data/MCA_DB_latest.xml`, `web/api/v1/meta.json`, `web/api/v1/passports/`, `web/sitemap.xml`, CLAUDE.md, and any other changed files. Commit message format: `v[X].[Y0]: [brief description]`.
+4. **Update `web/literature.php`** — bump the hard-coded paper count and add the new entry to the year-grouped array if any new PMIDs are part of this release.
+5. **Commit** — stage XML, `.sql.gz`, `web/api/v1/meta.json`, `web/api/v1/passports/`, `web/sitemap.xml`, CLAUDE.md, `web/literature.php`, and any other changed files. Commit message format: `v[X].[Y0]: [brief description]`.
 6. **Create GitHub Release** — go to `https://github.com/Snyder-Institute/MCA/releases/new`; tag `v[X].[Y0]`; attach three release assets:
    - `MCA_create_database.sql.gz`
    - `MCA_DB_v[X]_[Y0]_[DATE].xml` — raw XML snapshot (no compression)

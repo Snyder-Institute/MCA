@@ -2,11 +2,11 @@
 name: mca-xml-update
 description: "MCA XML update skill. Reads one or more approved staging JSON files from staging/, validates them, applies CREATE or UPDATE actions to database/MCA_DB_vX.X.xml, archives applied files, and runs xml2sql.py to generate a .sql dump. Triggers on: apply staging file, update MCA XML, apply to database, commit staging, import staging."
 metadata:
-  version: "2.3"
-  last_updated: "2026-04-02"
+  version: "2.4"
+  last_updated: "2026-05-06"
 ---
 
-# MCA XML Update Skill v2.3 — Apply Staging Files to the Knowledge Base
+# MCA XML Update Skill v2.4 — Apply Staging Files to the Knowledge Base
 
 Reads one or more approved staging JSON files from `staging/`, validates them, applies each CREATE or UPDATE action to `database/MCA_DB_vX.X.xml` via a dedicated `xml_writer_agent`, archives applied files to `staging/applied/`, and generates a `.sql` dump via `xml2sql.py`.
 
@@ -161,16 +161,10 @@ User: "Apply staging file(s)" + [file path(s) or "all"]
          - Output: database/MCA_DB_[output_version_string].sql (same stem as XML, .sql extension)
          - Run after all staging files have been applied (once per session, not per file)
          - If xml2sql.py fails, log the error in the report but do not fail the overall session
-     +-> Copy the updated XML to the web data directory:
-         - Command: cp <output_xml_path> web/data/MCA_DB_latest.xml
-         - Create web/data/ if it does not exist (mkdir -p web/data)
-         - This gives the web front-end a stable, path-fixed download link decoupled from versioned filenames
-         - If the copy fails, log the error in the report but do not fail the overall session
      +-> Report to user:
          - Output XML: database/MCA_DB_[output_version_string].xml (new file)
          - Source XML preserved: database/MCA_DB_[previous_version_string].xml
          - SQL dump: database/MCA_DB_[output_version_string].sql
-         - Web copy: web/data/MCA_DB_latest.xml (updated)
          - Files applied: N
          - New passport IDs assigned: [list]
          - Fields updated per taxon: [summary]
@@ -189,7 +183,6 @@ User: "Apply staging file(s)" + [file path(s) or "all"]
 4. **Phase 2 — no removal of existing data**: UPDATE actions may only append to list fields and overwrite scalar fields if a new value is explicitly provided. Never delete existing XML elements.
 5. **Phase 3 — archive on success only**: Only move a staging file to `staging/applied/` if the agent confirms it was applied without errors.
 6. **Phase 3 — xml2sql runs once per session**: Run `python3 database/xml2sql.py <output_xml_path>` once after all staging files have been applied. A failure here does not roll back the XML writes.
-7. **Phase 3 — web copy runs after xml2sql**: Copy `<output_xml_path>` to `web/data/MCA_DB_latest.xml` after xml2sql completes (or after the XML write if xml2sql failed). A failure here does not roll back the XML writes.
 
 ---
 
@@ -304,11 +297,11 @@ Applied files are never deleted — they serve as the audit trail of what was im
 
 | Item | Content |
 |------|---------|
-| Skill Version | 2.3 |
-| Last Updated | 2026-04-01 |
+| Skill Version | 2.4 |
+| Last Updated | 2026-05-06 |
 | Maintainer | Heewon Seo |
 | Input | `staging/PMID_YYYY-MM-DD_[taxon].json` (one or more) |
-| Output | New `database/MCA_DB_vMAJOR_MINOR_YYYYMMDD.xml` + `.sql` dump + `web/data/MCA_DB_latest.xml` + archived staging files |
+| Output | New `database/MCA_DB_vMAJOR_MINOR_YYYYMMDD.xml` + `.sql` dump + archived staging files |
 | Upstream Skill | MCA Paper Curator (Skill 1) |
 
 ---
@@ -317,6 +310,7 @@ Applied files are never deleted — they serve as the audit trail of what was im
 
 | Version | Date | Changes |
 |---------|------|---------|
+| 2.4 | 2026-05-06 | Phase 3: removed the `web/data/MCA_DB_latest.xml` copy step. The stable-download-link contract retired — `about.php` now points users to GitHub Releases for versioned XML/SQL artifacts. Removed Checkpoint Rule 7. |
 | 2.3 | 2026-04-02 | Phase 2: same-day collision now explicitly auto-bumps MINOR in workflow (previously only documented in changelog). Version header corrected from 2.2 → 2.3. Phase 3: after xml2sql, copy output XML to `web/data/MCA_DB_latest.xml` (stable web-accessible path, decoupled from versioned filenames). Added Checkpoint Rule 7. |
 | 2.2 | 2026-04-01 | Added `xsd_writer_agent` (Phase 2, conditional): when no `MCA_DB_v*.xml` exists, bootstraps a skeleton XML and `MCA_schema.xsd` before proceeding. Enables "start from scratch" workflow. |
 | 2.1 | 2026-04-01 | Removed Phase 1 mandatory confirmation — pre-flight summary is now informational only; skill proceeds automatically. Added xml2sql.py execution in Phase 3 to generate a `.sql` dump after each session. |

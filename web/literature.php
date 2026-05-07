@@ -68,7 +68,7 @@
 
     <h1 style="font-size: 28px; margin: 0 0 10px;">Curated Literature</h1>
     <p style="color: #555; font-size: 15px; line-height: 1.65; margin: 0 0 24px;">
-        All <?php echo 24; ?> papers curated into MCA, ordered by year of publication. Each entry links to the original record on PubMed.
+        All <?php echo 25; ?> papers curated into MCA, ordered by year of publication. Each entry links to the original record on PubMed.
     </p>
 
     <?php
@@ -76,6 +76,7 @@
         // 2026
         ['pmid' => 41039149, 'authors' => 'Chilton et al.',      'title' => 'Clostridioides difficile pathogenesis and control',                                                                                                    'journal' => 'Nature Reviews Microbiology',          'year' => 2026],
         ['pmid' => 41641127, 'authors' => 'Rogalidou',           'title' => 'Clostridioides difficile infection in pediatric inflammatory bowel disease: current understanding and clinical challenges',                            'journal' => 'Frontiers in Pediatrics',              'year' => 2026],
+        ['pmid' => 41814006, 'authors' => 'Baldanzi et al.',     'title' => 'Antibiotic use and gut microbiome composition links from individual-level prescription data of 14,979 individuals',                                     'journal' => 'Nature Medicine',                      'year' => 2026],
         // 2025
         ['pmid' => 40544256, 'authors' => 'Mannavola et al.',    'title' => 'Bloodstream infection by Lactobacillus rhamnosus in a haematology patient: why metagenomics can make the difference',                                  'journal' => 'Gut Pathogens',                        'year' => 2025],
         // 2024
