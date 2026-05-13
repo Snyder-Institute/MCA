@@ -131,24 +131,19 @@ Each passport JSON is regenerated alongside the SQL dump on every release (see `
 
 ## iOS App
 
-An iPhone companion app for MCA is available on the App Store. Built with SwiftUI (iOS 17+) using only Apple frameworks — no external dependencies.
+An iPhone companion app for MCA is available on the App Store. Built with SwiftUI (iOS 17+). Uses Apple frameworks plus a small set of Swift packages for on-device AI (`mlx-swift`, `Gemma4Swift`, `swift-transformers`).
 
 ### Passports
 Offline SQLite browser of all curated taxon passports. Full-text search, bookmarks, and a full passport detail view that mirrors the web layout.
 
 ### Advanced Search
-Unified search bar over KEGG pathways, MCA taxa, and diseases — a slimmer mobile counterpart of the web Advanced Search. Selecting a suggestion auto-routes to the right view (pathway → linked taxa, taxon → linked pathways + co-occurring taxa + drug target classes, disease → linked taxa + pathways). Powered by a bundled `kegg_pathway_index.json` so it works fully offline.
+Unified search bar over KEGG pathways, MCA taxa, and diseases — a slimmer mobile counterpart of the web Advanced Search. Selecting a suggestion auto-routes to the right view (pathway → linked taxa, taxon → linked pathways + co-occurring taxa + drug target classes, disease → linked taxa + pathways).
 
-### Extractor
-Enter a PMID, choose abstract or full text, and the app fetches the paper from PubMed/PMC (or accepts a PDF upload), sends it to the Claude API, extracts all taxa, and cross-references results against the MCA database. Results are cached locally. Once extracted, users can share the result as a JSON file with the developer so that **community contributions can be reviewed and incorporated into future MCA releases**.
+### Extractor (optional, on-device AI)
+Opt-in tool for suggesting papers to the curation team. Enter a PMID, the app fetches the abstract from PubMed, and a small on-device language model (Gemma 4 E2B INT4 via `mlx-swift`) scans it for candidate microbial taxa. The user reviews the result and emails a quick reference to the curation inbox. Nothing leaves the device unless the user taps Send in Mail. Requires iPhone 15 Pro or newer; the ~3.6 GB model downloads on first opt-in.
 
 ### About
 Database stats, curation pipeline overview, acknowledgements.
-
-### Note on App Store availability
-Apple rejected the **Passport Extractor feature** because it uses a user-provided API key to access Claude — which Apple treats as a paid transaction that must go through their in-app purchase system, while Siri has limited capacity. The app is free, open-source, and no payment is involved — users simply bring their own API key. Apple does not offer an exception for academic or research tools. The App Store version ships without the Extractor (Passports + About only). The full app with the Extractor is available by building from source in the `iOS/` folder.
-
-![Passport Extractor](.github/images/PassportExtractor.png)
 
 ---
 
@@ -165,7 +160,7 @@ Apple rejected the **Passport Extractor feature** because it uses a user-provide
 ### iOS
 - **Language:** Swift (SwiftUI, iOS 17+)
 - **Database:** SQLite (generated from XML via `database/xml2sqlite.py`)
-- **Dependencies:** None — Apple frameworks only
+- **On-device AI:** Gemma 4 E2B INT4 via `mlx-swift` / `Gemma4Swift` / `swift-transformers` (for the optional Extractor)
 
 ---
 
