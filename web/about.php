@@ -259,8 +259,8 @@ include 'header.php';
                 </p>
                 <?php
                 $grades = [
-                    ['E3', 'ev-badge-e3', 'Strong — systematic review, meta-analysis, or multiple independent human cohorts'],
-                    ['E2', 'ev-badge-e2', 'Moderate — single human cohort, RCT, case-control, or cross-sectional'],
+                    ['E3', 'ev-badge-e3', 'Strong — clinical guidelines, systematic review, pooled meta-analysis, or discovery + validation cohorts in one paper'],
+                    ['E2', 'ev-badge-e2', 'Moderate — single cohort (or multi-center observational without pooling), RCT, case-control, or cross-sectional'],
                     ['E1', 'ev-badge-e1', 'Limited — animal model, in vitro, case report, or mechanistic work only'],
                 ];
                 ?>

@@ -11,7 +11,11 @@ struct ContentView: View {
                 .tabItem {
                     Label("Search", systemImage: "arrow.triangle.branch")
                 }
-AboutView()
+            ExtractorView()
+                .tabItem {
+                    Label("Extractor", systemImage: "doc.text.magnifyingglass")
+                }
+            AboutView()
                 .tabItem {
                     Label("About", systemImage: "info.circle")
                 }

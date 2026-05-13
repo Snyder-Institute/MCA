@@ -153,12 +153,13 @@ struct PubMedService {
 
 private class PubMedXMLParser: NSObject, XMLParserDelegate {
     private let data: Data
-    private var currentElement = ""
     private var title = ""
     private var abstractParts: [String] = []
     private var pmid = ""
-    private var captureText = false
+    private var captureElement: String?
     private var currentText = ""
+
+    private static let capturedElements: Set<String> = ["ArticleTitle", "AbstractText", "PMID"]
 
     init(data: Data) {
         self.data = data
@@ -184,32 +185,36 @@ private class PubMedXMLParser: NSObject, XMLParserDelegate {
     func parser(_ parser: XMLParser, didStartElement elementName: String,
                 namespaceURI: String?, qualifiedName: String?,
                 attributes: [String: String] = [:]) {
-        currentElement = elementName
-        if elementName == "ArticleTitle" || elementName == "AbstractText" || elementName == "PMID" {
-            captureText = true
+        // Only open a capture when not already inside one. Inline tags like
+        // <i> or <sup> nested inside ArticleTitle / AbstractText must not
+        // reset state — their character data is part of the outer text.
+        if captureElement == nil, Self.capturedElements.contains(elementName) {
+            captureElement = elementName
             currentText = ""
         }
     }
 
     func parser(_ parser: XMLParser, foundCharacters string: String) {
-        if captureText {
+        if captureElement != nil {
             currentText += string
         }
     }
 
     func parser(_ parser: XMLParser, didEndElement elementName: String,
                 namespaceURI: String?, qualifiedName: String?) {
-        if elementName == "ArticleTitle" {
-            title = currentText.trimmingCharacters(in: .whitespacesAndNewlines)
-        } else if elementName == "AbstractText" {
-            let text = currentText.trimmingCharacters(in: .whitespacesAndNewlines)
-            if !text.isEmpty {
-                abstractParts.append(text)
-            }
-        } else if elementName == "PMID" && pmid.isEmpty {
-            pmid = currentText.trimmingCharacters(in: .whitespacesAndNewlines)
+        guard elementName == captureElement else { return }
+        let trimmed = currentText.trimmingCharacters(in: .whitespacesAndNewlines)
+        switch elementName {
+        case "ArticleTitle":
+            title = trimmed
+        case "AbstractText":
+            if !trimmed.isEmpty { abstractParts.append(trimmed) }
+        case "PMID":
+            if pmid.isEmpty { pmid = trimmed }
+        default:
+            break
         }
-        captureText = false
+        captureElement = nil
         currentText = ""
     }
 }

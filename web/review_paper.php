@@ -440,8 +440,10 @@ $pdf_url = 'review_pdf.php?t=' . urlencode($review_token) . '&pmid=' . $pmid;
     <p class="g-section-title">Evidence level</p>
     <p>How strongly the cited paper(s) support the claim — judged by study type, scale, and clinical relevance.</p>
     <ul class="g-list">
-        <li><strong>E3 — Strong</strong>: clinical practice guidelines, meta-analyses, systematic reviews, or multiple independent human cohorts presented within a single paper.</li>
-        <li><strong>E2 — Moderate</strong>: a single human cohort, a single randomised controlled trial, a case-control study, or a cross-sectional human study.</li>
+        <li style="text-decoration: line-through; color: #999;"><strong>E3 — Strong</strong>: clinical practice guidelines, meta-analyses, systematic reviews, or multiple independent human cohorts presented within a single paper.</li>
+        <li><strong>E3 — Strong</strong> <span style="color: #c00; font-size: 11px; font-weight: 600;">(updated 2026-05-13)</span>: clinical practice guidelines, systematic reviews, pooled meta-analyses (across RCTs or cohorts), or a discovery + independent validation cohort design within a single paper.</li>
+        <li style="text-decoration: line-through; color: #999;"><strong>E2 — Moderate</strong>: a single human cohort, a single randomised controlled trial, a case-control study, or a cross-sectional human study.</li>
+        <li><strong>E2 — Moderate</strong> <span style="color: #c00; font-size: 11px; font-weight: 600;">(updated 2026-05-13)</span>: a single human cohort (including multi-center observational cohorts without pooled analysis), a single randomised controlled trial, a case-control study, or a cross-sectional human study.</li>
         <li><strong>E1 — Limited / preliminary</strong>: animal models, in vitro studies, case reports, or mechanistic work without human-cohort confirmation.</li>
         <li><strong>Undetermined</strong>: you cannot tell from the paper which level applies, or the cited evidence is too ambiguous to grade.</li>
     </ul>

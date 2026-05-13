@@ -112,10 +112,10 @@ struct GlossaryView: View {
                         // Evidence grades
                         VStack(alignment: .leading, spacing: 12) {
                             evidenceGradeItem(grade: "E3", label: "Strong human clinical evidence",
-                                description: "Supported by systematic reviews, meta-analyses, clinical guidelines, or multiple independent human cohorts.",
+                                description: "Supported by clinical practice guidelines, systematic reviews, pooled meta-analyses (across RCTs or cohorts), or a discovery + independent validation cohort design within a single paper.",
                                 bg: "#dcfce7", fg: "#166534")
                             evidenceGradeItem(grade: "E2", label: "Moderate human evidence",
-                                description: "Supported by a single human cohort, RCT, case-control, or cross-sectional study.",
+                                description: "Supported by a single human cohort (including multi-center observational cohorts without pooled analysis), a single RCT, case-control, or cross-sectional study.",
                                 bg: "#fef3c7", fg: "#92400e")
                             evidenceGradeItem(grade: "E1", label: "Limited / preliminary",
                                 description: "Supported by animal models, in vitro studies, case reports, or mechanistic work only.",

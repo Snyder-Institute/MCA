@@ -48,8 +48,8 @@ Each passport also carries **Clinical Associations** — individual evidence-gra
 
 | Grade | Meaning |
 |-------|---------|
-| **E3** | Strong clinical evidence — guidelines, meta-analyses, systematic reviews, or multiple independent human cohorts |
-| **E2** | Moderate evidence — single cohort, single RCT, case-control, or cross-sectional study |
+| **E3** | Strong clinical evidence — clinical practice guidelines, systematic reviews, pooled meta-analyses (across RCTs or cohorts), or a discovery + independent validation cohort design within a single paper |
+| **E2** | Moderate evidence — a single human cohort (including multi-center observational cohorts without pooled analysis), a single RCT, case-control, or cross-sectional study |
 | **E1** | Limited / preliminary — animal models, in vitro studies, case reports, mechanistic work |
 
 `UNCERTAIN` claims are stored in the canonical XML for audit but excluded from the SQL dump and the public API — they are not surfaced to clinicians.

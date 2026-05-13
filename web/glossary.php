@@ -174,11 +174,11 @@ if (!$is_popup) {
             <div class="nested-level">
                 <div style="margin-bottom: 15px;">
                     <span class="glossary-term" style="background: #dbeafe; color: #1e40af;">E3 — Strong human clinical evidence</span>
-                    <div class="glossary-text">Supported by systematic reviews, meta-analyses, clinical guidelines, or multiple independent human cohorts reported in a single paper.</div>
+                    <div class="glossary-text">Supported by clinical practice guidelines, systematic reviews, pooled meta-analyses (across RCTs or cohorts), or a discovery + independent validation cohort design within a single paper.</div>
                 </div>
                 <div style="margin-bottom: 15px;">
                     <span class="glossary-term" style="background: #fef3c7; color: #92400e;">E2 — Moderate human evidence</span>
-                    <div class="glossary-text">Supported by a single human cohort, RCT, case-control, or cross-sectional study.</div>
+                    <div class="glossary-text">Supported by a single human cohort (including multi-center observational cohorts without pooled analysis), a single RCT, case-control, or cross-sectional study.</div>
                 </div>
                 <div>
                     <span class="glossary-term" style="background: #f3f4f6; color: #6b7280;">E1 — Limited / preliminary</span>

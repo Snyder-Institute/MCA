@@ -41,8 +41,8 @@ Full criteria in `references/GRADING_CRITERIA.md`.
 
 | Grade | Assign when study design is... |
 |-------|-------------------------------|
-| `E3` | Systematic review, meta-analysis, clinical guideline, multiple independent human cohorts in one paper |
-| `E2` | Single cohort (prospective/retrospective), single RCT, case-control, cross-sectional (human) |
+| `E3` | Clinical practice guideline, systematic review, pooled meta-analysis (across RCTs or cohorts), or discovery + independent validation cohort design in one paper |
+| `E2` | Single cohort (prospective/retrospective, including multi-center observational without pooled analysis), single RCT, case-control, cross-sectional (human) |
 | `E1` | Animal model, in vitro, case report/series (<5 subjects), mechanistic, pilot/exploratory |
 | `UNCERTAIN` | Study design ambiguous, not reported, or does not fit any tier — **including narrative reviews, scoping reviews, and perspective/opinion papers that contain no original data** |
 

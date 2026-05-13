@@ -8,8 +8,8 @@ Used by `agents/GRADING_AGENT.md` to assign a single evidence grade to a paper a
 
 | Grade | Label | Definition |
 |-------|-------|------------|
-| **E3** | Strong human clinical evidence | Broadly accepted in clinical practice. Supported by official clinical guidelines, systematic reviews, or meta-analyses of human studies. |
-| **E2** | Moderate human evidence | Direct evidence in humans exists but may be context-dependent or limited in scope. Supported by well-designed observational studies (cohort, case-control). |
+| **E3** | Strong human clinical evidence | Broadly accepted in clinical practice. Supported by clinical practice guidelines, systematic reviews, pooled meta-analyses (across RCTs or cohorts), or a discovery + independent validation cohort design within a single paper. |
+| **E2** | Moderate human evidence | Direct evidence in humans exists but may be context-dependent or limited in scope. Supported by a single human cohort (including multi-center observational cohorts without pooled analysis), a single RCT, case-control, or cross-sectional study. |
 | **E1** | Limited / preliminary | Suggestive but not yet established in humans. Supported by animal models, in vitro studies, isolated case reports, or mechanistic/exploratory work. |
 
 ---
@@ -20,21 +20,22 @@ Use the study design identified in Phase 0 (paper analysis) to assign the grade.
 
 ### E3 — Strong human clinical evidence
 Assign E3 if the paper is one of the following:
-- Systematic review or meta-analysis of human clinical studies
 - Clinical practice guideline citing microbiome evidence
-- Multiple independent human cohorts (or trials) confirming the same finding within a single paper (e.g., discovery cohort + replication cohort, or pooled multi-centre analysis)
+- Systematic review of human clinical studies (with defined search strategy and inclusion criteria)
+- Pooled meta-analysis across RCTs or cohorts (quantitative synthesis of multiple primary studies)
+- Discovery + independent validation cohort design within a single paper (e.g., findings established in a discovery cohort and confirmed in a separate validation cohort)
 
-**Key signal phrases in paper:** "systematic review", "meta-analysis", "clinical guideline", "PRISMA", "GRADE", "replication cohort", "multi-centre", "pooled analysis"
+**Key signal phrases in paper:** "systematic review", "meta-analysis", "pooled analysis", "clinical guideline", "PRISMA", "GRADE", "discovery cohort", "validation cohort", "replication cohort"
 
 ### E2 — Moderate human evidence
 Assign E2 if the paper is one of the following:
-- Single prospective or retrospective cohort study in humans
-- Single randomized controlled trial (RCT) with microbiome outcome data
+- Single prospective or retrospective cohort study in humans (including multi-centre observational cohorts that report a single combined analysis but **do not** perform a formal pooled/meta-analytic synthesis)
+- Single randomized controlled trial (RCT) with microbiome outcome data (regardless of trial size — a well-powered single RCT is still E2 unless pooled with others)
 - Case-control study in humans
 - Cross-sectional study with a well-defined clinical outcome
 - Secondary analysis of a clinical trial with microbiome data
 
-**Key signal phrases in paper:** "cohort", "case-control", "cross-sectional", "randomized", "odds ratio", "hazard ratio", "human subjects", "patients enrolled"
+**Key signal phrases in paper:** "cohort", "case-control", "cross-sectional", "randomized", "odds ratio", "hazard ratio", "human subjects", "patients enrolled", "multi-centre observational"
 
 ### E1 — Limited / preliminary
 Assign E1 if the paper is one of the following:
@@ -98,4 +99,4 @@ Write 2–3 sentences covering:
 - The quality of microbiome methodology (sequencing depth, 16S vs WGS, batch correction) — note in rationale if relevant but do not adjust grade for it
 - Journal impact factor or prestige
 - Whether the taxon is the primary focus or incidentally mentioned
-- Replication status (a single high-quality RCT still qualifies as E3)
+- Sample size or statistical power alone — a well-powered single RCT remains E2 under the current rubric; it can be promoted to E3 only when pooled with other RCTs in a meta-analysis or paired with a separate validation cohort within the same paper

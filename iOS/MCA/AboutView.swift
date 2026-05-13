@@ -84,9 +84,9 @@ struct AboutView: View {
                     .font(.caption)
                     .foregroundColor(.secondary)
                 VStack(alignment: .leading, spacing: 6) {
-                    EvidenceKeyRow(grade: "E3", description: "Strong — systematic review, meta-analysis, or multiple independent human cohorts")
-                    EvidenceKeyRow(grade: "E2", description: "Moderate — single human cohort, RCT, case-control, or cross-sectional")
-                    EvidenceKeyRow(grade: "E1", description: "Limited — animal model, in vitro, case report, or mechanistic work only")
+                    EvidenceKeyRow(grade: "E3", description: "Strong — clinical practice guidelines, systematic reviews, pooled meta-analyses (across RCTs or cohorts), or a discovery + independent validation cohort design within a single paper")
+                    EvidenceKeyRow(grade: "E2", description: "Moderate — a single human cohort (including multi-center observational cohorts without pooled analysis), a single RCT, a case-control study, or a cross-sectional human study")
+                    EvidenceKeyRow(grade: "E1", description: "Limited — animal models, in vitro studies, case reports, or mechanistic work only")
                 }
             }
 
@@ -103,6 +103,54 @@ struct AboutView: View {
                     DbLinkRow(label: "ChEBI", description: "Chemical entity identifiers on metabolites", bg: "#e0f2fe", fg: "#0369a1")
                     DbLinkRow(label: "BacDive", description: "Morphology, physiology, ecological niche data", bg: "#eef0f8", fg: "#404f7c")
                 }
+            }
+
+            // Advanced Search
+            FeatureCard(title: "Advanced Search") {
+                Text("A unified search bar across the Search tab lets you explore MCA through three lenses at once:")
+                    .font(.caption)
+                    .foregroundColor(.secondary)
+                VStack(alignment: .leading, spacing: 6) {
+                    SearchModeRow(label: "Pathway", description: "Browse KEGG pathways — for each pathway, see the linked MCA taxa and the diseases it touches.")
+                    SearchModeRow(label: "Taxon", description: "Pick any MCA taxon to see the pathways it participates in, the diseases that share those pathways, and co-occurring taxa.")
+                    SearchModeRow(label: "Disease", description: "Pick a disease to see the pathways implicated and the MCA taxa connected through them.")
+                }
+                Text("Type a few letters and the suggestions group by type — tap to open a result. From inside a result, tap any badge to cross-navigate (pathway \u{2192} disease \u{2192} taxon) without losing your place.")
+                    .font(.caption)
+                    .foregroundColor(.secondary)
+            }
+
+            // On-Device Extractor
+            FeatureCard(title: "On-Device AI Extractor") {
+                Text("An optional, opt-in tool that helps you suggest papers for the atlas. Runs entirely on your device with Gemma 4 by Google — nothing leaves your phone unless you tap Send in Mail.")
+                    .font(.caption)
+                    .foregroundColor(.secondary)
+
+                Text("How it works")
+                    .font(.caption.bold())
+                    .foregroundColor(.primary)
+                    .padding(.top, 4)
+                VStack(alignment: .leading, spacing: 6) {
+                    ExtractorStepRow(number: 1, text: "Open the Extractor tab and tap Enable. The on-device AI model (~3.6 GB) downloads once and is cached for future use.")
+                    ExtractorStepRow(number: 2, text: "Enter a PubMed ID for a paper you find interesting.")
+                    ExtractorStepRow(number: 3, text: "Choose Abstract or Full Text. If the full text isn\u{2019}t freely available on PMC, upload the PDF from your device.")
+                    ExtractorStepRow(number: 4, text: "Gemma 4 scans the text on-device and surfaces a PubMed ID, DOI, title, abstract, and a list of candidate taxa. All of this stays on your phone.")
+                    ExtractorStepRow(number: 5, text: "Review the suggestion, add an optional note, then tap Share to MCA team. Mail opens pre-filled — you tap Send. Only the PMID and your note are sent.")
+                }
+                Text("Gemma 4 is a general-purpose language model, not microbiology-specific, so the candidate list may include unrelated terms. Please review before sharing.")
+                    .font(.caption)
+                    .foregroundColor(.secondary)
+                    .padding(.top, 4)
+
+                Text("Full text extraction on-device is limited; we are exploring another approach.")
+                    .font(.caption)
+                    .foregroundColor(.secondary)
+                    .padding(.top, 4)
+
+                Text("Requires an iPhone 15 Pro or newer.")
+                    .font(.caption2)
+                    .foregroundColor(Color(hex: "#888888"))
+                    .padding(.top, 4)
             }
         }
         .padding(.vertical, 16)
@@ -121,7 +169,7 @@ struct AboutView: View {
                 PipelineStep(number: 1, title: "Paper Analysis", description: "A PDF is submitted to the Paper Curator skill. An analyst agent reads the full paper, extracts metadata, and identifies all microbial taxa mentioned.")
                 PipelineStep(number: 2, title: "Database Fetch & Entity Extraction", description: "Per taxon, agents query NCBI Taxonomy and BacDive for biology/ecology fields, while an Entity Extractor reads the paper for the clinical layer.")
                 PipelineStep(number: 3, title: "Routing, Grading & Ontology Enrichment", description: "A Routing agent checks CREATE vs UPDATE. A Grading agent assigns E1/E2/E3. Enrichment agents run MeSH, KEGG, and ARO lookups in parallel.")
-                PipelineStep(number: 4, title: "Staging File & Expert Review", description: "A structured JSON staging file is written per taxon. An expert curator reviews every field before approving.")
+                PipelineStep(number: 4, title: "Expert Review", description: "Every staging file — the full Taxon Passport plus its clinical associations — is routed to outside domain experts through a token-gated review portal. Reviewers can flag any field they see: biology, ecology, clinical profile, metabolites, synonyms, ontology references, and PMIDs. For each clinical association, they also assess the evidence grade (E3 / E2 / E1 / Undetermined) and judge whether the curated text is Accurate, Overstated, Understated, or Unsure, with free-text comments for additional context.", dotColor: "#166534")
                 PipelineStep(number: 5, title: "XML Update & SQL Export", description: "Approved staging files are applied to the versioned XML database. A content hash deduplicates associations. A full SQL dump is generated automatically.", isLast: true)
             }
         }
@@ -164,6 +212,9 @@ struct AboutView: View {
                 AckRow(name: "BacDive", use: "Gram status, oxygen tolerance, morphology, key traits", url: "https://bacdive.dsmz.de")
                 AckRow(name: "KEGG", use: "Disease, Drug, and Compound IDs", url: "https://www.kegg.jp")
                 AckRow(name: "CARD / ARO", use: "Antibiotic Resistance Ontology identifiers", url: "https://card.mcmaster.ca")
+                AckRow(name: "Google Gemma 4", use: "On-device language model powering the Extractor (Apache 2.0)", url: "https://ai.google.dev/gemma")
+                AckRow(name: "Apple MLX", use: "On-device tensor framework used by the Extractor (MIT)", url: "https://github.com/ml-explore/mlx-swift")
+                AckRow(name: "Hugging Face", use: "Tokenizers and model hosting for the Extractor", url: "https://huggingface.co")
             }
         }
         .padding(.vertical, 16)
@@ -273,6 +324,44 @@ private struct EvidenceKeyRow: View {
     }
 }
 
+private struct SearchModeRow: View {
+    let label: String
+    let description: String
+    var body: some View {
+        HStack(alignment: .top, spacing: 8) {
+            Text(label)
+                .font(.caption2).bold()
+                .padding(.horizontal, 8).padding(.vertical, 3)
+                .background(Color(hex: "#eef0f8"))
+                .foregroundColor(Color(hex: "#404f7c"))
+                .clipShape(RoundedRectangle(cornerRadius: 4))
+            Text(description)
+                .font(.caption)
+                .foregroundColor(.secondary)
+        }
+    }
+}
+
+private struct ExtractorStepRow: View {
+    let number: Int
+    let text: String
+    var body: some View {
+        HStack(alignment: .top, spacing: 8) {
+            ZStack {
+                Circle()
+                    .fill(Color(hex: "#404f7c"))
+                    .frame(width: 18, height: 18)
+                Text("\(number)")
+                    .font(.system(size: 10, weight: .bold))
+                    .foregroundColor(.white)
+            }
+            Text(text)
+                .font(.caption)
+                .foregroundColor(.secondary)
+        }
+    }
+}
+
 private struct DbLinkRow: View {
     let label: String
     let description: String
@@ -298,13 +387,14 @@ private struct PipelineStep: View {
     let title: String
     let description: String
     var isLast = false
+    var dotColor: String = "#404f7c"
 
     var body: some View {
         HStack(alignment: .top, spacing: 12) {
             VStack(spacing: 0) {
                 ZStack {
                     Circle()
-                        .fill(Color(hex: "#404f7c"))
+                        .fill(Color(hex: dotColor))
                         .frame(width: 28, height: 28)
                     Text("\(number)")
                         .font(.caption2).bold()
